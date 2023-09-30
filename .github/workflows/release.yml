@@ -24,4 +24,4 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: housemanager/backend:${{ github.event.release.tag_name }}
+          tags: nicksettler/iis-backend:${{ github.event.release.tag_name }}
