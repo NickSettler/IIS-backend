@@ -38,9 +38,7 @@ export class User {
   @Column()
   [E_USER_ENTITY_KEYS.LAST_NAME]: string;
 
-  @ManyToMany(() => Role, {
-    eager: true,
-  })
+  @ManyToMany(() => Role)
   @JoinTable({
     name: E_DB_TABLES.USER_ROLES,
     joinColumn: {
