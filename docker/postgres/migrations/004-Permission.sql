@@ -2,24 +2,23 @@ DROP TABLE IF EXISTS permisions;
 
 CREATE TABLE permissions
 (
-    permission_id   uuid DEFAULT gen_random_uuid(),
-    permission_name VARCHAR(255) NOT NULL,
-    PRIMARY KEY (permission_id)
+    id   uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
 );
 
-INSERT INTO permissions (permission_name)
-VALUES ('edit user'),
-       ('edit class'),
-       ('edit course'),
-       ('add guarantor'),
-       ('edit activity'),
-       ('edit course teacher'),
-       ('define course requirements'),
-       ('add personal requirements'),
-       ('place schedule activities'),
-       ('assign schedule classes'),
-       ('edit personal courses'),
-       ('view personal schedule'),
-       ('view annotation');
+INSERT INTO permissions (name)
+VALUES ('EDIT_USER'),
+       ('EDIT_CLASS'),
+       ('EDIT_COURSE'),
+       ('ADD_GUARANTOR'),
+       ('EDIT_ACTIVITY'),
+       ('EDIT_COURSE TEACHER'),
+       ('DEFINE_COURSE_REQUIREMENTS'),
+       ('ADD_PERSONAL_REQUIREMENTS'),
+       ('PLACE_SCHEDULE_ACTIVITIES'),
+       ('ASSIGN_SCHEDULE_CLASSES'),
+       ('EDIT_PERSONAL_COURSES'),
+       ('VIEW_PERSONAL_SCHEDULE'),
+       ('VIEW_ANNOTATION');
 
 
