@@ -50,5 +50,5 @@ export class User {
       referencedColumnName: E_ROLE_ENTITY_KEYS.ID,
     },
   })
-  [E_USER_ENTITY_KEYS.ROLES]: Role[];
+  [E_USER_ENTITY_KEYS.ROLES]: Array<Role>;
 }
