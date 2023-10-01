@@ -22,7 +22,9 @@ export class Role {
   @Column()
   [E_ROLE_ENTITY_KEYS.NAME]: string;
 
-  @ManyToMany(() => Permission)
+  @ManyToMany(() => Permission, {
+    eager: true,
+  })
   @JoinTable({
     name: E_DB_TABLES.ROLE_PERMISSIONS,
     joinColumn: {
