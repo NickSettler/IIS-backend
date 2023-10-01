@@ -8,4 +8,3 @@ CREATE TABLE user_roles
     CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES roles (id),
     PRIMARY KEY (user_id, role_id)
 );
-
