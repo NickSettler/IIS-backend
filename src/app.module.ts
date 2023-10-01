@@ -12,6 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
+      schema: 'public',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
     }),
   ],
