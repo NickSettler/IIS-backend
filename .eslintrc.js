@@ -21,7 +21,20 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    "@typescript-eslint/array-type": ["error", { "default": "generic" }],
+    '@typescript-eslint/array-type': ['error', { default: 'generic' }],
+    '@typescript-eslint/explicit-member-accessibility': [
+      'error',
+      {
+        accessibility: 'explicit',
+        overrides: {
+          accessors: 'explicit',
+          constructors: 'no-public',
+          methods: 'explicit',
+          properties: 'off',
+          parameterProperties: 'explicit',
+        },
+      },
+    ],
     '@typescript-eslint/naming-convention': [
       'error',
       {
