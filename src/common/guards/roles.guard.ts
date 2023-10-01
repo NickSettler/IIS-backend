@@ -3,14 +3,10 @@ import { Reflector } from '@nestjs/core';
 import { E_ROLE, E_ROLE_ENTITY_KEYS } from '../../db/entities/role.entity';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import { User } from '../../db/entities/user.entity';
-import { UsersService } from '../../users/users.service';
 
 @Injectable()
 export default class RolesGuard implements CanActivate {
-  constructor(
-    private readonly reflector: Reflector,
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly reflector: Reflector) {}
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRoles = this.reflector.getAllAndOverride<Array<E_ROLE>>(
