@@ -2,8 +2,7 @@ name: Lint And Build
 
 on:
   pull_request:
-    branches:
-      - 'master'
+    types: [opened, synchronize, reopened]
 
 jobs:
   lint:
