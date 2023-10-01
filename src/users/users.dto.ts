@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
 
 export class CreateUserDto {

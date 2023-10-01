@@ -5,12 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
-import {
-  FindOneOptions,
-  FindOptionsWhere,
-  Repository,
-  UpdateResult,
-} from 'typeorm';
+import { FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { CreateUserDto } from './users.dto';
 import { E_DB_ERROR_CODES } from '../db/constants';
 
