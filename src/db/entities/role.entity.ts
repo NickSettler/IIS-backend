@@ -34,5 +34,5 @@ export class Role {
       referencedColumnName: E_PERMISSION_ENTITY_KEYS.ID,
     },
   })
-  [E_ROLE_ENTITY_KEYS.PERMISSIONS]: Permission[];
+  [E_ROLE_ENTITY_KEYS.PERMISSIONS]: Array<Permission>;
 }
