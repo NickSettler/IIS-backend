@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:16-alpine as backend
 
 WORKDIR /app
 
@@ -19,3 +19,11 @@ RUN yarn build
 EXPOSE 3000
 
 CMD ["sh", "-c", "yarn start:prod"]
+
+FROM postgres:16-alpine as database
+
+COPY ./docker/postgres/migrations /docker-entrypoint-initdb.d
+
+EXPOSE 5432
+
+CMD ["postgres"]
