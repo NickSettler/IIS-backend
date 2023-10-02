@@ -12,6 +12,11 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  /**
+   * Validate user by username and password
+   * @param username username
+   * @param password password
+   */
   public async validateUser(
     username: string,
     password: string,
@@ -29,6 +34,10 @@ export class AuthService {
     return null;
   }
 
+  /**
+   * Generate access token cookie
+   * @param user user entity
+   */
   public generateAccessTokenCookie(user: any) {
     const payload = { userId: user[E_USER_ENTITY_KEYS.ID] };
 
@@ -42,6 +51,10 @@ export class AuthService {
     };
   }
 
+  /**
+   * Generate refresh token cookie
+   * @param user user entity
+   */
   public generateRefreshTokenCookie(user: any) {
     const payload = { userId: user[E_USER_ENTITY_KEYS.ID] };
 
