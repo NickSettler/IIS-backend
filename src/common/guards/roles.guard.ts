@@ -28,8 +28,8 @@ export default class RolesGuard implements CanActivate {
     const user: User = context.switchToHttp().getRequest().user;
 
     // If user has some of required roles then the user can access the route
-    return requiredRoles.some(
-      (role) => user.roles?.some((r) => r[E_ROLE_ENTITY_KEYS.NAME] === role),
+    return requiredRoles.some((role) =>
+      user.roles.some((r) => r[E_ROLE_ENTITY_KEYS.NAME] === role),
     );
   }
 }

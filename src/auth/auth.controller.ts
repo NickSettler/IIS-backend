@@ -30,7 +30,7 @@ export class AuthController {
   @Post('sign-in')
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
-  private async signIn(@Req() request: Request, @Res() response: Response) {
+  public async signIn(@Req() request: Request, @Res() response: Response) {
     const accessCookie = this.authService.generateAccessTokenCookie(
       request.user,
     );

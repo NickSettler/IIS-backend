@@ -22,10 +22,10 @@ export class JwtRefreshStrategy extends PassportStrategy(
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
-          return request?.headers?.refresh;
+          return request.headers.refresh;
         },
         (request: Request) => {
-          return request?.cookies?.Refresh;
+          return request.cookies?.Refresh;
         },
       ]),
       secretOrKey: jwtConstants.refreshSecret,
@@ -34,7 +34,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
   }
 
   public async validate(request: Request, payload: any) {
-    const refreshToken = request?.cookies?.Refresh || request?.headers?.refresh;
+    const refreshToken = request.cookies?.Refresh || request.headers.refresh;
     const user = this.usersService.findWithRefreshToken(refreshToken, {
       [E_USER_ENTITY_KEYS.ID]: payload.userId,
     });

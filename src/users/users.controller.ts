@@ -8,7 +8,7 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  public getAll() {
+  public async getAll() {
     return this.usersService.findAll();
   }
 

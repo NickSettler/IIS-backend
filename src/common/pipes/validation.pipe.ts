@@ -10,6 +10,11 @@ import { validate } from 'class-validator';
 
 @Injectable()
 export class ValidationPipe implements PipeTransform {
+  private static toValidate(metatype: unknown) {
+    const types: Array<unknown> = [String, Boolean, Number, Array, Object];
+    return !types.includes(metatype);
+  }
+
   public async transform(value: any, { metatype }: ArgumentMetadata) {
     if (!metatype || !ValidationPipe.toValidate(metatype)) return value;
 
@@ -28,10 +33,5 @@ export class ValidationPipe implements PipeTransform {
     }
 
     return value;
-  }
-
-  private static toValidate(metatype: unknown) {
-    const types: Array<unknown> = [String, Boolean, Number, Array, Object];
-    return !types.includes(metatype);
   }
 }

@@ -15,13 +15,18 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
   rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/array-type': ['error', { default: 'generic' }],
+    '@typescript-eslint/await-thenable': 'error',
+    '@typescript-eslint/consistent-indexed-object-style': ['error', 'record'],
+    '@typescript-eslint/consistent-type-assertions': [
+      'error',
+      {
+        assertionStyle: 'as',
+      },
+    ],
+    '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+    '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-member-accessibility': [
       'error',
       {
@@ -35,6 +40,10 @@ module.exports = {
         },
       },
     ],
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/member-ordering': 'error',
+    '@typescript-eslint/method-signature-style': ['error', 'method'],
     '@typescript-eslint/naming-convention': [
       'error',
       {
@@ -62,5 +71,36 @@ module.exports = {
         leadingUnderscore: 'allow',
       },
     ],
+    '@typescript-eslint/no-confusing-void-expression': [
+      'error',
+      {
+        ignoreArrowShorthand: true,
+      },
+    ],
+    '@typescript-eslint/no-duplicate-enum-values': 'error',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-inferrable-types': 'error',
+    '@typescript-eslint/no-redundant-type-constituents': 'error',
+    '@typescript-eslint/no-require-imports': 'error',
+    '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
+    '@typescript-eslint/no-unnecessary-qualifier': 'error',
+    '@typescript-eslint/no-unnecessary-type-arguments': 'error',
+    '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+    '@typescript-eslint/no-unnecessary-type-constraint': 'error',
+    '@typescript-eslint/no-unsafe-declaration-merging': 'error',
+    '@typescript-eslint/no-useless-empty-export': 'error',
+    '@typescript-eslint/parameter-properties': [
+      'error',
+      {
+        prefer: 'parameter-property',
+      },
+    ],
+    '@typescript-eslint/prefer-enum-initializers': 'error',
+    '@typescript-eslint/prefer-for-of': 'error',
+    '@typescript-eslint/prefer-function-type': 'error',
+    '@typescript-eslint/prefer-optional-chain': 'error',
+    '@typescript-eslint/promise-function-async': 'error',
+    '@typescript-eslint/sort-type-constituents': 'error',
+    '@typescript-eslint/switch-exhaustiveness-check': 'error',
   },
 };
