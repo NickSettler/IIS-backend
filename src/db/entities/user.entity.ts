@@ -14,6 +14,7 @@ export enum E_USER_ENTITY_KEYS {
   PASSWORD = 'password',
   FIRST_NAME = 'first_name',
   LAST_NAME = 'last_name',
+  REFRESH_TOKEN = 'refresh_token',
   ROLES = 'roles',
 }
 
@@ -37,6 +38,9 @@ export class User {
 
   @Column()
   [E_USER_ENTITY_KEYS.LAST_NAME]: string;
+
+  @Column()
+  [E_USER_ENTITY_KEYS.REFRESH_TOKEN]: string;
 
   @ManyToMany(() => Role)
   @JoinTable({

@@ -14,6 +14,15 @@ export enum E_ROLE_ENTITY_KEYS {
   PERMISSIONS = 'permissions',
 }
 
+export enum E_ROLE {
+  ADMIN = 'ADMIN',
+  GUARANTOR = 'GUARANTOR',
+  TEACHER = 'TEACHER',
+  SCHEDULER = 'SCHEDULER',
+  STUDENT = 'STUDENT',
+  GUEST = 'GUEST',
+}
+
 @Entity({ name: E_DB_TABLES.ROLES })
 export class Role {
   @PrimaryGeneratedColumn('uuid')

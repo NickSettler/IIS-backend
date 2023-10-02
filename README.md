@@ -19,6 +19,12 @@ To start the project run:
 docker-compose up -d
 ```
 
+In case new packages were added to the project, you should rebuild the container:
+
+```bash
+docker-compose up -d --build
+```
+
 ### Monitoring
 
 You can monitor container status using WebStorm built-in docker plugin
