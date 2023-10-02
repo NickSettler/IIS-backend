@@ -16,14 +16,26 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
+  /**
+   * Find all users
+   */
   public async findAll(): Promise<Array<User>> {
     return this.usersRepository.find();
   }
 
+  /**
+   * Find one user using options
+   * @param options
+   */
   public async findOne(options: FindOneOptions<User>): Promise<User | null> {
     return this.usersRepository.findOne(options);
   }
 
+  /**
+   * Find a user with refresh token using criteria
+   * @param refreshToken refresh token user has
+   * @param criteria criteria to find user
+   */
   public async findWithRefreshToken(
     refreshToken: string,
     criteria: FindOptionsWhere<User>,
@@ -37,6 +49,10 @@ export class UsersService {
     if (user[E_USER_ENTITY_KEYS.REFRESH_TOKEN] === refreshToken) return user;
   }
 
+  /**
+   * Create a user
+   * @param createDto user data
+   */
   public async create(createDto: CreateUserDto): Promise<User> {
     const user = this.usersRepository.create(createDto);
 
@@ -47,6 +63,11 @@ export class UsersService {
     });
   }
 
+  /**
+   * Set refresh token for user
+   * @param id user id
+   * @param refreshToken refresh token
+   */
   public async setRefreshToken(
     id: string,
     refreshToken: string,
@@ -56,6 +77,10 @@ export class UsersService {
     });
   }
 
+  /**
+   * Delete a user
+   * @param id user id
+   */
   public async delete(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }
