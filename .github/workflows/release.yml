@@ -6,7 +6,7 @@ on:
       - published
 
 jobs:
-  build_and_push_docker:
+  build_backend:
     name: Build and push to Docker Hub
     runs-on: ubuntu-latest
     steps:
@@ -25,3 +25,25 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: nicksettler/iis-backend:${{ github.event.release.tag_name }}
+          target: backend
+
+  build_database:
+    name: Build and push to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker BuildX
+        uses: docker/setup-buildx-action@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: nicksettler/iis-database:${{ github.event.release.tag_name }}
+          target: database
