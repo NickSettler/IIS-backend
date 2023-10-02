@@ -6,6 +6,13 @@ import { UsersService } from '../../../users/users.service';
 import { jwtConstants } from '../../../auth/constants';
 import { E_USER_ENTITY_KEYS } from '../../../db/entities/user.entity';
 
+/**
+ * JWT (JSON Web Token) Refresh Strategy
+ *
+ * The strategy will extract the refresh JWT from the request and verify that the signature is valid.
+ * It will then invoke our validate() method passing the decoded token to it so that we can access associated user in our request handler.
+ * If the token is invalid (e.g. because it has expired) the strategy will throw an error.
+ */
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
   Strategy,
