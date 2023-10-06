@@ -2,8 +2,7 @@ DROP TABLE IF EXISTS roles;
 
 CREATE TABLE roles
 (
-    id   uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL PRIMARY KEY
 );
 
 INSERT INTO roles (name)
