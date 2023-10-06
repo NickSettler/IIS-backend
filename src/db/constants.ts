@@ -4,6 +4,11 @@ export enum E_DB_TABLES {
   ROLES = 'roles',
   ROLE_PERMISSIONS = 'role_permissions',
   PERMISSIONS = 'permissions',
+  COURSES = 'courses',
+  COURSE_ACTIVITY = 'course_activity',
+  CLASSES = 'classes',
+  SCHEDULE = 'schedule',
+  STUDENT_SCHEDULE = 'student_schedule',
 }
 
 export enum E_DB_ERROR_CODES {

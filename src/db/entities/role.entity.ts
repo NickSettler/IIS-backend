@@ -1,15 +1,8 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 import { E_DB_TABLES } from '../constants';
 import { E_PERMISSION_ENTITY_KEYS, Permission } from './permission.entity';
 
 export enum E_ROLE_ENTITY_KEYS {
-  ID = 'id',
   NAME = 'name',
   PERMISSIONS = 'permissions',
 }
@@ -25,10 +18,7 @@ export enum E_ROLE {
 
 @Entity({ name: E_DB_TABLES.ROLES })
 export class Role {
-  @PrimaryGeneratedColumn('uuid')
-  [E_ROLE_ENTITY_KEYS.ID]: string;
-
-  @Column()
+  @PrimaryColumn()
   [E_ROLE_ENTITY_KEYS.NAME]: string;
 
   @ManyToMany(() => Permission)
@@ -36,11 +26,11 @@ export class Role {
     name: E_DB_TABLES.ROLE_PERMISSIONS,
     joinColumn: {
       name: 'role_id',
-      referencedColumnName: E_ROLE_ENTITY_KEYS.ID,
+      referencedColumnName: E_ROLE_ENTITY_KEYS.NAME,
     },
     inverseJoinColumn: {
       name: 'permission_id',
-      referencedColumnName: E_PERMISSION_ENTITY_KEYS.ID,
+      referencedColumnName: E_PERMISSION_ENTITY_KEYS.NAME,
     },
   })
   [E_ROLE_ENTITY_KEYS.PERMISSIONS]: Array<Permission>;
