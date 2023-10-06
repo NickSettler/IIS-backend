@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { E_DB_TABLES } from '../constants';
 import { E_ROLE_ENTITY_KEYS, Role } from './role.entity';
+import { Exclude } from 'class-transformer';
 
 export enum E_USER_ENTITY_KEYS {
   ID = 'id',
@@ -31,6 +32,7 @@ export class User {
   [E_USER_ENTITY_KEYS.USERNAME]: string;
 
   @Column()
+  @Exclude()
   [E_USER_ENTITY_KEYS.PASSWORD]: string;
 
   @Column()
@@ -40,6 +42,7 @@ export class User {
   [E_USER_ENTITY_KEYS.LAST_NAME]: string;
 
   @Column()
+  @Exclude()
   [E_USER_ENTITY_KEYS.REFRESH_TOKEN]: string;
 
   @ManyToMany(() => Role)
