@@ -9,7 +9,7 @@ export enum E_CLASS_ENTITY_KEYS {
 @Entity({
   name: E_DB_TABLES.CLASSES,
 })
-export class Classes {
+export class Class {
   @PrimaryColumn()
   [E_CLASS_ENTITY_KEYS.ABBR]: string;
 
