@@ -20,9 +20,6 @@ export const enum E_COURSE_ENTITY_KEYS {
 @Entity({
   name: E_DB_TABLES.COURSES,
 })
-@Check(
-  `${E_COURSE_ENTITY_KEYS.CREDITS} > 0 AND ${E_COURSE_ENTITY_KEYS.CREDITS} < 20`,
-)
 export class Course {
   @PrimaryColumn()
   [E_COURSE_ENTITY_KEYS.ABBR]: string;

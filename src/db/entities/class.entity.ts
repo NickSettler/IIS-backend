@@ -9,9 +9,6 @@ export enum E_CLASS_ENTITY_KEYS {
 @Entity({
   name: E_DB_TABLES.CLASSES,
 })
-@Check(
-  `${E_CLASS_ENTITY_KEYS.CAPACITY} > 0 AND ${E_CLASS_ENTITY_KEYS.CAPACITY} < 300`,
-)
 export class Classes {
   @PrimaryColumn()
   [E_CLASS_ENTITY_KEYS.ABBR]: string;
