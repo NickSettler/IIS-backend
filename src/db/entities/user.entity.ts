@@ -1,4 +1,5 @@
 import {
+  BeforeInsert,
   Column,
   Entity,
   JoinTable,
@@ -8,6 +9,7 @@ import {
 import { E_DB_TABLES } from '../constants';
 import { E_ROLE_ENTITY_KEYS, Role } from './role.entity';
 import { Exclude } from 'class-transformer';
+import { hashSync } from 'bcrypt';
 
 export enum E_USER_ENTITY_KEYS {
   ID = 'id',
@@ -58,4 +60,9 @@ export class User {
     },
   })
   [E_USER_ENTITY_KEYS.ROLES]: Array<Role>;
+
+  @BeforeInsert()
+  public async hashPassword() {
+    this[E_USER_ENTITY_KEYS.PASSWORD] = hashSync(this.password, 10);
+  }
 }

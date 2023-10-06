@@ -18,7 +18,6 @@ import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import parse from 'parse-duration';
 import { jwtConstants } from './constants';
 import { LocalAuthGuard } from '../common/guards/local-auth.guard';
-import { hash } from 'bcrypt';
 
 @Controller('auth')
 export class AuthController {
@@ -62,11 +61,8 @@ export class AuthController {
     @Body() registerDto: CreateUserDto,
     @Res() response: Response,
   ) {
-    const password = await hash(registerDto[E_USER_ENTITY_KEYS.PASSWORD], 10);
-
     const user = await this.usersService.create({
       ...registerDto,
-      [E_USER_ENTITY_KEYS.PASSWORD]: password,
     });
 
     const accessToken = this.authService.generateAccessTokenCookie(user);
