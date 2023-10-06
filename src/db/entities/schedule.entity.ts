@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CourseActivity } from './course_activity.entity';
-import { Classes } from './class.entity';
+import { Class } from './class.entity';
 import { E_USER_ENTITY_KEYS, User } from './user.entity';
 
 export enum E_SCHEDULE_ENTITY_KEYS {
@@ -46,9 +46,9 @@ export class Schedule {
   @Column()
   [E_SCHEDULE_ENTITY_KEYS.CLASS_ABBR]: string;
 
-  @ManyToOne(() => Classes)
+  @ManyToOne(() => Class)
   @JoinColumn({ name: E_SCHEDULE_ENTITY_KEYS.CLASS_ABBR })
-  [E_SCHEDULE_ENTITY_KEYS.CLASSES]: Classes;
+  [E_SCHEDULE_ENTITY_KEYS.CLASSES]: Class;
 
   @ManyToMany(() => User)
   @JoinTable({
