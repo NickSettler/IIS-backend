@@ -9,10 +9,14 @@
       "email": "marochkina.lena@gmail.com"
     },
     {
-        "name": "Nikita Pasynkov",
-        "email": "pasynkov.n.d@gmail.com"
+      "name": "Nikita Pasynkov",
+      "email": "pasynkov.n.d@gmail.com"
     }
   ],
+  "repository": {
+    "url": "https://github.com/NickSettler/IIS-backend",
+    "type": "git"
+  },
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
