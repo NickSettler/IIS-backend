@@ -1,11 +1,4 @@
-import {
-  Check,
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { E_DB_TABLES } from '../constants';
 import { User } from './user.entity';
 
@@ -15,6 +8,7 @@ export const enum E_COURSE_ENTITY_KEYS {
   NAME = 'name',
   CREDITS = 'credits',
   ANNOTATION = 'annotation',
+  GUARANTOR = 'guarantor',
 }
 
 @Entity({
@@ -33,7 +27,10 @@ export class Course {
   @Column({ nullable: true })
   [E_COURSE_ENTITY_KEYS.ANNOTATION]: string;
 
+  @Column('uuid')
+  [E_COURSE_ENTITY_KEYS.GUARANTOR_ID]: string;
+
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'guarantor_id' })
-  [E_COURSE_ENTITY_KEYS.GUARANTOR_ID]: User;
+  @JoinColumn({ name: E_COURSE_ENTITY_KEYS.GUARANTOR_ID })
+  [E_COURSE_ENTITY_KEYS.GUARANTOR]: User;
 }

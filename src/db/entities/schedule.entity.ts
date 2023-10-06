@@ -15,7 +15,9 @@ import { E_USER_ENTITY_KEYS, User } from './user.entity';
 export enum E_SCHEDULE_ENTITY_KEYS {
   ID = 'id',
   COURSE_ACTIVITY_ID = 'course_activity_id',
+  COURSE_ACTIVITY = 'course_activity',
   CLASS_ABBR = 'class_abbr',
+  CLASSES = 'classes',
   START_TIME = 'start_time',
   END_TIME = 'end_time',
   STUDENTS = 'students',
@@ -28,19 +30,25 @@ export class Schedule {
   @PrimaryGeneratedColumn('uuid')
   [E_SCHEDULE_ENTITY_KEYS.ID]: string;
 
-  @Column()
-  [E_SCHEDULE_ENTITY_KEYS.START_TIME]: string;
+  @Column({ type: 'timestamp' })
+  [E_SCHEDULE_ENTITY_KEYS.START_TIME]: Date;
 
-  @Column()
-  [E_SCHEDULE_ENTITY_KEYS.END_TIME]: string;
+  @Column({ type: 'timestamp' })
+  [E_SCHEDULE_ENTITY_KEYS.END_TIME]: Date;
+
+  @Column('uuid')
+  [E_SCHEDULE_ENTITY_KEYS.COURSE_ACTIVITY_ID]: string;
 
   @ManyToOne(() => CourseActivity)
-  @JoinColumn({ name: 'course_activity_id' })
-  [E_SCHEDULE_ENTITY_KEYS.COURSE_ACTIVITY_ID]: CourseActivity;
+  @JoinColumn({ name: E_SCHEDULE_ENTITY_KEYS.COURSE_ACTIVITY_ID })
+  [E_SCHEDULE_ENTITY_KEYS.COURSE_ACTIVITY]: CourseActivity;
+
+  @Column()
+  [E_SCHEDULE_ENTITY_KEYS.CLASS_ABBR]: string;
 
   @ManyToOne(() => Classes)
-  @JoinColumn({ name: 'class_abbr' })
-  [E_SCHEDULE_ENTITY_KEYS.CLASS_ABBR]: Classes;
+  @JoinColumn({ name: E_SCHEDULE_ENTITY_KEYS.CLASS_ABBR })
+  [E_SCHEDULE_ENTITY_KEYS.CLASSES]: Classes;
 
   @ManyToMany(() => User)
   @JoinTable({
