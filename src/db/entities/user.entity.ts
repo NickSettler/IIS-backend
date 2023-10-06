@@ -50,8 +50,8 @@ export class User {
       referencedColumnName: E_USER_ENTITY_KEYS.ID,
     },
     inverseJoinColumn: {
-      name: 'role_id',
-      referencedColumnName: E_ROLE_ENTITY_KEYS.ID,
+      name: 'role_name',
+      referencedColumnName: E_ROLE_ENTITY_KEYS.NAME,
     },
   })
   [E_USER_ENTITY_KEYS.ROLES]: Array<Role>;
