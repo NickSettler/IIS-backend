@@ -11,3 +11,4 @@ updates:
       - "NickSettler"
     labels:
       - "build"
+    open-pull-requests-limit: 10
