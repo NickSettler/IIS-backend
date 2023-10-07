@@ -1,5 +1,7 @@
 import {
+  AfterLoad,
   BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   JoinTable,
@@ -44,7 +46,7 @@ export class User {
   [E_USER_ENTITY_KEYS.LAST_NAME]: string;
 
   @Column()
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   [E_USER_ENTITY_KEYS.REFRESH_TOKEN]: string;
 
   @ManyToMany(() => Role)
@@ -61,8 +63,18 @@ export class User {
   })
   [E_USER_ENTITY_KEYS.ROLES]: Array<Role>;
 
+  @Exclude()
+  private tempPassword: string;
+
+  @AfterLoad()
+  private loadTempPassword(): void {
+    this.tempPassword = this.password;
+  }
+
   @BeforeInsert()
-  public async hashPassword() {
-    this[E_USER_ENTITY_KEYS.PASSWORD] = hashSync(this.password, 10);
+  @BeforeUpdate()
+  private async hashPassword() {
+    if (this.tempPassword !== this.password)
+      this[E_USER_ENTITY_KEYS.PASSWORD] = hashSync(this.password, 10);
   }
 }
