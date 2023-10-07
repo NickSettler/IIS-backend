@@ -10,5 +10,5 @@ export class CreateClassDto {
   @IsNotEmpty()
   @IsString()
   @MaxLength(3)
-  [E_CLASS_ENTITY_KEYS.CAPACITY]: string;
+  [E_CLASS_ENTITY_KEYS.CAPACITY]: number;
 }
