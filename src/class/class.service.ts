@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Class } from '../db/entities/class.entity';
+import { Class, E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { CreateClassDto } from './class.dto';
 import { E_DB_ERROR_CODES } from '../db/constants';
@@ -49,11 +49,22 @@ export class ClassService {
    * Update a class
    */
 
+  public async update(abbr: string, updateDto: CreateClassDto): Promise<Class> {
+    const classToUpdate = await this.classRepository.findOne({
+      where: { [E_CLASS_ENTITY_KEYS.ABBR]: abbr },
+    });
+
+    if (!classToUpdate) throw new ConflictException('Class not found');
+
+    const updatedClass = this.classRepository.merge(classToUpdate, updateDto);
+
+    return await this.classRepository.save(updatedClass);
+  }
+
   /**
    * Delete a class
-   * @param id class id
    */
-  public async delete(id: string): Promise<void> {
-    await this.classRepository.delete(id);
+  public async delete(abbr: string): Promise<void> {
+    await this.classRepository.delete(abbr);
   }
 }
