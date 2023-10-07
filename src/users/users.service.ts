@@ -2,18 +2,23 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
-import { CreateUserDto } from './users.dto';
+import { CreateUserDto, UpdateUserDto } from './users.dto';
 import { E_DB_ERROR_CODES } from '../db/constants';
+import { E_ROLE_ENTITY_KEYS, Role } from '../db/entities/role.entity';
+import { isEqual, unionWith, omit, differenceWith, map, assign } from 'lodash';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(Role)
+    private rolesRepository: Repository<Role>,
   ) {}
 
   /**
@@ -64,6 +69,32 @@ export class UsersService {
   }
 
   /**
+   * Update a user
+   * @param id user id
+   * @param updateDto user data
+   */
+  public async update(id: string, updateDto: UpdateUserDto) {
+    const user: User = await this.usersRepository.findOne({
+      where: {
+        [E_USER_ENTITY_KEYS.ID]: id,
+      },
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    assign(user, updateDto);
+
+    await this.usersRepository.save(user);
+
+    return this.usersRepository.findOne({
+      where: {
+        [E_USER_ENTITY_KEYS.ID]: id,
+      },
+      relations: [E_USER_ENTITY_KEYS.ROLES],
+    });
+  }
+
+  /**
    * Set refresh token for user
    * @param id user id
    * @param refreshToken refresh token
@@ -83,5 +114,69 @@ export class UsersService {
    */
   public async delete(id: string): Promise<void> {
     await this.usersRepository.delete(id);
+  }
+
+  /**
+   * Change roles of a user
+   * @param id user id
+   * @param roleName role name
+   * @param action action to perform (ADD or REMOVE)
+   */
+  public async changeRoles(
+    id: string,
+    roleName: string,
+    action: 'ADD' | 'REMOVE',
+  ) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        [E_USER_ENTITY_KEYS.ID]: id,
+      },
+      relations: [E_USER_ENTITY_KEYS.ROLES],
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    const role = await this.rolesRepository.findOne({
+      where: {
+        [E_ROLE_ENTITY_KEYS.NAME]: roleName,
+      },
+    });
+
+    if (!role) throw new NotFoundException('Role not found');
+
+    const newRoles =
+      action === 'ADD'
+        ? unionWith(
+            [
+              ...map(user[E_USER_ENTITY_KEYS.ROLES], (r) =>
+                omit(r, E_ROLE_ENTITY_KEYS.PERMISSIONS),
+              ),
+              {
+                [E_ROLE_ENTITY_KEYS.NAME]: roleName,
+              },
+            ],
+            isEqual,
+          )
+        : differenceWith(
+            [
+              ...map(user[E_USER_ENTITY_KEYS.ROLES], (r) =>
+                omit(r, E_ROLE_ENTITY_KEYS.PERMISSIONS),
+              ),
+            ],
+            [{ [E_ROLE_ENTITY_KEYS.NAME]: roleName }],
+            isEqual,
+          );
+
+    await this.usersRepository.save({
+      ...user,
+      [E_USER_ENTITY_KEYS.ROLES]: newRoles,
+    });
+
+    return this.usersRepository.findOne({
+      where: {
+        [E_USER_ENTITY_KEYS.ID]: id,
+      },
+      relations: [E_USER_ENTITY_KEYS.ROLES],
+    });
   }
 }
