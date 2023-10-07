@@ -1,4 +1,7 @@
 import {
+  AfterLoad,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   JoinTable,
@@ -7,6 +10,8 @@ import {
 } from 'typeorm';
 import { E_DB_TABLES } from '../constants';
 import { E_ROLE_ENTITY_KEYS, Role } from './role.entity';
+import { Exclude } from 'class-transformer';
+import { hashSync } from 'bcrypt';
 
 export enum E_USER_ENTITY_KEYS {
   ID = 'id',
@@ -31,6 +36,7 @@ export class User {
   [E_USER_ENTITY_KEYS.USERNAME]: string;
 
   @Column()
+  @Exclude()
   [E_USER_ENTITY_KEYS.PASSWORD]: string;
 
   @Column()
@@ -40,6 +46,7 @@ export class User {
   [E_USER_ENTITY_KEYS.LAST_NAME]: string;
 
   @Column()
+  @Exclude()
   [E_USER_ENTITY_KEYS.REFRESH_TOKEN]: string;
 
   @ManyToMany(() => Role)
@@ -55,4 +62,19 @@ export class User {
     },
   })
   [E_USER_ENTITY_KEYS.ROLES]: Array<Role>;
+
+  @Exclude()
+  private tempPassword: string;
+
+  @AfterLoad()
+  private loadTempPassword(): void {
+    this.tempPassword = this.password;
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private async hashPassword() {
+    if (this.tempPassword !== this.password)
+      this[E_USER_ENTITY_KEYS.PASSWORD] = hashSync(this.password, 10);
+  }
 }

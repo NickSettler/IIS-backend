@@ -24,7 +24,6 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data:/var/lib/postgresql/data
       - ./docker/postgres/migrations:/docker-entrypoint-initdb.d
   redis:
     image: redis:alpine

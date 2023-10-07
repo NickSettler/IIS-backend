@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
+import { PartialType } from '@nestjs/mapped-types';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -18,3 +19,5 @@ export class CreateUserDto {
   @IsString()
   [E_USER_ENTITY_KEYS.LAST_NAME]: string;
 }
+
+export class UpdateUserDto extends PartialType(CreateUserDto) {}
