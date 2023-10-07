@@ -46,7 +46,7 @@ export class User {
   [E_USER_ENTITY_KEYS.LAST_NAME]: string;
 
   @Column()
-  @Exclude({ toPlainOnly: true })
+  @Exclude()
   [E_USER_ENTITY_KEYS.REFRESH_TOKEN]: string;
 
   @ManyToMany(() => Role)
