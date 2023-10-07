@@ -92,6 +92,6 @@ export class UsersController {
     @Param('id') id: string,
     @Param('roleName') roleName: string,
   ) {
-    return this.usersService.changeRoles(id, roleName, 'ADD');
+    return this.usersService.changeRoles(id, roleName, 'REMOVE');
   }
 }
