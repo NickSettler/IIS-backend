@@ -90,7 +90,10 @@ export class UsersService {
       where: {
         [E_USER_ENTITY_KEYS.ID]: id,
       },
-      relations: [E_USER_ENTITY_KEYS.ROLES],
+      relations: [
+        E_USER_ENTITY_KEYS.ROLES,
+        `${E_USER_ENTITY_KEYS.ROLES}.${E_ROLE_ENTITY_KEYS.PERMISSIONS}`,
+      ],
     });
   }
 
@@ -176,7 +179,10 @@ export class UsersService {
       where: {
         [E_USER_ENTITY_KEYS.ID]: id,
       },
-      relations: [E_USER_ENTITY_KEYS.ROLES],
+      relations: [
+        E_USER_ENTITY_KEYS.ROLES,
+        `${E_USER_ENTITY_KEYS.ROLES}.${E_ROLE_ENTITY_KEYS.PERMISSIONS}`,
+      ],
     });
   }
 }

@@ -45,7 +45,9 @@ export class User {
   @Column()
   [E_USER_ENTITY_KEYS.LAST_NAME]: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @Exclude()
   [E_USER_ENTITY_KEYS.REFRESH_TOKEN]: string;
 
