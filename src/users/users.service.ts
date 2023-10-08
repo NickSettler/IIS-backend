@@ -8,9 +8,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { CreateUserDto, UpdateUserDto } from './users.dto';
-import { E_DB_ERROR_CODES } from '../db/constants';
 import { E_ROLE_ENTITY_KEYS, Role } from '../db/entities/role.entity';
 import { isEqual, unionWith, omit, differenceWith, map, assign } from 'lodash';
+import { isError } from '../utils/errors';
 
 @Injectable()
 export class UsersService {
@@ -62,9 +62,10 @@ export class UsersService {
     const user = this.usersRepository.create(createDto);
 
     return await this.usersRepository.save(user).catch((err: any) => {
-      if (err.code === E_DB_ERROR_CODES.UNIQUE_CONSTRAINT)
+      if (isError(err, 'UNIQUE_CONSTRAINT'))
         throw new ConflictException('User already exists');
-      else throw new InternalServerErrorException("Can't create user");
+
+      throw new InternalServerErrorException("Can't create user");
     });
   }
 
@@ -116,6 +117,14 @@ export class UsersService {
    * @param id user id
    */
   public async delete(id: string): Promise<void> {
+    const user = await this.usersRepository.findOne({
+      where: {
+        [E_USER_ENTITY_KEYS.ID]: id,
+      },
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
     await this.usersRepository.delete(id);
   }
 
