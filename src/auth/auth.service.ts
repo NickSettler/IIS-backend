@@ -4,6 +4,7 @@ import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { compareSync } from 'bcrypt';
 import { jwtConstants } from './constants';
+import parse from 'parse-duration';
 
 @Injectable()
 export class AuthService {
@@ -43,7 +44,11 @@ export class AuthService {
 
     const token = this.jwtService.sign(payload);
 
-    const cookie = `Authentication=${token}; HttpOnly; Path=/; Max-Age=${jwtConstants.tokenExpiresIn}`;
+    const expires = new Date(
+      Date.now() + parse(jwtConstants.tokenExpiresIn),
+    ).toUTCString();
+
+    const cookie = `Authentication=${token}; HttpOnly; Path=/; Max-Age=${jwtConstants.tokenExpiresIn}; Expires=${expires}`;
 
     return {
       cookie,
@@ -63,7 +68,11 @@ export class AuthService {
       expiresIn: jwtConstants.refreshExpiresIn,
     });
 
-    const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${jwtConstants.refreshExpiresIn}`;
+    const expires = new Date(
+      Date.now() + parse(jwtConstants.tokenExpiresIn),
+    ).toUTCString();
+
+    const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${jwtConstants.refreshExpiresIn}; Expires=${expires}`;
 
     return {
       cookie,

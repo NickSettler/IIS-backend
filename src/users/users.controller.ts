@@ -27,13 +27,13 @@ export class UsersController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(E_ROLE.ADMIN)
-  public async getAll() {
+  public async getAll(): Promise<Array<User>> {
     return this.usersService.findAll();
   }
 
   @Get('/me')
   @UseGuards(JwtAuthGuard)
-  public async getMe(@Req() request: Request) {
+  public async getMe(@Req() request: Request): Promise<User> {
     const user = request.user as User;
 
     return this.usersService.findOne({
@@ -50,7 +50,7 @@ export class UsersController {
   @Get('/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(E_ROLE.ADMIN)
-  public async getOne(@Param('id') id: string) {
+  public async getOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne({
       where: {
         [E_USER_ENTITY_KEYS.ID]: id,
@@ -66,7 +66,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @UsePipes(ValidationPipe)
   @Roles(E_ROLE.ADMIN)
-  public async create(@Body() createDto: CreateUserDto) {
+  public async create(@Body() createDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createDto);
   }
 
@@ -77,13 +77,13 @@ export class UsersController {
   public async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateUserDto,
-  ) {
+  ): Promise<User> {
     return this.usersService.update(id, updateDto);
   }
 
   @Delete('/:id')
   @Roles(E_ROLE.ADMIN)
-  public async delete(@Param('id') id: string) {
+  public async delete(@Param('id') id: string): Promise<void> {
     return this.usersService.delete(id);
   }
 
@@ -93,7 +93,7 @@ export class UsersController {
   public async addRole(
     @Param('id') id: string,
     @Param('roleName') roleName: string,
-  ) {
+  ): Promise<User> {
     return this.usersService.changeRoles(id, roleName, 'ADD');
   }
 
@@ -103,7 +103,7 @@ export class UsersController {
   public async deleteRole(
     @Param('id') id: string,
     @Param('roleName') roleName: string,
-  ) {
+  ): Promise<User> {
     return this.usersService.changeRoles(id, roleName, 'REMOVE');
   }
 }

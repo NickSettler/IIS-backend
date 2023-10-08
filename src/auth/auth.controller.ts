@@ -30,28 +30,29 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   public async signIn(@Req() request: Request, @Res() response: Response) {
-    const accessCookie = this.authService.generateAccessTokenCookie(
+    const accessToken = this.authService.generateAccessTokenCookie(
       request.user,
     );
-    const refreshCookie = this.authService.generateRefreshTokenCookie(
+    const refreshToken = this.authService.generateRefreshTokenCookie(
       request.user,
     );
 
     await this.usersService.setRefreshToken(
       (request.user as User)[E_USER_ENTITY_KEYS.ID],
-      refreshCookie.token,
+      refreshToken.token,
     );
 
-    response.setHeader('Set-Cookie', [
-      accessCookie.cookie,
-      refreshCookie.cookie,
-    ]);
+    console.log(accessToken.cookie);
 
-    return response.send({
-      accessToken: accessCookie.token,
-      refreshToken: refreshCookie.token,
-      expiresIn: parse(jwtConstants.tokenExpiresIn),
-    });
+    response.setHeader('Set-Cookie', [accessToken.cookie, refreshToken.cookie]);
+
+    response
+      .send({
+        accessToken: accessToken.token,
+        refreshToken: refreshToken.token,
+        expiresIn: parse(jwtConstants.tokenExpiresIn),
+      })
+      .end();
   }
 
   @Post('sign-up')
@@ -76,10 +77,12 @@ export class AuthController {
       refreshToken.token,
     );
 
-    return response.send({
-      accessToken: accessToken.token,
-      refreshToken: refreshToken.token,
-      expiresIn: parse(jwtConstants.tokenExpiresIn),
-    });
+    response
+      .send({
+        accessToken: accessToken.token,
+        refreshToken: refreshToken.token,
+        expiresIn: parse(jwtConstants.tokenExpiresIn),
+      })
+      .end();
   }
 }
