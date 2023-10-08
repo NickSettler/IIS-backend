@@ -42,8 +42,6 @@ export class AuthController {
       refreshToken.token,
     );
 
-    console.log(accessToken.cookie);
-
     response.setHeader('Set-Cookie', [accessToken.cookie, refreshToken.cookie]);
 
     response
