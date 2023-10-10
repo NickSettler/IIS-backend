@@ -2,7 +2,7 @@ name: Lint And Build
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, synchronize, reopened]
 
 jobs:
   lint:
@@ -49,7 +49,6 @@ jobs:
 
   build:
     name: Build
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     needs: [lint, test]
     steps:
@@ -67,6 +66,7 @@ jobs:
         run: yarn build
 
       - name: Archive production artifacts
+        if: github.event.pull_request.merged == true
         uses: actions/upload-artifact@v3
         with:
           name: dist
