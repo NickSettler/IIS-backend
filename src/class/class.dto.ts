@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
+import { PartialType } from '@nestjs/mapped-types';
 
 export class CreateClassDto {
   @IsNotEmpty()
@@ -12,3 +13,5 @@ export class CreateClassDto {
   @MaxLength(3)
   [E_CLASS_ENTITY_KEYS.CAPACITY]: number;
 }
+
+export class UpdateClassDto extends PartialType(CreateClassDto) {}

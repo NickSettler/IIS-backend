@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Class, E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 import { FindOneOptions, Repository } from 'typeorm';
-import { CreateClassDto } from './class.dto';
+import { CreateClassDto, UpdateClassDto } from './class.dto';
 import { E_DB_ERROR_CODES } from '../db/constants';
 
 @Injectable()
@@ -49,7 +49,7 @@ export class ClassService {
    * Update a class
    */
 
-  public async update(abbr: string, updateDto: CreateClassDto): Promise<Class> {
+  public async update(abbr: string, updateDto: UpdateClassDto): Promise<Class> {
     const classToUpdate = await this.classRepository.findOne({
       where: { [E_CLASS_ENTITY_KEYS.ABBR]: abbr },
     });
@@ -63,7 +63,9 @@ export class ClassService {
 
   /**
    * Delete a class
+   * @param abbr
    */
+
   public async delete(abbr: string): Promise<void> {
     await this.classRepository.delete(abbr);
   }
