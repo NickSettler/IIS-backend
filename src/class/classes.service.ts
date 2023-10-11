@@ -47,8 +47,9 @@ export class ClassesService {
 
   /**
    * Update a class
+   * @param abbr
+   * @param updateDto
    */
-
   public async update(abbr: string, updateDto: UpdateClassDto): Promise<Class> {
     const classToUpdate = await this.classRepository.findOne({
       where: { [E_CLASS_ENTITY_KEYS.ABBR]: abbr },
@@ -65,7 +66,6 @@ export class ClassesService {
    * Delete a class
    * @param abbr
    */
-
   public async delete(abbr: string): Promise<void> {
     await this.classRepository.delete(abbr);
   }

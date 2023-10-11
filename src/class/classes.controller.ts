@@ -27,9 +27,9 @@ export class ClassesController {
   @Roles(
     E_ROLE.ADMIN,
     E_ROLE.TEACHER,
-    E_ROLE.STUDENT,
     E_ROLE.GUARANTOR,
     E_ROLE.SCHEDULER,
+    E_ROLE.STUDENT,
   )
   public async getAll() {
     return this.classService.findAll();
@@ -37,7 +37,7 @@ export class ClassesController {
 
   @Get('/:abbr')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(E_ROLE.ADMIN, E_ROLE.TEACHER, E_ROLE.GUARANTOR, E_ROLE.SCHEDULER)
+  @Roles(E_ROLE.ADMIN)
   public async getOne(@Param('abbr') abbr: string) {
     return this.classService.findOne({
       where: { [E_CLASS_ENTITY_KEYS.ABBR]: abbr },
