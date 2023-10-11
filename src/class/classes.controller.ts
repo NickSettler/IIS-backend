@@ -5,19 +5,20 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { ClassService } from './class.service';
+import { ClassesService } from './classes.service';
 import { E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import RolesGuard from '../common/guards/roles.guard';
-import { CreateClassDto, UpdateClassDto } from './class.dto';
+import { CreateClassDto, UpdateClassDto } from './classes.dto';
 import { ValidationPipe } from '../common/pipes/validation.pipe';
 
-@Controller('class')
-export class ClassController {
-  constructor(private readonly classService: ClassService) {}
+@Controller('classes')
+export class ClassesController {
+  constructor(private readonly classService: ClassesService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -40,7 +41,7 @@ export class ClassController {
     return this.classService.create(createDto);
   }
 
-  @Post()
+  @Put('/:abbr')
   @UseGuards(JwtAuthGuard, RolesGuard)
   public async update(
     @Param('abbr') abbr: string,
@@ -49,7 +50,7 @@ export class ClassController {
     return this.classService.update(abbr, updateDto);
   }
 
-  @Delete('/:id')
+  @Delete('/:abbr')
   public async delete(@Param('abbr') abbr: string) {
     return this.classService.delete(abbr);
   }

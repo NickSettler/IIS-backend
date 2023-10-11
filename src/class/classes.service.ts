@@ -6,11 +6,11 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Class, E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 import { FindOneOptions, Repository } from 'typeorm';
-import { CreateClassDto, UpdateClassDto } from './class.dto';
+import { CreateClassDto, UpdateClassDto } from './classes.dto';
 import { E_POSTGRES_ERROR_CODES } from '../db/constants';
 
 @Injectable()
-export class ClassService {
+export class ClassesService {
   constructor(
     @InjectRepository(Class)
     private classRepository: Repository<Class>,
