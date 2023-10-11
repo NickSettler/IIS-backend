@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Class, E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { CreateClassDto, UpdateClassDto } from './class.dto';
-import { E_DB_ERROR_CODES } from '../db/constants';
+import { E_POSTGRES_ERROR_CODES } from '../db/constants';
 
 @Injectable()
 export class ClassService {
@@ -39,7 +39,7 @@ export class ClassService {
     const newClass = this.classRepository.create(createDto);
 
     return await this.classRepository.save(newClass).catch((err: any) => {
-      if (err.code === E_DB_ERROR_CODES.UNIQUE_CONSTRAINT)
+      if (err.code === E_POSTGRES_ERROR_CODES.UNIQUE_CONSTRAINT)
         throw new ConflictException('Class already exists');
       else throw new InternalServerErrorException("Can't create class");
     });
