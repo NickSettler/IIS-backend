@@ -33,6 +33,10 @@ export class CoursesService {
     return this.coursesRepository.findOne(options);
   }
 
+  /**
+   * Create a course
+   * @param createDto
+   */
   public async create(createDto: CreateCoursesDto): Promise<Course> {
     // check if guarantor_id exists in users table
     const course = this.coursesRepository.create({
@@ -47,6 +51,8 @@ export class CoursesService {
     await this.coursesRepository.save(course).catch((err: any) => {
       if (isError(err, 'UNIQUE_CONSTRAINT')) {
         throw new ConflictException('Course already exists');
+      } else if (isError(err, 'FOREIGN_KEY_VIOLATION')) {
+        throw new ConflictException('Guarantor does not exist');
       }
       throw err;
     });
