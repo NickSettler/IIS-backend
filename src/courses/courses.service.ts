@@ -7,10 +7,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { isError } from '../utils/errors';
-import { UpdateCoursesDto } from './courses.dto';
+import { CreateCoursesDto, UpdateCoursesDto } from './courses.dto';
+import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
 
 @Injectable()
 export class CoursesService {
+  private usersRepository: any;
   constructor(
     @InjectRepository(Course)
     private coursesRepository: Repository<Course>,
@@ -31,8 +33,16 @@ export class CoursesService {
     return this.coursesRepository.findOne(options);
   }
 
-  public async create(createDto: Course): Promise<Course> {
-    const course = this.coursesRepository.create(createDto);
+  public async create(createDto: CreateCoursesDto): Promise<Course> {
+    // check if guarantor_id exists in users table
+    const course = this.coursesRepository.create({
+      ...createDto,
+      ...(createDto[E_COURSE_ENTITY_KEYS.GUARANTOR] && {
+        [E_COURSE_ENTITY_KEYS.GUARANTOR]: {
+          [E_USER_ENTITY_KEYS.ID]: createDto[E_COURSE_ENTITY_KEYS.GUARANTOR],
+        },
+      }),
+    });
 
     await this.coursesRepository.save(course).catch((err: any) => {
       if (isError(err, 'UNIQUE_CONSTRAINT')) {
@@ -52,12 +62,22 @@ export class CoursesService {
     abbr: string,
     updateDto: UpdateCoursesDto,
   ): Promise<Course> {
-    const course = await this.coursesRepository.findOne({
+    // check if new guarantor_id exists in users table
+    await this.coursesRepository.update(abbr, {
+      ...updateDto,
+      ...(updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR] && {
+        [E_COURSE_ENTITY_KEYS.GUARANTOR]: {
+          [E_USER_ENTITY_KEYS.ID]: updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR],
+        },
+      }),
+    });
+
+    const newCourse = await this.coursesRepository.findOne({
       where: { [E_COURSE_ENTITY_KEYS.ABBR]: abbr },
     });
-    if (!course) throw new ConflictException('Course not found');
+    if (!newCourse) throw new ConflictException('Course not found');
 
-    const updatedCourse = this.coursesRepository.merge(course, updateDto);
+    const updatedCourse = this.coursesRepository.merge(newCourse, updateDto);
 
     return await this.coursesRepository.save(updatedCourse);
   }

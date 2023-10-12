@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS course;
+DROP TABLE IF EXISTS courses;
 
-CREATE TABLE course
+CREATE TABLE courses
 (
     abbr         VARCHAR(10) PRIMARY KEY,
     guarantor_id uuid         NOT NULL,
