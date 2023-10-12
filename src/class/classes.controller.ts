@@ -37,7 +37,13 @@ export class ClassesController {
 
   @Get('/:abbr')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(E_ROLE.ADMIN)
+  @Roles(
+    E_ROLE.ADMIN,
+    E_ROLE.TEACHER,
+    E_ROLE.GUARANTOR,
+    E_ROLE.SCHEDULER,
+    E_ROLE.STUDENT,
+  )
   public async getOne(@Param('abbr') abbr: string) {
     return this.classService.findOne({
       where: { [E_CLASS_ENTITY_KEYS.ABBR]: abbr },
