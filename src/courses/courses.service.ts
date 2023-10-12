@@ -12,7 +12,6 @@ import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
 
 @Injectable()
 export class CoursesService {
-  private usersRepository: any;
   constructor(
     @InjectRepository(Course)
     private coursesRepository: Repository<Course>,
