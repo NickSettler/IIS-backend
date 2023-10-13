@@ -1,13 +1,14 @@
 import {
   ConflictException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { isError } from '../utils/errors';
-import { CreateCoursesDto, UpdateCoursesDto } from './courses.dto';
+import { CreateCoursesDto, UpdateCourseDto } from './courses.dto';
 import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
 
 @Injectable()
@@ -51,7 +52,11 @@ export class CoursesService {
       if (isError(err, 'UNIQUE_CONSTRAINT')) {
         throw new ConflictException('Course already exists');
       } else if (isError(err, 'FOREIGN_KEY_VIOLATION')) {
-        throw new ConflictException('Guarantor does not exist');
+        throw new InternalServerErrorException(
+          `Guarantor ${
+            createDto[E_COURSE_ENTITY_KEYS.GUARANTOR_ID]
+          } does not exist`,
+        );
       }
       throw err;
     });
@@ -65,22 +70,34 @@ export class CoursesService {
    */
   public async update(
     abbr: string,
-    updateDto: UpdateCoursesDto,
+    updateDto: UpdateCourseDto,
   ): Promise<Course> {
-    // check if new guarantor_id exists in users table
-    await this.coursesRepository.update(abbr, {
-      ...updateDto,
-      ...(updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR] && {
-        [E_COURSE_ENTITY_KEYS.GUARANTOR]: {
-          [E_USER_ENTITY_KEYS.ID]: updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR],
-        },
-      }),
-    });
-
     const newCourse = await this.coursesRepository.findOne({
       where: { [E_COURSE_ENTITY_KEYS.ABBR]: abbr },
     });
+
     if (!newCourse) throw new ConflictException('Course not found');
+
+    // check if new guarantor_id exists in users table
+    await this.coursesRepository
+      .update(abbr, {
+        ...updateDto,
+        ...(updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR] && {
+          [E_COURSE_ENTITY_KEYS.GUARANTOR]: {
+            [E_USER_ENTITY_KEYS.ID]: updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR],
+          },
+        }),
+      })
+      .catch((err: any) => {
+        if (isError(err, 'FOREIGN_KEY_VIOLATION')) {
+          throw new InternalServerErrorException(
+            `Guarantor ${
+              updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR_ID]
+            } does not exist`,
+          );
+        }
+        throw err;
+      });
 
     const updatedCourse = this.coursesRepository.merge(newCourse, updateDto);
 
@@ -95,7 +112,8 @@ export class CoursesService {
     const course = await this.coursesRepository.findOne({
       where: { [E_COURSE_ENTITY_KEYS.ABBR]: abbr },
     });
-    if (!course) throw new NotFoundException('User not found');
+
+    if (!course) throw new NotFoundException('Course not found');
 
     await this.coursesRepository.delete(abbr);
   }

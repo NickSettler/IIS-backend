@@ -23,4 +23,4 @@ export class CreateCoursesDto {
   [E_COURSE_ENTITY_KEYS.GUARANTOR_ID]: string;
 }
 
-export class UpdateCoursesDto extends PartialType(CreateCoursesDto) {}
+export class UpdateCourseDto extends PartialType(CreateCoursesDto) {}

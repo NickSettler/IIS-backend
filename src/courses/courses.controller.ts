@@ -15,7 +15,7 @@ import RolesGuard from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { E_ROLE } from '../db/entities/role.entity';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
-import { CreateCoursesDto, UpdateCoursesDto } from './courses.dto';
+import { CreateCoursesDto, UpdateCourseDto } from './courses.dto';
 import { ValidationPipe } from '../common/pipes/validation.pipe';
 
 @Controller('courses')
@@ -65,7 +65,7 @@ export class CoursesController {
   @Roles(E_ROLE.ADMIN)
   public async update(
     @Param('abbr') abbr: string,
-    @Body() updateDto: UpdateCoursesDto,
+    @Body() updateDto: UpdateCourseDto,
   ): Promise<Course> {
     return this.coursesService.update(abbr, updateDto);
   }
