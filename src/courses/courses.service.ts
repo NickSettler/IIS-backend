@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
@@ -52,13 +53,13 @@ export class CoursesService {
       if (isError(err, 'UNIQUE_CONSTRAINT')) {
         throw new ConflictException('Course already exists');
       } else if (isError(err, 'FOREIGN_KEY_VIOLATION')) {
-        throw new InternalServerErrorException(
+        throw new UnprocessableEntityException(
           `Guarantor ${
             createDto[E_COURSE_ENTITY_KEYS.GUARANTOR_ID]
           } does not exist`,
         );
       }
-      throw err;
+      throw new InternalServerErrorException('Something went wrong');
     });
     return this.coursesRepository.save(course);
   }
@@ -90,13 +91,13 @@ export class CoursesService {
       })
       .catch((err: any) => {
         if (isError(err, 'FOREIGN_KEY_VIOLATION')) {
-          throw new InternalServerErrorException(
+          throw new UnprocessableEntityException(
             `Guarantor ${
               updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR_ID]
             } does not exist`,
           );
         }
-        throw err;
+        throw new InternalServerErrorException('Something went wrong');
       });
 
     const updatedCourse = this.coursesRepository.merge(newCourse, updateDto);
