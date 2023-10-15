@@ -53,11 +53,9 @@ export class CoursesService {
       if (isError(err, 'UNIQUE_CONSTRAINT')) {
         throw new ConflictException('Course already exists');
       } else if (isError(err, 'FOREIGN_KEY_VIOLATION')) {
-        throw new UnprocessableEntityException(
-          `Guarantor ${
-            createDto[E_COURSE_ENTITY_KEYS.GUARANTOR_ID]
-          } does not exist`,
-        );
+        if (err.constraint === 'fk_guarantor_id') {
+          throw new UnprocessableEntityException('Guarantor does not exist');
+        }
       }
       throw new InternalServerErrorException('Something went wrong');
     });
@@ -91,11 +89,9 @@ export class CoursesService {
       })
       .catch((err: any) => {
         if (isError(err, 'FOREIGN_KEY_VIOLATION')) {
-          throw new UnprocessableEntityException(
-            `Guarantor ${
-              updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR_ID]
-            } does not exist`,
-          );
+          if (err.constraint === 'fk_guarantor_id') {
+            throw new UnprocessableEntityException('Guarantor does not exist');
+          }
         }
         throw new InternalServerErrorException('Something went wrong');
       });

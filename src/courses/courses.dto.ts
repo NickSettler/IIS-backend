@@ -15,12 +15,11 @@ export class CreateCoursesDto {
   @IsNumber()
   [E_COURSE_ENTITY_KEYS.CREDITS]: number;
 
-  @IsString()
-  [E_COURSE_ENTITY_KEYS.ANNOTATION]: string;
-
   @IsNotEmpty()
   @IsUUID()
   [E_COURSE_ENTITY_KEYS.GUARANTOR_ID]: string;
+
+  [E_COURSE_ENTITY_KEYS.ANNOTATION]: string;
 }
 
 export class UpdateCourseDto extends PartialType(CreateCoursesDto) {}
