@@ -9,7 +9,16 @@ import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { CreateUserDto, UpdateUserDto } from './users.dto';
 import { E_ROLE_ENTITY_KEYS, Role } from '../db/entities/role.entity';
-import { isEqual, unionWith, omit, differenceWith, map, assign } from 'lodash';
+import {
+  isEqual,
+  unionWith,
+  omit,
+  differenceWith,
+  map,
+  assign,
+  omitBy,
+  isArray,
+} from 'lodash';
 import { isError } from '../utils/errors';
 
 @Injectable()
@@ -25,7 +34,9 @@ export class UsersService {
    * Find all users
    */
   public async findAll(): Promise<Array<User>> {
-    return this.usersRepository.find();
+    return this.usersRepository.find({
+      relations: [E_USER_ENTITY_KEYS.ROLES],
+    });
   }
 
   /**
@@ -59,7 +70,17 @@ export class UsersService {
    * @param createDto user data
    */
   public async create(createDto: CreateUserDto): Promise<User> {
-    const user = this.usersRepository.create(createDto);
+    const user = this.usersRepository.create({
+      ...createDto,
+      ...(createDto[E_USER_ENTITY_KEYS.ROLES]?.length && {
+        [E_USER_ENTITY_KEYS.ROLES]: map(
+          createDto[E_USER_ENTITY_KEYS.ROLES],
+          (r) => ({
+            [E_ROLE_ENTITY_KEYS.NAME]: r,
+          }),
+        ),
+      }),
+    });
 
     return await this.usersRepository.save(user).catch((err: any) => {
       if (isError(err, 'UNIQUE_CONSTRAINT'))
@@ -83,9 +104,19 @@ export class UsersService {
 
     if (!user) throw new NotFoundException('User not found');
 
-    assign(user, updateDto);
+    assign(user, omitBy(updateDto, isArray));
 
-    await this.usersRepository.save(user);
+    await this.usersRepository.save({
+      ...user,
+      ...(updateDto[E_USER_ENTITY_KEYS.ROLES]?.length && {
+        [E_USER_ENTITY_KEYS.ROLES]: map(
+          updateDto[E_USER_ENTITY_KEYS.ROLES],
+          (r) => ({
+            [E_ROLE_ENTITY_KEYS.NAME]: r,
+          }),
+        ),
+      }),
+    });
 
     return this.usersRepository.findOne({
       where: {

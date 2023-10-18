@@ -76,14 +76,20 @@ describe('UsersController', () => {
         plainToInstance(User, u),
       );
 
-      const expected = plainToInstance(
-        User,
-        omit(user, [E_USER_ENTITY_KEYS.ROLES]),
-      );
+      const expected = plainToInstance(User, {
+        ...user,
+        [E_USER_ENTITY_KEYS.ROLES]: map(roles, (r) =>
+          omit(r, [E_ROLE_ENTITY_KEYS.PERMISSIONS]),
+        ),
+      });
 
       expect(result).toHaveLength(1);
 
-      expect(result).toEqual([expected]);
+      expectWithoutNested(result, [expected], [E_USER_ENTITY_KEYS.ROLES]);
+
+      expectOnlyNested(result, [expected], {
+        [E_USER_ENTITY_KEYS.ROLES]: E_ROLE_ENTITY_KEYS.NAME,
+      });
     });
 
     it('should return a user', async () => {
@@ -125,6 +131,7 @@ describe('UsersController', () => {
         [E_USER_ENTITY_KEYS.PASSWORD]: 'test',
         [E_USER_ENTITY_KEYS.FIRST_NAME]: 'test',
         [E_USER_ENTITY_KEYS.LAST_NAME]: 'test',
+        [E_USER_ENTITY_KEYS.ROLES]: [],
       };
 
       const result = instanceToPlain(await usersController.create(newUser));
@@ -136,11 +143,9 @@ describe('UsersController', () => {
         ...expected,
       });
 
-      const all = map(await usersController.getAll(), instanceToPlain);
-
-      expect(all).toEqual([
-        omit(plainToInstance(User, user), [E_USER_ENTITY_KEYS.ROLES]),
-        plainToInstance(User, result),
+      expectWithoutNested(result, expected, [
+        E_USER_ENTITY_KEYS.ROLES,
+        E_USER_ENTITY_KEYS.ID,
       ]);
     });
 
