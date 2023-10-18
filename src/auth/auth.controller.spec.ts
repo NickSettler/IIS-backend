@@ -2,7 +2,7 @@ import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { E_ROLE, E_ROLE_ENTITY_KEYS, Role } from '../db/entities/role.entity';
 import { DataSource, DeepPartial } from 'typeorm';
 import { Permission } from '../db/entities/permission.entity';
-import { assign, map, omit, values } from 'lodash';
+import { assign, map, values } from 'lodash';
 import { Test } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -15,6 +15,7 @@ import { LocalStrategy } from '../common/guards/strategies/local.strategy';
 import { hashSync } from 'bcrypt';
 import { UsersModule } from '../users/users.module';
 import supertest from 'supertest';
+import { expectWithoutNested } from '../../test/helpers';
 
 describe('UsersController', () => {
   let app: INestApplication;
@@ -169,14 +170,18 @@ describe('UsersController', () => {
 
       expect(usersResponse.status).toBe(HttpStatus.OK);
 
-      expect(usersResponse.body).toEqual([
-        {
-          ...omit(user, [E_USER_ENTITY_KEYS.ROLES]),
-          [E_USER_ENTITY_KEYS.PASSWORD]: expect.any(String),
-          [E_USER_ENTITY_KEYS.REFRESH_TOKEN]: expect.any(String),
-          tempPassword: expect.any(String),
-        },
-      ]);
+      expectWithoutNested(
+        usersResponse.body,
+        [
+          {
+            ...user,
+            [E_USER_ENTITY_KEYS.PASSWORD]: expect.any(String),
+            [E_USER_ENTITY_KEYS.REFRESH_TOKEN]: expect.any(String),
+            tempPassword: expect.any(String),
+          },
+        ],
+        [E_USER_ENTITY_KEYS.ROLES],
+      );
     });
   });
 
