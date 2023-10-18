@@ -31,7 +31,7 @@ export class CreateUserDto {
     each: true,
   })
   @IsOptional()
-  [E_USER_ENTITY_KEYS.ROLES]: Array<E_ROLE>;
+  [E_USER_ENTITY_KEYS.ROLES]?: Array<E_ROLE>;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
