@@ -72,12 +72,14 @@ export class UsersService {
   public async create(createDto: CreateUserDto): Promise<User> {
     const user = this.usersRepository.create({
       ...createDto,
-      [E_USER_ENTITY_KEYS.ROLES]: map(
-        createDto[E_USER_ENTITY_KEYS.ROLES],
-        (r) => ({
-          [E_ROLE_ENTITY_KEYS.NAME]: r,
-        }),
-      ),
+      ...(createDto[E_USER_ENTITY_KEYS.ROLES]?.length && {
+        [E_USER_ENTITY_KEYS.ROLES]: map(
+          createDto[E_USER_ENTITY_KEYS.ROLES],
+          (r) => ({
+            [E_ROLE_ENTITY_KEYS.NAME]: r,
+          }),
+        ),
+      }),
     });
 
     return await this.usersRepository.save(user).catch((err: any) => {
