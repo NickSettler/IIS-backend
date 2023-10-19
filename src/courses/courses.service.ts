@@ -11,6 +11,7 @@ import { FindOneOptions, Repository } from 'typeorm';
 import { isError } from '../utils/errors';
 import { CreateCoursesDto, UpdateCourseDto } from './courses.dto';
 import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
+import { assign, isArray, map, omitBy } from 'lodash';
 
 @Injectable()
 export class CoursesService {
@@ -47,6 +48,14 @@ export class CoursesService {
           [E_USER_ENTITY_KEYS.ID]: createDto[E_COURSE_ENTITY_KEYS.GUARANTOR],
         },
       }),
+      ...(createDto[E_COURSE_ENTITY_KEYS.TEACHERS] && {
+        [E_COURSE_ENTITY_KEYS.TEACHERS]: map(
+          createDto[E_COURSE_ENTITY_KEYS.TEACHERS],
+          (teacher) => ({
+            [E_USER_ENTITY_KEYS.ID]: teacher,
+          }),
+        ),
+      }),
     });
 
     await this.coursesRepository.save(course).catch((err: any) => {
@@ -71,20 +80,25 @@ export class CoursesService {
     abbr: string,
     updateDto: UpdateCourseDto,
   ): Promise<Course> {
-    const newCourse = await this.coursesRepository.findOne({
+    const course = await this.coursesRepository.findOne({
       where: { [E_COURSE_ENTITY_KEYS.ABBR]: abbr },
     });
 
-    if (!newCourse) throw new ConflictException('Course not found');
+    if (!course) throw new ConflictException('Course not found');
+
+    assign(course, omitBy(updateDto, isArray));
 
     // check if new guarantor_id exists in users table
     await this.coursesRepository
-      .update(abbr, {
-        ...updateDto,
-        ...(updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR] && {
-          [E_COURSE_ENTITY_KEYS.GUARANTOR]: {
-            [E_USER_ENTITY_KEYS.ID]: updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR],
-          },
+      .save({
+        ...course,
+        ...(updateDto[E_COURSE_ENTITY_KEYS.TEACHERS] && {
+          [E_COURSE_ENTITY_KEYS.TEACHERS]: map(
+            updateDto[E_COURSE_ENTITY_KEYS.TEACHERS],
+            (teacher) => ({
+              [E_USER_ENTITY_KEYS.ID]: teacher,
+            }),
+          ),
         }),
       })
       .catch((err: any) => {
@@ -96,9 +110,9 @@ export class CoursesService {
         throw new InternalServerErrorException('Something went wrong');
       });
 
-    const updatedCourse = this.coursesRepository.merge(newCourse, updateDto);
-
-    return await this.coursesRepository.save(updatedCourse);
+    return await this.coursesRepository.findOne({
+      where: { [E_COURSE_ENTITY_KEYS.ABBR]: abbr },
+    });
   }
 
   /**
