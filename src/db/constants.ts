@@ -5,6 +5,7 @@ export enum E_DB_TABLES {
   ROLE_PERMISSIONS = 'role_permissions',
   PERMISSIONS = 'permissions',
   COURSES = 'courses',
+  COURSE_TEACHERS = 'course_teachers',
   COURSE_ACTIVITY = 'course_activity',
   CLASSES = 'classes',
   SCHEDULE = 'schedule',
