@@ -1,7 +1,11 @@
 import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { E_ROLE, E_ROLE_ENTITY_KEYS, Role } from '../db/entities/role.entity';
 import { DataSource, DeepPartial } from 'typeorm';
-import { Permission } from '../db/entities/permission.entity';
+import {
+  E_PERMISSION,
+  E_PERMISSION_ENTITY_KEYS,
+  Permission,
+} from '../db/entities/permission.entity';
 import { assign, map, values } from 'lodash';
 import { Test } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
@@ -21,8 +25,13 @@ describe('UsersController', () => {
   let app: INestApplication;
   let connection: DataSource;
 
-  const roles = map(values(E_ROLE), (r) => ({
+  const permissions: Array<Permission> = map(values(E_PERMISSION), (p) => ({
+    [E_PERMISSION_ENTITY_KEYS.NAME]: p,
+  }));
+
+  const roles: Array<Role> = map(values(E_ROLE), (r) => ({
     [E_ROLE_ENTITY_KEYS.NAME]: r,
+    [E_ROLE_ENTITY_KEYS.PERMISSIONS]: permissions,
   }));
 
   const user: DeepPartial<User> = {
@@ -83,6 +92,8 @@ describe('UsersController', () => {
     connection = await module.resolve(DataSource);
 
     const manager = connection.createEntityManager();
+
+    await manager.save(Permission, permissions);
 
     await manager.save(Role, roles);
 
