@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ClassesModule } from './class/classes.module';
 import { CoursesModule } from './courses/courses.module';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CoursesModule } from './courses/courses.module';
     AuthModule,
     CoursesModule,
     ClassesModule,
+    CaslModule,
   ],
   controllers: [AppController],
   providers: [AppService],
