@@ -6,13 +6,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './user.entity';
 import { Course } from './course.entity';
 
 export enum E_COURSE_ACTIVITY_ENTITY_KEYS {
   ID = 'id',
-  TEACHER_ID = 'teacher_id',
-  TEACHER = 'teacher',
   COURSE_ABBR = 'course_abbr',
   COURSE = 'course',
   FORM = 'form',
@@ -27,13 +24,6 @@ export class CourseActivity {
 
   @Column()
   [E_COURSE_ACTIVITY_ENTITY_KEYS.FORM]: string;
-
-  @Column('uuid')
-  [E_COURSE_ACTIVITY_ENTITY_KEYS.TEACHER_ID]: string;
-
-  @ManyToOne(() => User)
-  @JoinColumn({ name: E_COURSE_ACTIVITY_ENTITY_KEYS.TEACHER_ID })
-  [E_COURSE_ACTIVITY_ENTITY_KEYS.TEACHER]: User;
 
   @Column()
   [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE_ABBR]: string;

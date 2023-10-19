@@ -16,6 +16,7 @@ export enum E_SCHEDULE_ENTITY_KEYS {
   ID = 'id',
   COURSE_ACTIVITY_ID = 'course_activity_id',
   COURSE_ACTIVITY = 'course_activity',
+  TEACHER = 'teacher',
   CLASS_ABBR = 'class_abbr',
   CLASSES = 'classes',
   START_TIME = 'start_time',
@@ -42,6 +43,10 @@ export class Schedule {
   @ManyToOne(() => CourseActivity)
   @JoinColumn({ name: E_SCHEDULE_ENTITY_KEYS.COURSE_ACTIVITY_ID })
   [E_SCHEDULE_ENTITY_KEYS.COURSE_ACTIVITY]: CourseActivity;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: E_SCHEDULE_ENTITY_KEYS.TEACHER })
+  [E_SCHEDULE_ENTITY_KEYS.TEACHER]: User;
 
   @Column()
   [E_SCHEDULE_ENTITY_KEYS.CLASS_ABBR]: string;
