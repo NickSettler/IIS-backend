@@ -5,7 +5,7 @@ import { Request } from 'express';
 import { UsersService } from '../../../users/users.service';
 import { E_USER_ENTITY_KEYS } from '../../../db/entities/user.entity';
 import { jwtConstants } from '../../../auth/constants';
-import { E_DB_TABLES } from '../../../db/constants';
+import { E_ROLE_ENTITY_KEYS } from '../../../db/entities/role.entity';
 
 /**
  * JWT (JSON Web Token) Strategy
@@ -34,7 +34,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       where: {
         [E_USER_ENTITY_KEYS.ID]: payload.userId,
       },
-      relations: [E_DB_TABLES.ROLES],
+      relations: [
+        E_USER_ENTITY_KEYS.ROLES,
+        `${E_USER_ENTITY_KEYS.ROLES}.${E_ROLE_ENTITY_KEYS.PERMISSIONS}`,
+      ],
     });
   }
 }
