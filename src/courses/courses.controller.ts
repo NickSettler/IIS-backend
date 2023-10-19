@@ -62,6 +62,7 @@ export class CoursesController {
 
   @Put('/:abbr')
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @UsePipes(ValidationPipe)
   @Roles(E_ROLE.ADMIN)
   public async update(
     @Param('abbr') abbr: string,
