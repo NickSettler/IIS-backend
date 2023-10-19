@@ -1,6 +1,8 @@
 DROP TABLE IF EXISTS schedule;
 DROP FUNCTION IF EXISTS check_schedule_time();
 DROP TRIGGER IF EXISTS check_schedule_time ON schedule;
+DROP FUNCTION IF EXISTS check_schedule_teacher();
+DROP TRIGGER IF EXISTS check_schedule_teacher ON schedule;
 DROP FUNCTION IF EXISTS check_schedule_conflict();
 DROP TRIGGER IF EXISTS check_schedule_conflict ON schedule;
 
@@ -17,6 +19,10 @@ CREATE TABLE schedule
     CONSTRAINT fk_class_abbr FOREIGN KEY (class_abbr) REFERENCES classes (abbr)
 );
 
+-- Check if schedule time is valid
+-- 1. Schedule time must be at least 1 hour
+-- 2. Schedule time must be at most 4 hours
+-- 3. Schedule time must be in the future
 CREATE FUNCTION check_schedule_time()
     RETURNS TRIGGER
     LANGUAGE plpgsql
@@ -45,6 +51,40 @@ CREATE TRIGGER check_schedule_time
     FOR EACH ROW
 EXECUTE PROCEDURE check_schedule_time();
 
+-- Check if teacher is teaching the course
+CREATE FUNCTION check_schedule_teacher()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS
+$$
+DECLARE
+    selected_course_abbr VARCHAR(10);
+BEGIN
+    SELECT course_activity.course_abbr INTO selected_course_abbr
+    FROM course_activity
+    WHERE id = NEW.course_activity_id;
+
+    PERFORM *
+    FROM course_teachers
+    WHERE course_abbr = selected_course_abbr
+      AND teacher_id = NEW.teacher_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Teacher is not teaching the course' USING ERRCODE = 'C0005';
+    END IF;
+
+    RETURN NEW;
+END
+$$;
+
+CREATE TRIGGER check_schedule_teacher
+    BEFORE INSERT OR UPDATE
+    ON schedule
+    FOR EACH ROW
+EXECUTE PROCEDURE check_schedule_teacher();
+
+-- Check if schedule conflicts with other schedules
+-- 1. Schedule must not conflict with other schedules of the same class
 CREATE FUNCTION check_schedule_conflict()
     RETURNS TRIGGER
     LANGUAGE plpgsql
