@@ -19,6 +19,7 @@ import { CreateUserDto, UpdateUserDto } from './users.dto';
 import { ValidationPipe } from '../common/pipes/validation.pipe';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Request } from 'express';
+import DeleteAdminGuard from '../common/guards/delete-admin.guard';
 
 @Controller('users')
 export class UsersController {
@@ -82,6 +83,7 @@ export class UsersController {
   }
 
   @Delete('/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard, DeleteAdminGuard)
   @Roles(E_ROLE.ADMIN)
   public async delete(@Param('id') id: string): Promise<void> {
     return this.usersService.delete(id);
@@ -98,7 +100,7 @@ export class UsersController {
   }
 
   @Delete('/:id/role/:roleName')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, DeleteAdminGuard)
   @Roles(E_ROLE.ADMIN)
   public async deleteRole(
     @Param('id') id: string,
