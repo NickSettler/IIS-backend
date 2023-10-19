@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { CreateUserDto, UpdateUserDto } from './users.dto';
-import { E_ROLE_ENTITY_KEYS, Role } from '../db/entities/role.entity';
+import { E_ROLE, E_ROLE_ENTITY_KEYS, Role } from '../db/entities/role.entity';
 import {
   isEqual,
   unionWith,
@@ -167,7 +167,7 @@ export class UsersService {
    */
   public async changeRoles(
     id: string,
-    roleName: string,
+    roleName: E_ROLE,
     action: 'ADD' | 'REMOVE',
   ) {
     const user = await this.usersRepository.findOne({

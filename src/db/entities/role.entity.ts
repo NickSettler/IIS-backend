@@ -19,7 +19,7 @@ export enum E_ROLE {
 @Entity({ name: E_DB_TABLES.ROLES })
 export class Role {
   @PrimaryColumn()
-  [E_ROLE_ENTITY_KEYS.NAME]: string;
+  [E_ROLE_ENTITY_KEYS.NAME]: E_ROLE;
 
   @ManyToMany(() => Permission)
   @JoinTable({

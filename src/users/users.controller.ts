@@ -95,7 +95,7 @@ export class UsersController {
   @Permissions(E_PERMISSION.EDIT_USER)
   public async addRole(
     @Param('id') id: string,
-    @Param('roleName') roleName: string,
+    @Param('roleName') roleName: E_ROLE,
   ): Promise<User> {
     return this.usersService.changeRoles(id, roleName, 'ADD');
   }
@@ -105,7 +105,7 @@ export class UsersController {
   @Permissions(E_PERMISSION.EDIT_USER)
   public async deleteRole(
     @Param('id') id: string,
-    @Param('roleName') roleName: string,
+    @Param('roleName') roleName: E_ROLE,
   ): Promise<User> {
     return this.usersService.changeRoles(id, roleName, 'REMOVE');
   }
