@@ -5,5 +5,5 @@ CREATE TABLE course_teachers (
     teacher_id uuid NOT NULL,
     PRIMARY KEY (course_abbr, teacher_id),
     FOREIGN KEY (course_abbr) REFERENCES courses (abbr) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (teacher_id) REFERENCES users (id)
+    FOREIGN KEY (teacher_id) REFERENCES users (id) ON DELETE RESTRICT
 );
