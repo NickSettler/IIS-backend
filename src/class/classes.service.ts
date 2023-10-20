@@ -1,13 +1,8 @@
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Class, E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { CreateClassDto, UpdateClassDto } from './classes.dto';
-import { E_POSTGRES_ERROR_CODES } from '../db/constants';
 
 @Injectable()
 export class ClassesService {
@@ -38,11 +33,7 @@ export class ClassesService {
   public async create(createDto: CreateClassDto): Promise<Class> {
     const newClass = this.classRepository.create(createDto);
 
-    return await this.classRepository.save(newClass).catch((err: any) => {
-      if (err.code === E_POSTGRES_ERROR_CODES.UNIQUE_CONSTRAINT)
-        throw new ConflictException('Class already exists');
-      else throw new InternalServerErrorException("Can't create class");
-    });
+    return await this.classRepository.save(newClass);
   }
 
   /**
