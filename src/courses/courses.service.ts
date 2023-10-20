@@ -1,14 +1,11 @@
 import {
   ConflictException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
-  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 import { FindOneOptions, Repository } from 'typeorm';
-import { isError } from '../utils/errors';
 import { CreateCoursesDto, UpdateCourseDto } from './courses.dto';
 import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
 import { assign, isArray, map, omitBy } from 'lodash';
@@ -58,17 +55,7 @@ export class CoursesService {
       }),
     });
 
-    await this.coursesRepository.save(course).catch((err: any) => {
-      if (isError(err, 'UNIQUE_CONSTRAINT')) {
-        throw new ConflictException('Course already exists');
-      } else if (isError(err, 'FOREIGN_KEY_VIOLATION')) {
-        if (err.constraint === 'fk_guarantor_id') {
-          throw new UnprocessableEntityException('Guarantor does not exist');
-        }
-      }
-      throw new InternalServerErrorException('Something went wrong');
-    });
-    return this.coursesRepository.save(course);
+    return await this.coursesRepository.save(course);
   }
 
   /**
@@ -89,26 +76,17 @@ export class CoursesService {
     assign(course, omitBy(updateDto, isArray));
 
     // check if new guarantor_id exists in users table
-    await this.coursesRepository
-      .save({
-        ...course,
-        ...(updateDto[E_COURSE_ENTITY_KEYS.TEACHERS] && {
-          [E_COURSE_ENTITY_KEYS.TEACHERS]: map(
-            updateDto[E_COURSE_ENTITY_KEYS.TEACHERS],
-            (teacher) => ({
-              [E_USER_ENTITY_KEYS.ID]: teacher,
-            }),
-          ),
-        }),
-      })
-      .catch((err: any) => {
-        if (isError(err, 'FOREIGN_KEY_VIOLATION')) {
-          if (err.constraint === 'fk_guarantor_id') {
-            throw new UnprocessableEntityException('Guarantor does not exist');
-          }
-        }
-        throw new InternalServerErrorException('Something went wrong');
-      });
+    await this.coursesRepository.save({
+      ...course,
+      ...(updateDto[E_COURSE_ENTITY_KEYS.TEACHERS] && {
+        [E_COURSE_ENTITY_KEYS.TEACHERS]: map(
+          updateDto[E_COURSE_ENTITY_KEYS.TEACHERS],
+          (teacher) => ({
+            [E_USER_ENTITY_KEYS.ID]: teacher,
+          }),
+        ),
+      }),
+    });
 
     return await this.coursesRepository.findOne({
       where: { [E_COURSE_ENTITY_KEYS.ABBR]: abbr },

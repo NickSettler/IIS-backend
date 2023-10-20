@@ -1,14 +1,9 @@
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { CreateUserDto, UpdateUserDto } from './users.dto';
-import { E_ROLE_ENTITY_KEYS, Role } from '../db/entities/role.entity';
+import { E_ROLE, E_ROLE_ENTITY_KEYS, Role } from '../db/entities/role.entity';
 import {
   isEqual,
   unionWith,
@@ -19,7 +14,6 @@ import {
   omitBy,
   isArray,
 } from 'lodash';
-import { isError } from '../utils/errors';
 
 @Injectable()
 export class UsersService {
@@ -82,12 +76,7 @@ export class UsersService {
       }),
     });
 
-    return await this.usersRepository.save(user).catch((err: any) => {
-      if (isError(err, 'UNIQUE_CONSTRAINT'))
-        throw new ConflictException('User already exists');
-
-      throw new InternalServerErrorException("Can't create user");
-    });
+    return await this.usersRepository.save(user);
   }
 
   /**
@@ -167,7 +156,7 @@ export class UsersService {
    */
   public async changeRoles(
     id: string,
-    roleName: string,
+    roleName: E_ROLE,
     action: 'ADD' | 'REMOVE',
   ) {
     const user = await this.usersRepository.findOne({

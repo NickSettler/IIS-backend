@@ -6,7 +6,7 @@ import {
   IsUUID,
 } from 'class-validator';
 import { E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType, PickType } from '@nestjs/mapped-types';
 
 export class CreateCoursesDto {
   @IsNotEmpty()
@@ -35,3 +35,7 @@ export class CreateCoursesDto {
 }
 
 export class UpdateCourseDto extends PartialType(CreateCoursesDto) {}
+
+export class ManageCourseTeachersDto extends PickType(CreateCoursesDto, [
+  E_COURSE_ENTITY_KEYS.TEACHERS,
+] as const) {}

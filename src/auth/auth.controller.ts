@@ -8,6 +8,8 @@ import {
   Res,
   UseGuards,
   Req,
+  ConflictException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UsersService } from '../users/users.service';
@@ -18,6 +20,7 @@ import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import parse from 'parse-duration';
 import { jwtConstants } from './constants';
 import { LocalAuthGuard } from '../common/guards/local-auth.guard';
+import { isError } from '../utils/errors';
 
 @Controller('auth')
 export class AuthController {
@@ -60,9 +63,16 @@ export class AuthController {
     @Body() registerDto: CreateUserDto,
     @Res() response: Response,
   ) {
-    const user = await this.usersService.create({
-      ...registerDto,
-    });
+    const user = await this.usersService
+      .create({
+        ...registerDto,
+      })
+      .catch((err: any) => {
+        if (isError(err, 'UNIQUE_CONSTRAINT'))
+          throw new ConflictException('User already exists');
+
+        throw new InternalServerErrorException("Can't create user");
+      });
 
     const accessToken = this.authService.generateAccessTokenCookie(user);
 

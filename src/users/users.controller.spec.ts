@@ -11,9 +11,12 @@ import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { createRequest } from 'node-mocks-http';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { expectOnlyNested, expectWithoutNested } from '../../test/helpers';
+import { Request } from 'express';
+import { CaslModule } from '../casl/casl.module';
 
 describe('UsersController', () => {
   let connection: DataSource;
+  let req: Request;
 
   let userRepository: Repository<User>;
   let roleRepository: Repository<Role>;
@@ -47,6 +50,7 @@ describe('UsersController', () => {
           logging: false,
         }),
         TypeOrmModule.forFeature([User, Role, Permission]),
+        CaslModule,
       ],
       controllers: [UsersController],
       providers: [UsersService],
@@ -61,6 +65,10 @@ describe('UsersController', () => {
 
     await roleRepository.save(roles);
     await userRepository.save(userRepository.create(user));
+
+    req = createRequest({
+      user,
+    });
   });
 
   afterEach(async () => {
@@ -72,7 +80,7 @@ describe('UsersController', () => {
 
   describe('Find', () => {
     it('should return an array of users', async () => {
-      const result = map(await usersController.getAll(), (u) =>
+      const result = map(await usersController.getAll(req), (u) =>
         plainToInstance(User, u),
       );
 
@@ -95,7 +103,7 @@ describe('UsersController', () => {
     it('should return a user', async () => {
       const result = plainToInstance(
         User,
-        await usersController.getOne(user[E_USER_ENTITY_KEYS.ID]),
+        await usersController.getOne(req, user[E_USER_ENTITY_KEYS.ID]),
       );
 
       const expected = plainToInstance(User, user);
@@ -134,7 +142,9 @@ describe('UsersController', () => {
         [E_USER_ENTITY_KEYS.ROLES]: [],
       };
 
-      const result = instanceToPlain(await usersController.create(newUser));
+      const result = instanceToPlain(
+        await usersController.create(req, newUser),
+      );
 
       const expected = plainToInstance(User, newUser);
 
@@ -157,7 +167,7 @@ describe('UsersController', () => {
         [E_USER_ENTITY_KEYS.LAST_NAME]: 'test',
       };
 
-      await expect(usersController.create(newUser)).rejects.toThrow(
+      await expect(usersController.create(req, newUser)).rejects.toThrow(
         ConflictException,
       );
     });
@@ -171,7 +181,7 @@ describe('UsersController', () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       // TODO: fix sqlite throwing conflict error instead of bad request (unique violation == not null violation)
-      await expect(usersController.create(newUser)).rejects.toThrow(
+      await expect(usersController.create(req, newUser)).rejects.toThrow(
         ConflictException,
       );
     });
@@ -184,7 +194,7 @@ describe('UsersController', () => {
       };
 
       const result = instanceToPlain(
-        await usersController.update(user[E_USER_ENTITY_KEYS.ID], payload),
+        await usersController.update(req, user[E_USER_ENTITY_KEYS.ID], payload),
       );
 
       const expected = plainToInstance(User, {
@@ -201,23 +211,23 @@ describe('UsersController', () => {
 
     it('should not update a user (not found)', async () => {
       await expect(
-        usersController.update(`${user[E_USER_ENTITY_KEYS.ID]}1`, {}),
+        usersController.update(req, `${user[E_USER_ENTITY_KEYS.ID]}1`, {}),
       ).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('Delete', () => {
     it('should delete a user', async () => {
-      await usersController.delete(user[E_USER_ENTITY_KEYS.ID]);
+      await usersController.delete(req, user[E_USER_ENTITY_KEYS.ID]);
 
-      const all = map(await usersController.getAll(), instanceToPlain);
+      const all = map(await usersController.getAll(req), instanceToPlain);
 
       expect(all).toEqual([]);
     });
 
     it('should not delete a user (not found)', async () => {
       await expect(
-        usersController.delete(`${user[E_USER_ENTITY_KEYS.ID]}1`),
+        usersController.delete(req, `${user[E_USER_ENTITY_KEYS.ID]}1`),
       ).rejects.toThrow(NotFoundException);
     });
   });
@@ -226,6 +236,7 @@ describe('UsersController', () => {
     it('should delete a role', async () => {
       const result = instanceToPlain(
         await usersController.deleteRole(
+          req,
           user[E_USER_ENTITY_KEYS.ID],
           E_ROLE.ADMIN,
         ),
@@ -249,6 +260,7 @@ describe('UsersController', () => {
     it('should not delete a role (user not found)', async () => {
       await expect(
         usersController.deleteRole(
+          req,
           `${user[E_USER_ENTITY_KEYS.ID]}1`,
           E_ROLE.ADMIN,
         ),
@@ -258,7 +270,10 @@ describe('UsersController', () => {
     it('should not delete a role (role not found)', async () => {
       await expect(
         usersController.deleteRole(
+          req,
           user[E_USER_ENTITY_KEYS.ID],
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           `${E_ROLE.ADMIN}1`,
         ),
       ).rejects.toThrow(NotFoundException);
@@ -266,12 +281,14 @@ describe('UsersController', () => {
 
     it('should assign a role', async () => {
       await usersController.deleteRole(
+        req,
         user[E_USER_ENTITY_KEYS.ID],
         E_ROLE.ADMIN,
       );
 
       const result = instanceToPlain(
         await usersController.addRole(
+          req,
           user[E_USER_ENTITY_KEYS.ID],
           E_ROLE.ADMIN,
         ),
