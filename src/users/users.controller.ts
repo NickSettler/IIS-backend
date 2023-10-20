@@ -13,7 +13,7 @@ import {
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
-import { E_ROLE_ENTITY_KEYS } from '../db/entities/role.entity';
+import { E_ROLE, E_ROLE_ENTITY_KEYS } from '../db/entities/role.entity';
 import { CreateUserDto, UpdateUserDto } from './users.dto';
 import { ValidationPipe } from '../common/pipes/validation.pipe';
 import { Request } from 'express';
