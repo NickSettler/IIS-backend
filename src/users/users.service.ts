@@ -1,9 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
@@ -19,7 +14,6 @@ import {
   omitBy,
   isArray,
 } from 'lodash';
-import { isError } from '../utils/errors';
 
 @Injectable()
 export class UsersService {
@@ -82,12 +76,7 @@ export class UsersService {
       }),
     });
 
-    return await this.usersRepository.save(user).catch((err: any) => {
-      if (isError(err, 'UNIQUE_CONSTRAINT'))
-        throw new ConflictException('User already exists');
-
-      throw new InternalServerErrorException("Can't create user");
-    });
+    return await this.usersRepository.save(user);
   }
 
   /**

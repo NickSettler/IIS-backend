@@ -1,8 +1,12 @@
 import {
   Body,
+  ConflictException,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
+  InternalServerErrorException,
+  NotFoundException,
   Param,
   Post,
   Put,
@@ -18,19 +22,33 @@ import { CreateUserDto, UpdateUserDto } from './users.dto';
 import { ValidationPipe } from '../common/pipes/validation.pipe';
 import { Request } from 'express';
 import DeleteAdminGuard from '../common/guards/delete-admin.guard';
-import PermissionsGuard from '../common/guards/permissions.guard';
-import { E_PERMISSION } from '../db/entities/permission.entity';
-import { Permissions } from '../common/decorators/permissions.decorator';
+import { CaslAbilityFactory } from '../casl/casl-ability.factory';
+import { E_ACTION } from '../casl/actions';
+import { isError } from '../utils/errors';
+import { filter } from 'lodash';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly caslAbilityFactory: CaslAbilityFactory,
+  ) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions(E_PERMISSION.EDIT_USER)
-  public async getAll(): Promise<Array<User>> {
-    return this.usersService.findAll();
+  @UseGuards(JwtAuthGuard)
+  public async getAll(@Req() request: Request): Promise<Array<User>> {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    if (rules.cannot(E_ACTION.READ, User))
+      throw new ForbiddenException("You don't have permission to read users");
+
+    const foundUsers = filter(await this.usersService.findAll(), (user) =>
+      rules.can(E_ACTION.READ, user),
+    );
+
+    if (!foundUsers.length) throw new NotFoundException('Users not found');
+
+    return foundUsers;
   }
 
   @Get('/me')
@@ -50,10 +68,17 @@ export class UsersController {
   }
 
   @Get('/:id')
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions(E_PERMISSION.EDIT_USER)
-  public async getOne(@Param('id') id: string): Promise<User> {
-    return this.usersService.findOne({
+  @UseGuards(JwtAuthGuard)
+  public async getOne(
+    @Req() request: Request,
+    @Param('id') id: string,
+  ): Promise<User> {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    if (rules.cannot(E_ACTION.READ, User))
+      throw new ForbiddenException("You don't have permission to read users");
+
+    const foundUser = await this.usersService.findOne({
       where: {
         [E_USER_ENTITY_KEYS.ID]: id,
       },
@@ -62,51 +87,138 @@ export class UsersController {
         `${E_USER_ENTITY_KEYS.ROLES}.${E_ROLE_ENTITY_KEYS.PERMISSIONS}`,
       ],
     });
+
+    if (!foundUser) throw new ForbiddenException('User not found');
+
+    if (rules.cannot(E_ACTION.READ, foundUser))
+      throw new ForbiddenException("You don't have permission to read users");
+
+    return foundUser;
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
-  @Permissions(E_PERMISSION.EDIT_USER)
-  public async create(@Body() createDto: CreateUserDto): Promise<User> {
-    return this.usersService.create(createDto);
+  public async create(
+    @Req() request: Request,
+    @Body() createDto: CreateUserDto,
+  ): Promise<User> {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    if (rules.cannot(E_ACTION.CREATE, User))
+      throw new ForbiddenException("You don't have permission to create user");
+
+    const createdUser = await this.usersService
+      .create(createDto)
+      .catch((err: any) => {
+        if (isError(err, 'UNIQUE_CONSTRAINT'))
+          throw new ConflictException('User already exists');
+
+        throw new InternalServerErrorException("Can't create user");
+      });
+
+    if (rules.cannot(E_ACTION.READ, createdUser))
+      throw new ForbiddenException("You don't have permission to read users");
+
+    return createdUser;
   }
 
   @Put('/:id')
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
-  @Permissions(E_PERMISSION.EDIT_USER)
   public async update(
+    @Req() request: Request,
     @Param('id') id: string,
     @Body() updateDto: UpdateUserDto,
   ): Promise<User> {
-    return this.usersService.update(id, updateDto);
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    if (rules.cannot(E_ACTION.UPDATE, User))
+      throw new ForbiddenException("You don't have permission to update user");
+
+    const user = await this.usersService.findOne({
+      where: {
+        [E_USER_ENTITY_KEYS.ID]: id,
+      },
+    });
+
+    if (!user) throw new ForbiddenException('User not found');
+
+    if (rules.cannot(E_ACTION.UPDATE, user))
+      throw new ForbiddenException("You don't have permission to update user");
+
+    const updatedUser = await this.usersService.update(id, updateDto);
+
+    if (rules.cannot(E_ACTION.READ, updatedUser))
+      throw new ForbiddenException("You don't have permission to read users");
+
+    return updatedUser;
   }
 
   @Delete('/:id')
-  @UseGuards(JwtAuthGuard, PermissionsGuard, DeleteAdminGuard)
-  @Permissions(E_PERMISSION.EDIT_USER)
-  public async delete(@Param('id') id: string): Promise<void> {
+  @UseGuards(JwtAuthGuard, DeleteAdminGuard)
+  public async delete(
+    @Req() request: Request,
+    @Param('id') id: string,
+  ): Promise<void> {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    if (rules.cannot(E_ACTION.DELETE, User))
+      throw new ForbiddenException("You don't have permission to delete user");
+
+    const user = await this.usersService.findOne({
+      where: {
+        [E_USER_ENTITY_KEYS.ID]: id,
+      },
+    });
+
+    if (!user) throw new ForbiddenException('User not found');
+
+    if (rules.cannot(E_ACTION.DELETE, user))
+      throw new ForbiddenException("You don't have permission to delete user");
+
     return this.usersService.delete(id);
   }
 
   @Post('/:id/role/:roleName')
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions(E_PERMISSION.EDIT_USER)
+  @UseGuards(JwtAuthGuard)
   public async addRole(
+    @Req() request: Request,
     @Param('id') id: string,
     @Param('roleName') roleName: E_ROLE,
   ): Promise<User> {
+    await this.rolePreCheck(request, id);
+
     return this.usersService.changeRoles(id, roleName, 'ADD');
   }
 
   @Delete('/:id/role/:roleName')
-  @UseGuards(JwtAuthGuard, PermissionsGuard, DeleteAdminGuard)
-  @Permissions(E_PERMISSION.EDIT_USER)
+  @UseGuards(JwtAuthGuard, DeleteAdminGuard)
   public async deleteRole(
+    @Req() request: Request,
     @Param('id') id: string,
     @Param('roleName') roleName: E_ROLE,
   ): Promise<User> {
+    await this.rolePreCheck(request, id);
+
     return this.usersService.changeRoles(id, roleName, 'REMOVE');
+  }
+
+  private async rolePreCheck(request: Request, id: string) {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    if (rules.cannot(E_ACTION.UPDATE, User, E_USER_ENTITY_KEYS.ROLES))
+      throw new ForbiddenException("You don't have permission to update user");
+
+    const foundUser = await this.usersService.findOne({
+      where: {
+        [E_USER_ENTITY_KEYS.ID]: id,
+      },
+    });
+
+    if (!foundUser) throw new ForbiddenException('User not found');
+
+    if (rules.cannot(E_ACTION.UPDATE, foundUser, E_USER_ENTITY_KEYS.ROLES))
+      throw new ForbiddenException("You don't have permission to update user");
   }
 }
