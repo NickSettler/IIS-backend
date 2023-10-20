@@ -4,3 +4,5 @@ export enum E_ACTION {
   UPDATE = 'update',
   DELETE = 'delete',
 }
+
+export const E_MANAGE_ACTION = 'manage' as const;

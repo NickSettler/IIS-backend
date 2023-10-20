@@ -7,12 +7,12 @@ import {
   InferSubjects,
   MongoAbility,
 } from '@casl/ability';
-import { E_ACTION } from './actions';
+import { E_ACTION, E_MANAGE_ACTION } from './actions';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 import { Class } from '../db/entities/class.entity';
 import { CourseActivity } from '../db/entities/course_activity.entity';
 import { Schedule } from '../db/entities/schedule.entity';
-import { map, values } from 'lodash';
+import { map } from 'lodash';
 import { E_ROLE, E_ROLE_ENTITY_KEYS } from '../db/entities/role.entity';
 
 export type TSubjects =
@@ -25,7 +25,9 @@ export type TSubjects =
     >
   | 'all';
 
-export type TAbility = MongoAbility<[E_ACTION, TSubjects]>;
+export type TAbility = MongoAbility<
+  [E_ACTION | typeof E_MANAGE_ACTION, TSubjects]
+>;
 
 @Injectable()
 export class CaslAbilityFactory {
@@ -37,7 +39,7 @@ export class CaslAbilityFactory {
   }
 
   private static applySchedulerRules(can: (...params: any) => void): void {
-    can(values(E_ACTION), Schedule);
+    can(E_MANAGE_ACTION, Schedule);
   }
 
   public createForUser(user: User | undefined): TAbility {
