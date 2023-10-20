@@ -8,7 +8,7 @@ VALUES ('A218', 20);
 
 -- D Classes
 INSERT INTO classes (abbr, capacity)
-VALUES ('D105', 316);
+VALUES ('D105', 299);
 
 -- E Classes
 INSERT INTO classes (abbr, capacity)
