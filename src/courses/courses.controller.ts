@@ -21,13 +21,17 @@ import RolesGuard from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { E_ROLE } from '../db/entities/role.entity';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
-import { CreateCoursesDto, UpdateCourseDto } from './courses.dto';
+import {
+  CreateCoursesDto,
+  ManageCourseTeachersDto,
+  UpdateCourseDto,
+} from './courses.dto';
 import { ValidationPipe } from '../common/pipes/validation.pipe';
-import { User } from '../db/entities/user.entity';
+import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { E_ACTION } from '../casl/actions';
 import { Request } from 'express';
-import { CaslAbilityFactory } from '../casl/casl-ability.factory';
-import { filter } from 'lodash';
+import { CaslAbilityFactory, TAbility } from '../casl/casl-ability.factory';
+import { filter, map, union } from 'lodash';
 import { isError } from '../utils/errors';
 
 @Controller('courses')
@@ -188,5 +192,74 @@ export class CoursesController {
       );
 
     return this.coursesService.delete(abbr);
+  }
+
+  @Post('/:abbr/teachers')
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
+  public async addTeachers(
+    @Req() request: Request,
+    @Param('abbr') abbr: string,
+    @Body() manageCourseTeachersDto: ManageCourseTeachersDto,
+  ) {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    const foundTeachers = await this.getCourseTeachers(rules, abbr);
+
+    const newTeachers = union(foundTeachers, manageCourseTeachersDto.teachers);
+
+    return this.update(request, abbr, {
+      [E_COURSE_ENTITY_KEYS.TEACHERS]: newTeachers,
+    });
+  }
+
+  @Delete('/:abbr/teachers')
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
+  public async deleteTeachers(
+    @Req() request: Request,
+    @Param('abbr') abbr: string,
+    @Body() manageCourseTeachersDto: ManageCourseTeachersDto,
+  ) {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    const foundTeachers = await this.getCourseTeachers(rules, abbr);
+
+    const newTeachers = filter(
+      foundTeachers,
+      (teacher) => !manageCourseTeachersDto.teachers.includes(teacher),
+    );
+
+    return this.update(request, abbr, {
+      [E_COURSE_ENTITY_KEYS.TEACHERS]: newTeachers,
+    });
+  }
+
+  private async getCourseTeachers(
+    rules: TAbility,
+    abbr: string,
+  ): Promise<Array<string>> {
+    if (rules.cannot(E_ACTION.UPDATE, Course, E_COURSE_ENTITY_KEYS.TEACHERS))
+      throw new ForbiddenException(
+        "You don't have permission to update course",
+      );
+
+    const foundCourse = await this.coursesService.findOne({
+      where: {
+        [E_COURSE_ENTITY_KEYS.ABBR]: abbr,
+      },
+    });
+
+    if (!foundCourse) throw new NotFoundException('Course not found');
+
+    if (!rules.can(E_ACTION.UPDATE, foundCourse, E_COURSE_ENTITY_KEYS.TEACHERS))
+      throw new ForbiddenException(
+        "You don't have permission to update this course",
+      );
+
+    return map(
+      foundCourse[E_COURSE_ENTITY_KEYS.TEACHERS],
+      (teacher) => teacher[E_USER_ENTITY_KEYS.ID],
+    );
   }
 }
