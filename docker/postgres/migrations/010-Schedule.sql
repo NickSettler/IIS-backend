@@ -11,12 +11,12 @@ CREATE TABLE schedule
     id                 uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     course_activity_id uuid        NOT NULL,
     teacher_id         uuid        NOT NULL,
-    class_abbr         VARCHAR(10) NOT NULL,
+    class_abbr         VARCHAR(10),
     start_time         TIMESTAMP   NOT NULL,
     end_time           TIMESTAMP   NOT NULL CHECK (end_time > start_time),
-    CONSTRAINT fk_teacher_id FOREIGN KEY (teacher_id) REFERENCES users (id),
-    CONSTRAINT fk_course_activity_id FOREIGN KEY (course_activity_id) REFERENCES course_activity (id),
-    CONSTRAINT fk_class_abbr FOREIGN KEY (class_abbr) REFERENCES classes (abbr)
+    CONSTRAINT fk_teacher_id FOREIGN KEY (teacher_id) REFERENCES users (id) ON DELETE RESTRICT,
+    CONSTRAINT fk_course_activity_id FOREIGN KEY (course_activity_id) REFERENCES course_activity (id) ON DELETE CASCADE,
+    CONSTRAINT fk_class_abbr FOREIGN KEY (class_abbr) REFERENCES classes (abbr) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 -- Check if schedule time is valid
