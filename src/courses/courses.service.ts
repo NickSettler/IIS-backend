@@ -1,14 +1,11 @@
 import {
   ConflictException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
-  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 import { FindOneOptions, Repository } from 'typeorm';
-import { isError } from '../utils/errors';
 import { CreateCoursesDto, UpdateCourseDto } from './courses.dto';
 import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
 import { assign, isArray, map, omitBy } from 'lodash';

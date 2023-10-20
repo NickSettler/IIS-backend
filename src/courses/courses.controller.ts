@@ -25,7 +25,6 @@ import { CreateCoursesDto, UpdateCourseDto } from './courses.dto';
 import { ValidationPipe } from '../common/pipes/validation.pipe';
 import { User } from '../db/entities/user.entity';
 import { E_ACTION } from '../casl/actions';
-import { Class, E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 import { Request } from 'express';
 import { CaslAbilityFactory } from '../casl/casl-ability.factory';
 import { filter } from 'lodash';
