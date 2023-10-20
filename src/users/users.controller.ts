@@ -142,7 +142,7 @@ export class UsersController {
       },
     });
 
-    if (!user) throw new ForbiddenException('User not found');
+    if (!user) throw new NotFoundException('User not found');
 
     if (rules.cannot(E_ACTION.UPDATE, user))
       throw new ForbiddenException("You don't have permission to update user");
@@ -172,7 +172,7 @@ export class UsersController {
       },
     });
 
-    if (!user) throw new ForbiddenException('User not found');
+    if (!user) throw new NotFoundException('User not found');
 
     if (rules.cannot(E_ACTION.DELETE, user))
       throw new ForbiddenException("You don't have permission to delete user");
