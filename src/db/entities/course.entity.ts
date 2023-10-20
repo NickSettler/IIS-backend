@@ -33,7 +33,7 @@ export class Course {
   @Column()
   [E_COURSE_ENTITY_KEYS.CREDITS]: number;
 
-  @Column({ nullable: true })
+  @Column()
   [E_COURSE_ENTITY_KEYS.ANNOTATION]: string;
 
   @ManyToOne(() => User, {
