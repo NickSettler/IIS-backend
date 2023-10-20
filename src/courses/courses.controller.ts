@@ -17,9 +17,6 @@ import {
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import RolesGuard from '../common/guards/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';
-import { E_ROLE } from '../db/entities/role.entity';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 import {
   CreateCoursesDto,
@@ -168,8 +165,7 @@ export class CoursesController {
   }
 
   @Delete('/:abbr')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(E_ROLE.ADMIN)
+  @UseGuards(JwtAuthGuard)
   public async delete(@Req() request: Request, @Param('abbr') abbr: string) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
