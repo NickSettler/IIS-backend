@@ -11,7 +11,10 @@ import { E_ACTION, E_MANAGE_ACTION } from './actions';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 import { Class } from '../db/entities/class.entity';
 import { CourseActivity } from '../db/entities/course_activity.entity';
-import { Schedule } from '../db/entities/schedule.entity';
+import {
+  E_SCHEDULE_ENTITY_KEYS,
+  Schedule,
+} from '../db/entities/schedule.entity';
 import { map } from 'lodash';
 import { E_ROLE, E_ROLE_ENTITY_KEYS } from '../db/entities/role.entity';
 
@@ -31,11 +34,20 @@ export type TAbility = MongoAbility<
 
 @Injectable()
 export class CaslAbilityFactory {
-  private static applyStudentRules(can: (...params: any) => void): void {
+  private static applyStudentRules(
+    user: User,
+    can: (...params: any) => void,
+  ): void {
     can(E_ACTION.READ, Class);
     can(E_ACTION.READ, CourseActivity, ['**']);
     can(E_ACTION.READ, Course, ['**']);
     can(E_ACTION.READ, Schedule);
+    can(E_ACTION.CREATE, Schedule, [`${E_SCHEDULE_ENTITY_KEYS.STUDENTS}.*`]);
+    can(E_ACTION.DELETE, Schedule, [`${E_SCHEDULE_ENTITY_KEYS.STUDENTS}.*`], {
+      [E_SCHEDULE_ENTITY_KEYS.STUDENTS]: {
+        [E_USER_ENTITY_KEYS.ID]: user[E_USER_ENTITY_KEYS.ID],
+      },
+    });
   }
 
   private static applySchedulerRules(can: (...params: any) => void): void {
@@ -60,11 +72,11 @@ export class CaslAbilityFactory {
     );
 
     if (userRoles.includes(E_ROLE.STUDENT)) {
-      CaslAbilityFactory.applyStudentRules(can);
+      CaslAbilityFactory.applyStudentRules(user, can);
     }
 
     if (userRoles.includes(E_ROLE.SCHEDULER)) {
-      CaslAbilityFactory.applyStudentRules(can);
+      CaslAbilityFactory.applyStudentRules(user, can);
       CaslAbilityFactory.applySchedulerRules(can);
     }
 
