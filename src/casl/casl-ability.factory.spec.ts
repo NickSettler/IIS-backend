@@ -1,10 +1,6 @@
 import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { Test } from '@nestjs/testing';
-import {
-  CaslAbilityFactory,
-  TAbility,
-  TSubjects,
-} from './casl-ability.factory';
+import { CaslAbilityFactory, TAbility } from './casl-ability.factory';
 import { E_ACTION, E_MANAGE_ACTION } from './actions';
 import { constant, reduce, times, values } from 'lodash';
 import { map } from 'lodash';
@@ -13,22 +9,6 @@ import { Class } from '../db/entities/class.entity';
 import { Schedule } from '../db/entities/schedule.entity';
 import { CourseActivity } from '../db/entities/course_activity.entity';
 import { E_ROLE, E_ROLE_ENTITY_KEYS } from '../db/entities/role.entity';
-
-export const checkAbility = (
-  ability: TAbility,
-  actions: Array<E_ACTION>,
-  entity: TSubjects,
-  expected: Array<boolean>,
-): void => {
-  if (actions.length !== expected.length)
-    throw new Error('actions and expected arrays must have the same length');
-
-  actions.forEach((action, index) => {
-    it(`Can ${action} ${entity}`, () => {
-      expect(ability.can(action, entity)).toEqual(expected[index]);
-    });
-  });
-};
 
 export const generateExpected = (
   actions: Array<E_ACTION>,
@@ -205,10 +185,10 @@ describe('CaslAbilityFactory test', () => {
 
     describe('Schedule', () => {
       const expected = generateExpected(values(E_ACTION), [
-        false,
+        true,
         true,
         false,
-        false,
+        true,
       ]);
 
       map(expected, (value, action: E_ACTION) => {
