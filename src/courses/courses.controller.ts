@@ -105,7 +105,10 @@ export class CoursesController {
           if (err.constraint === 'fk_guarantor_id') {
             throw new UnprocessableEntityException('Guarantor does not exist');
           }
+        } else if (isError(err, 'STRING_DATA_RIGHT_TRUNCATION')) {
+          throw new UnprocessableEntityException('Some data is wrong');
         }
+
         throw new InternalServerErrorException('Something went wrong');
       });
 
