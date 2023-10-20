@@ -42,13 +42,9 @@ export class UsersController {
     if (rules.cannot(E_ACTION.READ, User))
       throw new ForbiddenException("You don't have permission to read users");
 
-    const foundUsers = filter(await this.usersService.findAll(), (user) =>
+    return filter(await this.usersService.findAll(), (user) =>
       rules.can(E_ACTION.READ, user),
     );
-
-    if (!foundUsers.length) throw new NotFoundException('Users not found');
-
-    return foundUsers;
   }
 
   @Get('/me')
@@ -216,7 +212,7 @@ export class UsersController {
       },
     });
 
-    if (!foundUser) throw new ForbiddenException('User not found');
+    if (!foundUser) throw new NotFoundException('User not found');
 
     if (rules.cannot(E_ACTION.UPDATE, foundUser, E_USER_ENTITY_KEYS.ROLES))
       throw new ForbiddenException("You don't have permission to update user");
