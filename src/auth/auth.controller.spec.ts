@@ -206,7 +206,7 @@ describe('UsersController', () => {
 
       expect(usersResponse.body).toEqual({
         error: 'Forbidden',
-        message: 'Forbidden resource',
+        message: "You don't have permission to read users",
         statusCode: HttpStatus.FORBIDDEN,
       });
     });
