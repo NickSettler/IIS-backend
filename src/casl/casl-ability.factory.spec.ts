@@ -5,7 +5,7 @@ import {
   TAbility,
   TSubjects,
 } from './casl-ability.factory';
-import { E_ACTION } from './actions';
+import { E_ACTION, E_MANAGE_ACTION } from './actions';
 import { constant, reduce, times, values } from 'lodash';
 import { map } from 'lodash';
 import { Course } from '../db/entities/course.entity';
@@ -290,15 +290,51 @@ describe('CaslAbilityFactory test', () => {
     });
 
     describe('Schedule', () => {
-      const expected = generateExpected(
-        values(E_ACTION),
-        times(4, constant(true)),
-      );
+      it(`Can manage schedule items`, () => {
+        expect(ability.can(E_MANAGE_ACTION, Schedule)).toEqual(true);
+      });
+    });
+  });
 
-      map(expected, (value, action: E_ACTION) => {
-        it(`Can ${action} schedule items`, () => {
-          expect(ability.can(action, Schedule)).toEqual(value);
-        });
+  describe('Admin', () => {
+    beforeEach(() => {
+      user = new User();
+      user[E_USER_ENTITY_KEYS.ROLES] = [
+        {
+          [E_ROLE_ENTITY_KEYS.NAME]: E_ROLE.ADMIN,
+          [E_ROLE_ENTITY_KEYS.PERMISSIONS]: [],
+        },
+      ];
+      ability = abilityFactory.createForUser(user);
+    });
+
+    describe('Users', () => {
+      it(`Can manage users`, () => {
+        expect(ability.can(E_MANAGE_ACTION, User)).toEqual(true);
+      });
+    });
+
+    describe('Class', () => {
+      it(`Can manage classes`, () => {
+        expect(ability.can(E_MANAGE_ACTION, Class)).toEqual(true);
+      });
+    });
+
+    describe('Course', () => {
+      it(`Can manage courses`, () => {
+        expect(ability.can(E_MANAGE_ACTION, Course)).toEqual(true);
+      });
+    });
+
+    describe('Course activity', () => {
+      it(`Can manage course activities`, () => {
+        expect(ability.can(E_MANAGE_ACTION, CourseActivity)).toEqual(true);
+      });
+    });
+
+    describe('Schedule', () => {
+      it(`Can manage schedule items`, () => {
+        expect(ability.can(E_MANAGE_ACTION, Schedule)).toEqual(true);
       });
     });
   });
