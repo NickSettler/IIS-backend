@@ -43,7 +43,10 @@ export class CaslAbilityFactory {
   }
 
   public createForUser(user: User | undefined): TAbility {
-    const { can, build } = new AbilityBuilder<TAbility>(createMongoAbility);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { can, cannot, build } = new AbilityBuilder<TAbility>(
+      createMongoAbility,
+    );
 
     can(E_ACTION.READ, Course, [
       E_COURSE_ENTITY_KEYS.ABBR,
@@ -63,6 +66,10 @@ export class CaslAbilityFactory {
     if (userRoles.includes(E_ROLE.SCHEDULER)) {
       CaslAbilityFactory.applyStudentRules(can);
       CaslAbilityFactory.applySchedulerRules(can);
+    }
+
+    if (userRoles.includes(E_ROLE.ADMIN)) {
+      can(E_MANAGE_ACTION, 'all');
     }
 
     return build({
