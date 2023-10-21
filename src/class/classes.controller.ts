@@ -41,11 +41,9 @@ export class ClassesController {
     if (rules.cannot(E_ACTION.READ, Class))
       throw new ForbiddenException("You don't have permission to read classes");
 
-    const foundClasses = filter(await this.classService.findAll(), (fClass) =>
+    return filter(await this.classService.findAll(), (fClass) =>
       rules.can(E_ACTION.READ, fClass),
     );
-
-    return foundClasses;
   }
 
   @Get('/:abbr')
