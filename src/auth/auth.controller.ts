@@ -10,6 +10,7 @@ import {
   Req,
   ConflictException,
   InternalServerErrorException,
+  HttpException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UsersService } from '../users/users.service';
@@ -20,7 +21,7 @@ import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import parse from 'parse-duration';
 import { jwtConstants } from './constants';
 import { LocalAuthGuard } from '../common/guards/local-auth.guard';
-import { isError } from '../utils/errors';
+import { handleCustomError, isCustomError, isError } from '../utils/errors';
 
 @Controller('auth')
 export class AuthController {
@@ -70,6 +71,8 @@ export class AuthController {
       .catch((err: any) => {
         if (isError(err, 'UNIQUE_CONSTRAINT'))
           throw new ConflictException('User already exists');
+        else if (isCustomError(err))
+          throw new HttpException(...handleCustomError(err));
 
         throw new InternalServerErrorException("Can't create user");
       });
