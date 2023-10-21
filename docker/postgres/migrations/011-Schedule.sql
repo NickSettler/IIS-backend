@@ -1,19 +1,21 @@
-DROP TABLE IF EXISTS schedule;
-DROP FUNCTION IF EXISTS check_schedule_time();
 DROP TRIGGER IF EXISTS check_schedule_time ON schedule;
-DROP FUNCTION IF EXISTS check_schedule_teacher();
 DROP TRIGGER IF EXISTS check_schedule_teacher ON schedule;
-DROP FUNCTION IF EXISTS check_schedule_conflict();
 DROP TRIGGER IF EXISTS check_schedule_conflict ON schedule;
+DROP TRIGGER IF EXISTS check_teacher_requirements ON schedule;
+DROP FUNCTION IF EXISTS check_schedule_time();
+DROP FUNCTION IF EXISTS check_schedule_teacher();
+DROP FUNCTION IF EXISTS check_schedule_conflict();
+DROP FUNCTION IF EXISTS check_teacher_requirements();
+DROP TABLE IF EXISTS schedule;
 
 CREATE TABLE schedule
 (
     id                 uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-    course_activity_id uuid        NOT NULL,
-    teacher_id         uuid        NOT NULL,
+    course_activity_id uuid      NOT NULL,
+    teacher_id         uuid      NOT NULL,
     class_abbr         VARCHAR(10),
-    start_time         TIMESTAMP   NOT NULL,
-    end_time           TIMESTAMP   NOT NULL CHECK (end_time > start_time),
+    start_time         TIMESTAMP NOT NULL,
+    end_time           TIMESTAMP NOT NULL CHECK (end_time > start_time),
     CONSTRAINT fk_teacher_id FOREIGN KEY (teacher_id) REFERENCES users (id) ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT fk_course_activity_id FOREIGN KEY (course_activity_id) REFERENCES course_activity (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fk_class_abbr FOREIGN KEY (class_abbr) REFERENCES classes (abbr) ON UPDATE CASCADE ON DELETE SET NULL
@@ -60,7 +62,8 @@ $$
 DECLARE
     selected_course_abbr VARCHAR(10);
 BEGIN
-    SELECT course_activity.course_abbr INTO selected_course_abbr
+    SELECT course_activity.course_abbr
+    INTO selected_course_abbr
     FROM course_activity
     WHERE id = NEW.course_activity_id;
 
@@ -113,3 +116,33 @@ CREATE TRIGGER check_schedule_conflict
     ON schedule
     FOR EACH ROW
 EXECUTE PROCEDURE check_schedule_conflict();
+
+-- Check if teacher not excluded this time in requirements
+CREATE FUNCTION check_teacher_requirements()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    PERFORM *
+    FROM teacher_requirements
+    WHERE teacher_id = NEW.teacher_id
+      AND (
+            (NEW.start_time BETWEEN start_time AND end_time)
+            OR (NEW.end_time BETWEEN start_time AND end_time)
+        )
+      AND mode = 'EXCLUDE';
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Teacher has excluded this time' USING ERRCODE = 'C0007';
+    END IF;
+
+    RETURN NEW;
+END
+$$;
+
+CREATE TRIGGER check_teacher_requirements
+    BEFORE INSERT OR UPDATE
+    ON schedule
+    FOR EACH ROW
+EXECUTE PROCEDURE check_teacher_requirements();
