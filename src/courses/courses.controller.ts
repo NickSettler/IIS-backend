@@ -46,13 +46,9 @@ export class CoursesController {
     if (rules.cannot(E_ACTION.READ, Course))
       throw new ForbiddenException("You don't have permission to read courses");
 
-    const foundCourses = filter(await this.coursesService.findAll(), (course) =>
+    return filter(await this.coursesService.findAll(), (course) =>
       rules.can(E_ACTION.READ, course),
     );
-
-    if (!foundCourses.length) throw new NotFoundException('Courses not found');
-
-    return foundCourses;
   }
 
   @Get('/:abbr')
