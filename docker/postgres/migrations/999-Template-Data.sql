@@ -226,33 +226,23 @@ $$
         -- Course Teachers
         -- IDS
         INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_1, GUARANTOR_UUID_1);
-        INSERT INTO course_teachers (course_abbr, teacher_id)
         VALUES (COURSE_ABBR_1, TEACHER_UUID_1);
         INSERT INTO course_teachers (course_abbr, teacher_id)
         VALUES (COURSE_ABBR_1, TEACHER_UUID_2);
         -- ILG
         INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_2, GUARANTOR_UUID_2);
-        INSERT INTO course_teachers (course_abbr, teacher_id)
         VALUES (COURSE_ABBR_2, TEACHER_UUID_3);
         -- IIS
-        INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_3, GUARANTOR_UUID_1);
         INSERT INTO course_teachers (course_abbr, teacher_id)
         VALUES (COURSE_ABBR_3, TEACHER_UUID_1);
         INSERT INTO course_teachers (course_abbr, teacher_id)
         VALUES (COURSE_ABBR_3, TEACHER_UUID_2);
         -- ITU
         INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_4, GUARANTOR_UUID_1);
-        INSERT INTO course_teachers (course_abbr, teacher_id)
         VALUES (COURSE_ABBR_4, TEACHER_UUID_1);
         INSERT INTO course_teachers (course_abbr, teacher_id)
         VALUES (COURSE_ABBR_4, TEACHER_UUID_2);
         -- IFJ
-        INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_5, GUARANTOR_UUID_2);
         INSERT INTO course_teachers (course_abbr, teacher_id)
         VALUES (COURSE_ABBR_5, TEACHER_UUID_3);
 
