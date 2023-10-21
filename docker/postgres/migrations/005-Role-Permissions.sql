@@ -4,8 +4,8 @@ CREATE TABLE role_permissions
 (
     role_name       VARCHAR NOT NULL,
     permission_name VARCHAR NOT NULL,
-    CONSTRAINT fk_role_name FOREIGN KEY (role_name) REFERENCES roles (name),
-    CONSTRAINT fk_permission_name FOREIGN KEY (permission_name) REFERENCES permissions (name),
+    CONSTRAINT fk_role_name FOREIGN KEY (role_name) REFERENCES roles (name) ON UPDATE CASCADE ON DELETE RESTRICT,
+    CONSTRAINT fk_permission_name FOREIGN KEY (permission_name) REFERENCES permissions (name) ON UPDATE CASCADE ON DELETE RESTRICT,
     PRIMARY KEY (role_name, permission_name)
 );
 
