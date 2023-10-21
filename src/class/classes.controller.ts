@@ -130,6 +130,7 @@ export class ClassesController {
   }
 
   @Delete('/:abbr')
+  @UseGuards(JwtAuthGuard)
   public async delete(@Req() request: Request, @Param('abbr') abbr: string) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
