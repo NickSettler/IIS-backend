@@ -50,8 +50,6 @@ export class CoursesController {
       rules.can(E_ACTION.READ, course),
     );
 
-    if (!foundCourses.length) throw new NotFoundException('Courses not found');
-
     return foundCourses;
   }
 

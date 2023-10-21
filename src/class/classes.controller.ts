@@ -45,8 +45,6 @@ export class ClassesController {
       rules.can(E_ACTION.READ, fClass),
     );
 
-    if (!foundClasses.length) throw new NotFoundException('Classes not found');
-
     return foundClasses;
   }
 
