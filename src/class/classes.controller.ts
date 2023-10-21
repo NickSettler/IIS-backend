@@ -5,6 +5,7 @@ import {
   Delete,
   ForbiddenException,
   Get,
+  HttpException,
   InternalServerErrorException,
   NotFoundException,
   Param,
@@ -24,7 +25,7 @@ import { Request } from 'express';
 import { User } from '../db/entities/user.entity';
 import { E_ACTION } from '../casl/actions';
 import { filter } from 'lodash';
-import { isError } from 'src/utils/errors';
+import { handleCustomError, isCustomError, isError } from 'src/utils/errors';
 
 @Controller('classes')
 export class ClassesController {
@@ -85,7 +86,10 @@ export class ClassesController {
       .catch((err: any) => {
         if (isError(err, 'UNIQUE_CONSTRAINT'))
           throw new ConflictException('Class already exists');
-        else throw new InternalServerErrorException("Can't create class");
+        else if (isCustomError(err))
+          throw new HttpException(...handleCustomError(err));
+
+        throw new InternalServerErrorException("Can't create class");
       });
 
     if (!rules.can(E_ACTION.READ, createdClass))
@@ -119,7 +123,16 @@ export class ClassesController {
         "You don't have permission to update this class",
       );
 
-    const updatedClass = await this.classService.update(abbr, updateDto);
+    const updatedClass = await this.classService
+      .update(abbr, updateDto)
+      .catch((err: any) => {
+        if (isError(err, 'UNIQUE_CONSTRAINT'))
+          throw new ConflictException('Class already exists');
+        else if (isCustomError(err))
+          throw new HttpException(...handleCustomError(err));
+
+        throw new InternalServerErrorException("Can't create class");
+      });
 
     if (!rules.can(E_ACTION.READ, updatedClass))
       throw new ForbiddenException(

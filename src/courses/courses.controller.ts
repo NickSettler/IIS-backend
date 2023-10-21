@@ -5,6 +5,7 @@ import {
   Delete,
   ForbiddenException,
   Get,
+  HttpException,
   InternalServerErrorException,
   NotFoundException,
   Param,
@@ -29,7 +30,7 @@ import { E_ACTION } from '../casl/actions';
 import { Request } from 'express';
 import { CaslAbilityFactory, TAbility } from '../casl/casl-ability.factory';
 import { filter, map, union } from 'lodash';
-import { isError } from '../utils/errors';
+import { handleCustomError, isCustomError, isError } from '../utils/errors';
 
 @Controller('courses')
 export class CoursesController {
@@ -103,7 +104,8 @@ export class CoursesController {
           }
         } else if (isError(err, 'STRING_DATA_RIGHT_TRUNCATION')) {
           throw new UnprocessableEntityException('Some data is wrong');
-        }
+        } else if (isCustomError(err))
+          throw new HttpException(...handleCustomError(err));
 
         throw new InternalServerErrorException('Something went wrong');
       });
@@ -153,11 +155,17 @@ export class CoursesController {
     const updatedCourse = await this.coursesService
       .update(abbr, updateDto)
       .catch((err: any) => {
-        if (isError(err, 'FOREIGN_KEY_VIOLATION')) {
+        if (isError(err, 'UNIQUE_CONSTRAINT')) {
+          throw new ConflictException('Course already exists');
+        } else if (isError(err, 'FOREIGN_KEY_VIOLATION')) {
           if (err.constraint === 'fk_guarantor_id') {
             throw new UnprocessableEntityException('Guarantor does not exist');
           }
-        }
+        } else if (isError(err, 'STRING_DATA_RIGHT_TRUNCATION')) {
+          throw new UnprocessableEntityException('Some data is wrong');
+        } else if (isCustomError(err))
+          throw new HttpException(...handleCustomError(err));
+
         throw new InternalServerErrorException('Something went wrong');
       });
 

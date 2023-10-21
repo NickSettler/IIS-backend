@@ -23,11 +23,18 @@ CREATE FUNCTION check_user_is_teacher()
     LANGUAGE plpgsql
 AS
 $$
+DECLARE
+    user_username VARCHAR;
 BEGIN
     PERFORM * FROM course_teachers WHERE teacher_id = NEW.teacher_id;
 
     IF NOT FOUND THEN
-        RAISE EXCEPTION 'User is not a teacher' USING ERRCODE = 'C0006';
+        SELECT username
+        INTO user_username
+        FROM users
+        WHERE id = NEW.teacher_id;
+
+        RAISE EXCEPTION 'User % is not a teacher', user_username USING ERRCODE = 'C0006';
     END IF;
 
     RETURN NEW;

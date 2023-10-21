@@ -5,6 +5,7 @@ import {
   Delete,
   ForbiddenException,
   Get,
+  HttpException,
   InternalServerErrorException,
   NotFoundException,
   Param,
@@ -24,7 +25,7 @@ import { Request } from 'express';
 import DeleteAdminGuard from '../common/guards/delete-admin.guard';
 import { CaslAbilityFactory } from '../casl/casl-ability.factory';
 import { E_ACTION } from '../casl/actions';
-import { isError } from '../utils/errors';
+import { handleCustomError, isCustomError, isError } from '../utils/errors';
 import { filter } from 'lodash';
 
 @Controller('users')
@@ -109,6 +110,8 @@ export class UsersController {
       .catch((err: any) => {
         if (isError(err, 'UNIQUE_CONSTRAINT'))
           throw new ConflictException('User already exists');
+        else if (isCustomError(err))
+          throw new HttpException(...handleCustomError(err));
 
         throw new InternalServerErrorException("Can't create user");
       });

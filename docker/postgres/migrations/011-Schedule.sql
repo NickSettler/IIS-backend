@@ -73,7 +73,7 @@ BEGIN
       AND teacher_id = NEW.teacher_id;
 
     IF NOT FOUND THEN
-        RAISE EXCEPTION 'Teacher is not teaching the course' USING ERRCODE = 'C0005';
+        RAISE EXCEPTION 'Teacher is not teaching this course' USING ERRCODE = 'C0005';
     END IF;
 
     RETURN NEW;
@@ -104,11 +104,11 @@ BEGIN
       AND id <> NEW.id;
 
     IF FOUND THEN
-        RAISE EXCEPTION 'Schedule conflict' USING ERRCODE = 'C0004';
+        RAISE EXCEPTION 'This class is already occupied for this time' USING ERRCODE = 'C0004';
     END IF;
 
     RETURN NEW;
-END;
+END
 $$;
 
 CREATE TRIGGER check_schedule_conflict
@@ -134,7 +134,7 @@ BEGIN
       AND mode = 'EXCLUDE';
 
     IF FOUND THEN
-        RAISE EXCEPTION 'Teacher has excluded this time' USING ERRCODE = 'C0007';
+        RAISE EXCEPTION 'Teacher has excluded this time in his requirements' USING ERRCODE = 'C0007';
     END IF;
 
     RETURN NEW;
