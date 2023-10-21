@@ -23,6 +23,24 @@ export enum E_CUSTOM_ERROR_CODES {
   TEACHER_REQS_CONFLICT = 'C0008',
 }
 
+export const defaultCustomMessages: Record<E_CUSTOM_ERROR_CODES, string> = {
+  [E_CUSTOM_ERROR_CODES.SCHEDULE_TIME_TOO_SHORT]:
+    'Schedule must be at least 1 hour',
+  [E_CUSTOM_ERROR_CODES.SCHEDULE_TIME_TOO_LONG]:
+    'Schedule must be at most 4 hours',
+  [E_CUSTOM_ERROR_CODES.SCHEDULE_TIME_IN_THE_PAST]:
+    'Schedule must be in the future',
+  [E_CUSTOM_ERROR_CODES.SCHEDULE_CONFLICT]:
+    'There is a conflict with another schedule item',
+  [E_CUSTOM_ERROR_CODES.TEACHER_NOT_IN_COURSE]:
+    'Teacher cannot be assigned to a course they are not in',
+  [E_CUSTOM_ERROR_CODES.USER_NOT_A_TEACHER]: 'User is not a teacher',
+  [E_CUSTOM_ERROR_CODES.TEACHER_REQS_UNSATISFIED]:
+    'Teacher requirements are not satisfied',
+  [E_CUSTOM_ERROR_CODES.TEACHER_REQS_CONFLICT]:
+    'Teacher already has requirements for this time',
+};
+
 export enum E_POSTGRES_ERROR_CODES {
   UNIQUE_CONSTRAINT = '23505',
   INVALID_TEXT_REPRESENTATION = '22P02',
