@@ -16,6 +16,8 @@ CREATE FUNCTION check_user_role()
     LANGUAGE plpgsql
 AS
 $$
+DECLARE
+    user_username VARCHAR;
 BEGIN
     PERFORM *
     FROM user_roles
@@ -23,7 +25,12 @@ BEGIN
       AND role_name = 'TEACHER';
 
     IF NOT FOUND THEN
-        RAISE EXCEPTION 'User is not a teacher' USING ERRCODE = 'C0006';
+        SELECT username
+        INTO user_username
+        FROM users
+        WHERE id = NEW.teacher_id;
+
+        RAISE EXCEPTION 'User % is not a teacher', user_username USING ERRCODE = 'C0006';
     END IF;
 
     RETURN NEW;
