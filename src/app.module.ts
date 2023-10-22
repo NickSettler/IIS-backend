@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { ClassesModule } from './class/classes.module';
 import { CoursesModule } from './courses/courses.module';
 import { CaslModule } from './casl/casl.module';
+import { CourseActivitiesModule } from './course-activities/course-activities.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CaslModule } from './casl/casl.module';
     CaslModule,
     UsersModule,
     AuthModule,
+    CourseActivitiesModule,
     CoursesModule,
     ClassesModule,
   ],
