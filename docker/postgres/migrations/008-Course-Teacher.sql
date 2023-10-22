@@ -30,7 +30,7 @@ BEGIN
         FROM users
         WHERE id = NEW.teacher_id;
 
-        RAISE EXCEPTION 'User % is not a teacher', user_username USING ERRCODE = 'C0006';
+        RAISE EXCEPTION 'User % is not a teacher', user_username USING ERRCODE = 'C0061';
     END IF;
 
     RETURN NEW;
