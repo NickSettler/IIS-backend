@@ -41,6 +41,7 @@ export class CourseActivitiesController {
    * Find all course activities
    **/
   @Get('/activities')
+  @UseGuards(JwtAuthGuard)
   public async getAll(@Req() request: Request): Promise<Array<CourseActivity>> {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
@@ -86,6 +87,7 @@ export class CourseActivitiesController {
    * @param request
    */
   @Get('/activity/:id')
+  @UseGuards(JwtAuthGuard)
   public async getOne(@Param('id') id: string, @Req() request: Request) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
@@ -105,16 +107,17 @@ export class CourseActivitiesController {
    * @param request
    */
   @Post('/activity')
+  @UseGuards(JwtAuthGuard)
   public async create(
     @Body() createDto: CreateCourseActivitiesDto,
     @Req() request: Request,
   ) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
-    // if (rules.cannot(E_ACTION.CREATE, CourseActivity))
-    //   throw new ForbiddenException(
-    //     "You don't have permission to create course activity",
-    //   );
+    if (rules.cannot(E_ACTION.CREATE, CourseActivity))
+      throw new ForbiddenException(
+        "You don't have permission to create course activity",
+      );
 
     const createdCourseActivity = await this.courseActivitiesService
       .create(createDto)
@@ -142,6 +145,7 @@ export class CourseActivitiesController {
    * @param request
    */
   @Put('/activity/:id')
+  @UseGuards(JwtAuthGuard)
   public async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateCourseActivitiesDto,
@@ -192,6 +196,7 @@ export class CourseActivitiesController {
    * @param request
    */
   @Delete('/activity/:id')
+  @UseGuards(JwtAuthGuard)
   public async delete(@Param('id') id: string, @Req() request: Request) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 

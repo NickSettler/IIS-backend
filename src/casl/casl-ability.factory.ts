@@ -10,10 +10,7 @@ import {
 import { E_ACTION, E_MANAGE_ACTION } from './actions';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 import { Class } from '../db/entities/class.entity';
-import {
-  CourseActivity,
-  E_COURSE_ACTIVITY_ENTITY_KEYS,
-} from '../db/entities/course_activity.entity';
+import { CourseActivity } from '../db/entities/course_activity.entity';
 import {
   E_SCHEDULE_ENTITY_KEYS,
   Schedule,
