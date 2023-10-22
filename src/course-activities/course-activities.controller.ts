@@ -4,6 +4,7 @@ import {
   Delete,
   ForbiddenException,
   Get,
+  HttpException,
   InternalServerErrorException,
   NotFoundException,
   Param,
@@ -22,7 +23,7 @@ import {
   CreateCourseActivitiesDto,
   UpdateCourseActivitiesDto,
 } from './course-activities.dto';
-import { isError } from '../utils/errors';
+import { handleCustomError, isCustomError, isError } from '../utils/errors';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CaslAbilityFactory } from '../casl/casl-ability.factory';
 import { Request } from 'express';
@@ -124,10 +125,10 @@ export class CourseActivitiesController {
       .catch((err) => {
         if (isError(err, 'FOREIGN_KEY_VIOLATION'))
           throw new UnprocessableEntityException('Course does not exist');
-        else
-          throw new InternalServerErrorException(
-            "Can't create course activity",
-          );
+        else if (isCustomError(err))
+          throw new HttpException(...handleCustomError(err));
+
+        throw new InternalServerErrorException("Can't create course activity");
       });
 
     if (!rules.can(E_ACTION.READ, createdCourseActivity))
@@ -176,10 +177,10 @@ export class CourseActivitiesController {
       .catch((err) => {
         if (isError(err, 'UNIQUE_CONSTRAINT'))
           throw new NotFoundException('Course activity already exists');
-        else
-          throw new InternalServerErrorException(
-            "Can't update course activity",
-          );
+        else if (isCustomError(err))
+          throw new HttpException(...handleCustomError(err));
+
+        throw new InternalServerErrorException("Can't update course activity");
       });
 
     if (!rules.can(E_ACTION.READ, updatedCourseActivity))
