@@ -51,7 +51,9 @@ export class CourseActivitiesController {
         "You don't have permission to read course activities",
       );
 
-    return this.courseActivitiesService.findAll();
+    return filter(await this.courseActivitiesService.findAll(), (activity) =>
+      rules.can(E_ACTION.READ, activity),
+    );
   }
 
   /**
@@ -77,8 +79,6 @@ export class CourseActivitiesController {
       (course_activity) => rules.can(E_ACTION.READ, course_activity),
     );
 
-    if (!foundCourse) throw new NotFoundException('Course not found');
-
     return foundCourse;
   }
 
@@ -97,9 +97,21 @@ export class CourseActivitiesController {
         "You don't have permission to read course activities",
       );
 
-    return this.courseActivitiesService.findByOptions({
-      [E_COURSE_ACTIVITY_ENTITY_KEYS.ID]: id,
+    const foundActivity = await this.courseActivitiesService.findOne({
+      where: {
+        [E_COURSE_ACTIVITY_ENTITY_KEYS.ID]: id,
+      },
     });
+
+    if (!foundActivity)
+      throw new NotFoundException('Course activity not found');
+
+    if (!rules.can(E_ACTION.READ, foundActivity))
+      throw new ForbiddenException(
+        "You don't have permission to read this course activity",
+      );
+
+    return foundActivity;
   }
 
   /**
@@ -159,15 +171,16 @@ export class CourseActivitiesController {
         "You don't have permission to update course activity",
       );
 
-    const foundCourseActivity =
-      await this.courseActivitiesService.findByOptions({
+    const foundCourseActivity = await this.courseActivitiesService.findOne({
+      where: {
         [E_COURSE_ACTIVITY_ENTITY_KEYS.ID]: id,
-      });
+      },
+    });
 
     if (!foundCourseActivity)
       throw new NotFoundException('Course activity not found');
 
-    if (!rules.can(E_ACTION.UPDATE, foundCourseActivity[0]))
+    if (!rules.can(E_ACTION.UPDATE, foundCourseActivity))
       throw new ForbiddenException(
         "You don't have permission to update this course activity",
       );
@@ -206,15 +219,16 @@ export class CourseActivitiesController {
         "You don't have permission to delete course activity",
       );
 
-    const foundCourseActivity =
-      await this.courseActivitiesService.findByOptions({
+    const foundCourseActivity = await this.courseActivitiesService.findOne({
+      where: {
         [E_COURSE_ACTIVITY_ENTITY_KEYS.ID]: id,
-      });
+      },
+    });
 
     if (!foundCourseActivity)
       throw new NotFoundException('Course activity not found');
 
-    if (!rules.can(E_ACTION.DELETE, foundCourseActivity[0]))
+    if (!rules.can(E_ACTION.DELETE, foundCourseActivity))
       throw new ForbiddenException(
         "You don't have permission to delete this course activity",
       );

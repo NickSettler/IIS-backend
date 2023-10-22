@@ -5,7 +5,7 @@ import { PartialType } from '@nestjs/mapped-types';
 export class CreateCourseActivitiesDto {
   @IsNotEmpty()
   @IsString()
-  [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE_ABBR]: string;
+  [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]: string;
 
   @IsNotEmpty()
   @IsString()
