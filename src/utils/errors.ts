@@ -38,6 +38,7 @@ export const handleCustomError = (err: any): [string, number] => {
     case E_CUSTOM_ERROR_CODES.TEACHER_NOT_IN_COURSE:
     case E_CUSTOM_ERROR_CODES.USER_NOT_A_TEACHER:
     case E_CUSTOM_ERROR_CODES.USER_NOT_A_GUARANTOR:
+    case E_CUSTOM_ERROR_CODES.USER_NOT_A_STUDENT:
     case E_CUSTOM_ERROR_CODES.TEACHER_REQS_UNSATISFIED:
       return [message, HttpStatus.BAD_REQUEST];
     case E_CUSTOM_ERROR_CODES.SCHEDULE_CONFLICT:

@@ -20,6 +20,7 @@ export enum E_CUSTOM_ERROR_CODES {
   TEACHER_NOT_IN_COURSE = 'C0005',
   USER_NOT_A_TEACHER = 'C0061',
   USER_NOT_A_GUARANTOR = 'C0062',
+  USER_NOT_A_STUDENT = 'C0063',
   TEACHER_REQS_UNSATISFIED = 'C0007',
   TEACHER_REQS_CONFLICT = 'C0008',
 }
@@ -37,6 +38,7 @@ export const defaultCustomMessages: Record<E_CUSTOM_ERROR_CODES, string> = {
     'Teacher cannot be assigned to a course they are not in',
   [E_CUSTOM_ERROR_CODES.USER_NOT_A_TEACHER]: 'User is not a teacher',
   [E_CUSTOM_ERROR_CODES.USER_NOT_A_GUARANTOR]: 'User is not a guarantor',
+  [E_CUSTOM_ERROR_CODES.USER_NOT_A_STUDENT]: 'User is not a student',
   [E_CUSTOM_ERROR_CODES.TEACHER_REQS_UNSATISFIED]:
     'Teacher requirements are not satisfied',
   [E_CUSTOM_ERROR_CODES.TEACHER_REQS_CONFLICT]:
