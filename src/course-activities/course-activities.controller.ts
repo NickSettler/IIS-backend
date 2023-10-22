@@ -9,6 +9,8 @@ import {
   Param,
   Post,
   Put,
+  Req,
+  UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
 import { CourseActivitiesService } from './course-activities.service';
@@ -23,7 +25,7 @@ import {
 import { isError } from '../utils/errors';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CaslAbilityFactory } from '../casl/casl-ability.factory';
-import { request } from 'express';
+import { Request } from 'express';
 import { User } from '../db/entities/user.entity';
 import { E_ACTION } from '../casl/actions';
 import { filter } from 'lodash';
@@ -39,7 +41,14 @@ export class CourseActivitiesController {
    * Find all course activities
    **/
   @Get('/activities')
-  public async getAll(): Promise<Array<CourseActivity>> {
+  public async getAll(@Req() request: Request): Promise<Array<CourseActivity>> {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    if (rules.cannot(E_ACTION.READ, CourseActivity))
+      throw new ForbiddenException(
+        "You don't have permission to read course activities",
+      );
+
     return this.courseActivitiesService.findAll();
   }
 
@@ -48,7 +57,10 @@ export class CourseActivitiesController {
    */
   @Get('/:abbr/activities')
   @UseGuards(JwtAuthGuard)
-  public async getAllForCourse(@Param('abbr') abbr: string) {
+  public async getAllForCourse(
+    @Param('abbr') abbr: string,
+    @Req() request: Request,
+  ) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
     if (rules.cannot(E_ACTION.READ, CourseActivity))
@@ -71,9 +83,10 @@ export class CourseActivitiesController {
   /**
    * Find one course activity by id
    * @param id course activity id
+   * @param request
    */
   @Get('/activity/:id')
-  public async getOne(@Param('id') id: string) {
+  public async getOne(@Param('id') id: string, @Req() request: Request) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
     if (rules.cannot(E_ACTION.READ, CourseActivity))
@@ -89,21 +102,25 @@ export class CourseActivitiesController {
   /**
    * Create a course activity
    * @param createDto course activity data
+   * @param request
    */
   @Post('/activity')
-  public async create(@Body() createDto: CreateCourseActivitiesDto) {
+  public async create(
+    @Body() createDto: CreateCourseActivitiesDto,
+    @Req() request: Request,
+  ) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
-    if (rules.cannot(E_ACTION.CREATE, CourseActivity))
-      throw new ForbiddenException(
-        "You don't have permission to create course activity",
-      );
+    // if (rules.cannot(E_ACTION.CREATE, CourseActivity))
+    //   throw new ForbiddenException(
+    //     "You don't have permission to create course activity",
+    //   );
 
     const createdCourseActivity = await this.courseActivitiesService
       .create(createDto)
       .catch((err) => {
-        if (isError(err, 'UNIQUE_CONSTRAINT'))
-          throw new NotFoundException('Course activity already exists');
+        if (isError(err, 'FOREIGN_KEY_VIOLATION'))
+          throw new UnprocessableEntityException('Course does not exist');
         else
           throw new InternalServerErrorException(
             "Can't create course activity",
@@ -122,11 +139,13 @@ export class CourseActivitiesController {
    * Update course activity
    * @param id course activity id
    * @param updateDto course activity data
+   * @param request
    */
   @Put('/activity/:id')
   public async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateCourseActivitiesDto,
+    @Req() request: Request,
   ) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
@@ -167,8 +186,13 @@ export class CourseActivitiesController {
     return updatedCourseActivity;
   }
 
+  /**
+   * Delete course activity
+   * @param id
+   * @param request
+   */
   @Delete('/activity/:id')
-  public async delete(@Param('id') id: string) {
+  public async delete(@Param('id') id: string, @Req() request: Request) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
     if (rules.cannot(E_ACTION.DELETE, CourseActivity))

@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import {
   CourseActivity,
   E_COURSE_ACTIVITY_ENTITY_KEYS,
@@ -13,7 +9,6 @@ import {
   CreateCourseActivitiesDto,
   UpdateCourseActivitiesDto,
 } from './course-activities.dto';
-import { E_POSTGRES_ERROR_CODES } from '../db/constants';
 import { E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 
 @Injectable()
@@ -57,16 +52,7 @@ export class CourseActivitiesService {
       }),
     });
 
-    return await this.courseActivitiesRepository
-      .save(newCourseActivity)
-      .catch((err) => {
-        if (err.code === E_POSTGRES_ERROR_CODES.UNIQUE_CONSTRAINT)
-          throw new ConflictException('Course activity already exists');
-        else
-          throw new InternalServerErrorException(
-            "Can't create course activity",
-          );
-      });
+    return await this.courseActivitiesRepository.save(newCourseActivity);
   }
 
   /**

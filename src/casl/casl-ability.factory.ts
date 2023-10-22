@@ -10,7 +10,10 @@ import {
 import { E_ACTION, E_MANAGE_ACTION } from './actions';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 import { Class } from '../db/entities/class.entity';
-import { CourseActivity } from '../db/entities/course_activity.entity';
+import {
+  CourseActivity,
+  E_COURSE_ACTIVITY_ENTITY_KEYS,
+} from '../db/entities/course_activity.entity';
 import {
   E_SCHEDULE_ENTITY_KEYS,
   Schedule,
@@ -64,6 +67,20 @@ export class CaslAbilityFactory {
       E_COURSE_ENTITY_KEYS.ABBR,
       E_COURSE_ENTITY_KEYS.NAME,
       E_COURSE_ENTITY_KEYS.ANNOTATION,
+    ]);
+
+    can(E_ACTION.READ, CourseActivity, [
+      E_COURSE_ACTIVITY_ENTITY_KEYS.ID,
+      E_COURSE_ACTIVITY_ENTITY_KEYS.FORM,
+      E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE_ABBR,
+      E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE,
+    ]);
+
+    can(E_ACTION.CREATE, CourseActivity, [
+      E_COURSE_ACTIVITY_ENTITY_KEYS.ID,
+      E_COURSE_ACTIVITY_ENTITY_KEYS.FORM,
+      E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE_ABBR,
+      E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE,
     ]);
 
     const userRoles: Array<E_ROLE> = map(
