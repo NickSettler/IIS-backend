@@ -190,7 +190,11 @@ $$
         INSERT INTO user_roles (user_id, role_name)
         VALUES (GUARANTOR_UUID_1, 'GUARANTOR');
         INSERT INTO user_roles (user_id, role_name)
+        VALUES (GUARANTOR_UUID_1, 'TEACHER');
+        INSERT INTO user_roles (user_id, role_name)
         VALUES (GUARANTOR_UUID_2, 'GUARANTOR');
+        INSERT INTO user_roles (user_id, role_name)
+        VALUES (GUARANTOR_UUID_2, 'TEACHER');
         INSERT INTO user_roles (user_id, role_name)
         VALUES (TEACHER_UUID_1, 'TEACHER');
         INSERT INTO user_roles (user_id, role_name)
