@@ -72,14 +72,12 @@ export class CourseActivitiesController {
         "You don't have permission to read course activities",
       );
 
-    const foundCourse = filter(
+    return filter(
       await this.courseActivitiesService.findByOptions({
         [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]: { abbr },
       }),
       (course_activity) => rules.can(E_ACTION.READ, course_activity),
     );
-
-    return foundCourse;
   }
 
   /**

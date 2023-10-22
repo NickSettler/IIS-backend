@@ -13,7 +13,7 @@ import {
   CreateCourseActivitiesDto,
   UpdateCourseActivitiesDto,
 } from './course-activities.dto';
-import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
+import { E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 
 @Injectable()
 export class CourseActivitiesService {
