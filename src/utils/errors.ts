@@ -33,19 +33,14 @@ export const handleCustomError = (err: any): [string, number] => {
 
   switch (err.code) {
     case E_CUSTOM_ERROR_CODES.SCHEDULE_TIME_TOO_SHORT:
-      return [message, HttpStatus.BAD_REQUEST];
     case E_CUSTOM_ERROR_CODES.SCHEDULE_TIME_TOO_LONG:
-      return [message, HttpStatus.BAD_REQUEST];
     case E_CUSTOM_ERROR_CODES.SCHEDULE_TIME_IN_THE_PAST:
-      return [message, HttpStatus.BAD_REQUEST];
-    case E_CUSTOM_ERROR_CODES.SCHEDULE_CONFLICT:
-      return [message, HttpStatus.CONFLICT];
     case E_CUSTOM_ERROR_CODES.TEACHER_NOT_IN_COURSE:
-      return [message, HttpStatus.BAD_REQUEST];
     case E_CUSTOM_ERROR_CODES.USER_NOT_A_TEACHER:
-      return [message, HttpStatus.BAD_REQUEST];
+    case E_CUSTOM_ERROR_CODES.USER_NOT_A_GUARANTOR:
     case E_CUSTOM_ERROR_CODES.TEACHER_REQS_UNSATISFIED:
       return [message, HttpStatus.BAD_REQUEST];
+    case E_CUSTOM_ERROR_CODES.SCHEDULE_CONFLICT:
     case E_CUSTOM_ERROR_CODES.TEACHER_REQS_CONFLICT:
       return [message, HttpStatus.CONFLICT];
   }

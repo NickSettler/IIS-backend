@@ -18,7 +18,8 @@ export enum E_CUSTOM_ERROR_CODES {
   SCHEDULE_TIME_IN_THE_PAST = 'C0003',
   SCHEDULE_CONFLICT = 'C0004',
   TEACHER_NOT_IN_COURSE = 'C0005',
-  USER_NOT_A_TEACHER = 'C0006',
+  USER_NOT_A_TEACHER = 'C0061',
+  USER_NOT_A_GUARANTOR = 'C0062',
   TEACHER_REQS_UNSATISFIED = 'C0007',
   TEACHER_REQS_CONFLICT = 'C0008',
 }
@@ -35,6 +36,7 @@ export const defaultCustomMessages: Record<E_CUSTOM_ERROR_CODES, string> = {
   [E_CUSTOM_ERROR_CODES.TEACHER_NOT_IN_COURSE]:
     'Teacher cannot be assigned to a course they are not in',
   [E_CUSTOM_ERROR_CODES.USER_NOT_A_TEACHER]: 'User is not a teacher',
+  [E_CUSTOM_ERROR_CODES.USER_NOT_A_GUARANTOR]: 'User is not a guarantor',
   [E_CUSTOM_ERROR_CODES.TEACHER_REQS_UNSATISFIED]:
     'Teacher requirements are not satisfied',
   [E_CUSTOM_ERROR_CODES.TEACHER_REQS_CONFLICT]:
