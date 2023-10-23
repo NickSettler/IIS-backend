@@ -8,6 +8,7 @@ import { ClassesModule } from './class/classes.module';
 import { CoursesModule } from './courses/courses.module';
 import { CaslModule } from './casl/casl.module';
 import { CourseActivitiesModule } from './course-activities/course-activities.module';
+import { TeacherRequirementsModule } from './teacher_requirements/teacher_requirements.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CourseActivitiesModule } from './course-activities/course-activities.mo
     CourseActivitiesModule,
     CoursesModule,
     ClassesModule,
+    TeacherRequirementsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
