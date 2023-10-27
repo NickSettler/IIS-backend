@@ -67,7 +67,7 @@ END
 $$;
 
 CREATE TRIGGER check_existing_teacher_requirements
-    BEFORE INSERT OR UPDATE
+    BEFORE INSERT
     ON teacher_requirements
     FOR EACH ROW
 EXECUTE PROCEDURE check_existing_teacher_requirements();
