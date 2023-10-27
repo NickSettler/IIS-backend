@@ -10,6 +10,7 @@ import {
   UpdateTeacherRequirementsDto,
 } from './teacher_requirements.dto';
 import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
+import { assign, isArray, omitBy } from 'lodash';
 
 @Injectable()
 export class TeacherRequirementsService {
@@ -73,22 +74,23 @@ export class TeacherRequirementsService {
       throw new ConflictException('Teacher requirement not found');
     }
 
-    const updatedTeacherRequirement = this.teacherRequirementsRepository.merge(
-      teacherRequirementToUpdate,
-      {
-        ...updateDto,
-        ...(updateDto[E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER] && {
-          [E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER]: {
-            [E_USER_ENTITY_KEYS.ID]:
-              updateDto[E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER],
-          },
-        }),
-      },
-    );
+    assign(teacherRequirementToUpdate, omitBy(updateDto, isArray));
 
-    return await this.teacherRequirementsRepository.save(
-      updatedTeacherRequirement,
-    );
+    await this.teacherRequirementsRepository.save({
+      ...teacherRequirementToUpdate,
+      ...(updateDto[E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER] && {
+        [E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER]: {
+          [E_USER_ENTITY_KEYS.ID]:
+            updateDto[E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER],
+        },
+      }),
+    });
+
+    return this.teacherRequirementsRepository.findOne({
+      where: {
+        [E_TEACHER_REQUIREMENT_ENTITY_KEYS.ID]: id,
+      },
+    });
   }
 
   /**
