@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   HttpException,
@@ -120,7 +121,6 @@ export class TeacherRequirementsController {
         else if (isError(err, 'FOREIGN_KEY_VIOLATION'))
           throw new UnprocessableEntityException('Teacher not found');
         else if (isCustomError(err)) {
-          console.log(err);
           throw new HttpException(...handleCustomError(err));
         }
 
@@ -190,5 +190,37 @@ export class TeacherRequirementsController {
       );
 
     return updatedTeacherRequirement;
+  }
+
+  /**
+   * Delete a teacher requirement
+   * @param id
+   * @param request
+   */
+  @Delete('/:id')
+  @UseGuards(JwtAuthGuard)
+  public async delete(@Param('id') id: string, @Req() request: Request) {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    if (rules.cannot(E_ACTION.DELETE, TeacherRequirement))
+      throw new ForbiddenException(
+        "You don't have permission to delete teacher requirements",
+      );
+
+    const foundRequirement = await this.teacherRequirementsService.findOne({
+      where: {
+        [E_TEACHER_REQUIREMENT_ENTITY_KEYS.ID]: id,
+      },
+    });
+
+    if (!foundRequirement)
+      throw new NotFoundException(`Teacher requirement not found`);
+
+    if (!rules.can(E_ACTION.DELETE, foundRequirement))
+      throw new ForbiddenException(
+        "You don't have permission to delete this teacher requirement",
+      );
+
+    return this.teacherRequirementsService.delete(id);
   }
 }
