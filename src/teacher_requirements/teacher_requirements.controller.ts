@@ -176,6 +176,8 @@ export class TeacherRequirementsController {
       .catch((err) => {
         if (isError(err, 'UNIQUE_CONSTRAINT'))
           throw new NotFoundException('Teacher requirement already exists');
+        else if (isError(err, 'FOREIGN_KEY_VIOLATION'))
+          throw new UnprocessableEntityException('Teacher not found');
         else if (isCustomError(err))
           throw new HttpException(...handleCustomError(err));
 
