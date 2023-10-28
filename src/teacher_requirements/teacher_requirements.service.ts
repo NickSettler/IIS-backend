@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   E_TEACHER_REQUIREMENT_ENTITY_KEYS,
@@ -71,7 +71,7 @@ export class TeacherRequirementsService {
       });
 
     if (!teacherRequirementToUpdate) {
-      throw new ConflictException('Teacher requirement not found');
+      throw new NotFoundException('Teacher requirement not found');
     }
 
     assign(teacherRequirementToUpdate, omitBy(updateDto, isArray));
@@ -104,7 +104,7 @@ export class TeacherRequirementsService {
       });
 
     if (!deletedTeacherRequirement) {
-      throw new ConflictException('Teacher requirement not found');
+      throw new NotFoundException('Teacher requirement not found');
     }
 
     await this.teacherRequirementsRepository.delete(id);
