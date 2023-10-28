@@ -56,6 +56,7 @@ BEGIN
     PERFORM *
     FROM teacher_requirements
     WHERE teacher_id = NEW.teacher_id
+      AND NEW.id IS DISTINCT FROM id
       AND (start_time, end_time) OVERLAPS (NEW.start_time, NEW.end_time);
 
     IF FOUND THEN
@@ -67,7 +68,7 @@ END
 $$;
 
 CREATE TRIGGER check_existing_teacher_requirements
-    BEFORE INSERT
+    BEFORE INSERT OR UPDATE
     ON teacher_requirements
     FOR EACH ROW
 EXECUTE PROCEDURE check_existing_teacher_requirements();
