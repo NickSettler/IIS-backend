@@ -56,6 +56,7 @@ BEGIN
     PERFORM *
     FROM teacher_requirements
     WHERE teacher_id = NEW.teacher_id
+      AND NEW.id IS DISTINCT FROM id
       AND (start_time, end_time) OVERLAPS (NEW.start_time, NEW.end_time);
 
     IF FOUND THEN

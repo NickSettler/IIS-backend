@@ -10,6 +10,7 @@ export enum E_DB_TABLES {
   CLASSES = 'classes',
   SCHEDULE = 'schedule',
   STUDENT_SCHEDULE = 'student_schedule',
+  TEACHER_REQUIREMENT = 'teacher_requirements',
 }
 
 export enum E_CUSTOM_ERROR_CODES {

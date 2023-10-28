@@ -17,6 +17,7 @@ import {
 } from '../db/entities/schedule.entity';
 import { map } from 'lodash';
 import { E_ROLE, E_ROLE_ENTITY_KEYS } from '../db/entities/role.entity';
+import { TeacherRequirement } from '../db/entities/teacher_requirement.entity';
 
 export type TSubjects =
   | InferSubjects<
@@ -24,6 +25,7 @@ export type TSubjects =
       | typeof Course
       | typeof CourseActivity
       | typeof Schedule
+      | typeof TeacherRequirement
       | typeof User
     >
   | 'all';
