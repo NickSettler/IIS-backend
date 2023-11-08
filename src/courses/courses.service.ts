@@ -8,7 +8,7 @@ import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { CreateCoursesDto, UpdateCourseDto } from './courses.dto';
 import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
-import { assign, isArray, map, omitBy } from 'lodash';
+import { assign, isArray, map, omitBy, without } from 'lodash';
 
 @Injectable()
 export class CoursesService {
@@ -37,7 +37,6 @@ export class CoursesService {
    * @param createDto
    */
   public async create(createDto: CreateCoursesDto): Promise<Course> {
-    // check if guarantor_id exists in users table
     const course = this.coursesRepository.create({
       ...createDto,
       ...(createDto[E_COURSE_ENTITY_KEYS.GUARANTOR] && {
@@ -47,7 +46,10 @@ export class CoursesService {
       }),
       ...(createDto[E_COURSE_ENTITY_KEYS.TEACHERS] && {
         [E_COURSE_ENTITY_KEYS.TEACHERS]: map(
-          createDto[E_COURSE_ENTITY_KEYS.TEACHERS],
+          without(
+            createDto[E_COURSE_ENTITY_KEYS.TEACHERS],
+            createDto[E_COURSE_ENTITY_KEYS.GUARANTOR],
+          ),
           (teacher) => ({
             [E_USER_ENTITY_KEYS.ID]: teacher,
           }),
