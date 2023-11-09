@@ -92,12 +92,18 @@ export class ClassesController {
         throw new InternalServerErrorException("Can't create class");
       });
 
-    if (!rules.can(E_ACTION.READ, createdClass))
+    const foundClass = await this.classService.findOne({
+      where: {
+        [E_CLASS_ENTITY_KEYS.ABBR]: createdClass[E_CLASS_ENTITY_KEYS.ABBR],
+      },
+    });
+
+    if (!rules.can(E_ACTION.READ, foundClass))
       throw new ForbiddenException(
         "You don't have permission to read this class",
       );
 
-    return createdClass;
+    return foundClass;
   }
 
   @Put('/:abbr')
@@ -134,12 +140,18 @@ export class ClassesController {
         throw new InternalServerErrorException("Can't create class");
       });
 
-    if (!rules.can(E_ACTION.READ, updatedClass))
+    const foundUpdatedClass = await this.classService.findOne({
+      where: {
+        [E_CLASS_ENTITY_KEYS.ABBR]: updatedClass[E_CLASS_ENTITY_KEYS.ABBR],
+      },
+    });
+
+    if (!rules.can(E_ACTION.READ, foundUpdatedClass))
       throw new ForbiddenException(
         "You don't have permission to read this class",
       );
 
-    return updatedClass;
+    return foundUpdatedClass;
   }
 
   @Delete('/:abbr')

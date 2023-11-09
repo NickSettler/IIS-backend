@@ -129,12 +129,20 @@ export class TeacherRequirementsController {
         );
       });
 
-    if (!rules.can(E_ACTION.READ, createdRequirement))
+    const foundTeacherRequirement =
+      await this.teacherRequirementsService.findOne({
+        where: {
+          [E_TEACHER_REQUIREMENT_ENTITY_KEYS.ID]:
+            createdRequirement[E_TEACHER_REQUIREMENT_ENTITY_KEYS.ID],
+        },
+      });
+
+    if (!rules.can(E_ACTION.READ, foundTeacherRequirement))
       throw new ForbiddenException(
         "You don't have permission to read this teacher requirement",
       );
 
-    return createdRequirement;
+    return foundTeacherRequirement;
   }
 
   /**
@@ -186,12 +194,20 @@ export class TeacherRequirementsController {
         );
       });
 
-    if (!rules.can(E_ACTION.READ, updatedTeacherRequirement))
+    const foundUpdatedTeacherRequirement =
+      await this.teacherRequirementsService.findOne({
+        where: {
+          [E_TEACHER_REQUIREMENT_ENTITY_KEYS.ID]:
+            updatedTeacherRequirement[E_TEACHER_REQUIREMENT_ENTITY_KEYS.ID],
+        },
+      });
+
+    if (!rules.can(E_ACTION.READ, foundUpdatedTeacherRequirement))
       throw new ForbiddenException(
         "You don't have permission to read this teacher requirement",
       );
 
-    return updatedTeacherRequirement;
+    return foundUpdatedTeacherRequirement;
   }
 
   /**

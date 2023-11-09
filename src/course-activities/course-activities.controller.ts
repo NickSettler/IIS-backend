@@ -141,12 +141,19 @@ export class CourseActivitiesController {
         throw new InternalServerErrorException("Can't create course activity");
       });
 
-    if (!rules.can(E_ACTION.READ, createdCourseActivity))
+    const foundCourseActivity = await this.courseActivitiesService.findOne({
+      where: {
+        [E_COURSE_ACTIVITY_ENTITY_KEYS.ID]:
+          createdCourseActivity[E_COURSE_ACTIVITY_ENTITY_KEYS.ID],
+      },
+    });
+
+    if (!rules.can(E_ACTION.READ, foundCourseActivity))
       throw new ForbiddenException(
         "You don't have permission to read this course activity",
       );
 
-    return createdCourseActivity;
+    return foundCourseActivity;
   }
 
   /**
@@ -194,12 +201,20 @@ export class CourseActivitiesController {
         throw new InternalServerErrorException("Can't update course activity");
       });
 
-    if (!rules.can(E_ACTION.READ, updatedCourseActivity))
+    const foundUpdatedCourseActivity =
+      await this.courseActivitiesService.findOne({
+        where: {
+          [E_COURSE_ACTIVITY_ENTITY_KEYS.ID]:
+            updatedCourseActivity[E_COURSE_ACTIVITY_ENTITY_KEYS.ID],
+        },
+      });
+
+    if (!rules.can(E_ACTION.READ, foundUpdatedCourseActivity))
       throw new ForbiddenException(
         "You don't have permission to read this course activity",
       );
 
-    return updatedCourseActivity;
+    return foundUpdatedCourseActivity;
   }
 
   /**

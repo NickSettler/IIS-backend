@@ -169,12 +169,18 @@ export class CoursesController {
         throw new InternalServerErrorException('Something went wrong');
       });
 
-    if (!rules.can(E_ACTION.READ, updatedCourse))
+    const foundUpdatedCourse = await this.coursesService.findOne({
+      where: {
+        [E_COURSE_ENTITY_KEYS.ABBR]: updatedCourse[E_COURSE_ENTITY_KEYS.ABBR],
+      },
+    });
+
+    if (!rules.can(E_ACTION.READ, foundUpdatedCourse))
       throw new ForbiddenException(
         "You don't have permission to read this course",
       );
 
-    return updatedCourse;
+    return foundUpdatedCourse;
   }
 
   @Delete('/:abbr')
