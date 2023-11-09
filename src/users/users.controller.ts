@@ -116,10 +116,20 @@ export class UsersController {
         throw new InternalServerErrorException("Can't create user");
       });
 
-    if (rules.cannot(E_ACTION.READ, createdUser))
+    const foundUser = await this.usersService.findOne({
+      where: {
+        [E_USER_ENTITY_KEYS.ID]: createdUser[E_USER_ENTITY_KEYS.ID],
+      },
+      relations: [
+        E_USER_ENTITY_KEYS.ROLES,
+        `${E_USER_ENTITY_KEYS.ROLES}.${E_ROLE_ENTITY_KEYS.PERMISSIONS}`,
+      ],
+    });
+
+    if (rules.cannot(E_ACTION.READ, foundUser))
       throw new ForbiddenException("You don't have permission to read users");
 
-    return createdUser;
+    return foundUser;
   }
 
   @Put('/:id')
@@ -148,10 +158,20 @@ export class UsersController {
 
     const updatedUser = await this.usersService.update(id, updateDto);
 
-    if (rules.cannot(E_ACTION.READ, updatedUser))
+    const foundUser = await this.usersService.findOne({
+      where: {
+        [E_USER_ENTITY_KEYS.ID]: updatedUser[E_USER_ENTITY_KEYS.ID],
+      },
+      relations: [
+        E_USER_ENTITY_KEYS.ROLES,
+        `${E_USER_ENTITY_KEYS.ROLES}.${E_ROLE_ENTITY_KEYS.PERMISSIONS}`,
+      ],
+    });
+
+    if (rules.cannot(E_ACTION.READ, foundUser))
       throw new ForbiddenException("You don't have permission to read users");
 
-    return updatedUser;
+    return foundUser;
   }
 
   @Delete('/:id')
