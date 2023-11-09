@@ -25,6 +25,7 @@ CREATE TABLE schedule
 -- 1. Schedule time must be at least 1 hour
 -- 2. Schedule time must be at most 4 hours
 -- 3. Schedule time must be in the future
+
 CREATE FUNCTION check_schedule_time()
     RETURNS TRIGGER
     LANGUAGE plpgsql
