@@ -20,6 +20,11 @@ $$
         DECLARE CLASS_UUID_5        uuid    := '0aeab050-2f37-48bb-a129-0b36ac9ca71a';
         DECLARE CLASS_UUID_6        uuid    := '9f528627-5813-49db-8953-7763938ac347';
         DECLARE CLASS_UUID_7        uuid    := '5ad436e2-cea2-4067-8310-32de6184e59b';
+        DECLARE COURSE_UUID_1       uuid    := '9ae5a999-d8eb-470a-884f-003de7d75241';
+        DECLARE COURSE_UUID_2       uuid    := '24bed943-a1dc-4572-aac8-e6e2c2add0d0';
+        DECLARE COURSE_UUID_3       uuid    := '68eb8ec9-0b24-45ec-8bd9-0dceebf34ca0';
+        DECLARE COURSE_UUID_4       uuid    := '86957719-d721-478a-8406-132d65f8b3b9';
+        DECLARE COURSE_UUID_5       uuid    := 'c103f3c8-6c61-411f-821a-cd09dfc0e748';
         DECLARE COURSE_ABBR_1       varchar := 'IDS';
         DECLARE COURSE_ABBR_2       varchar := 'ILG';
         DECLARE COURSE_ABBR_3       varchar := 'IIS';
@@ -222,69 +227,69 @@ $$
         VALUES (STUDENT_UUID_5, 'STUDENT');
 
         -- Courses
-        INSERT INTO courses (abbr, guarantor_id, name, credits, annotation)
-        VALUES (COURSE_ABBR_1, GUARANTOR_UUID_1, 'Database Systems', 5, 'Database Systems Annotation');
-        INSERT INTO courses (abbr, guarantor_id, name, credits, annotation)
-        VALUES (COURSE_ABBR_2, GUARANTOR_UUID_2, 'Linear Algebra', 4, 'Linear Algebra Annotation');
-        INSERT INTO courses (abbr, guarantor_id, name, credits, annotation)
-        VALUES (COURSE_ABBR_3, GUARANTOR_UUID_1, 'Information Systems', 10, 'Information Systems Annotation');
-        INSERT INTO courses (abbr, guarantor_id, name, credits, annotation)
-        VALUES (COURSE_ABBR_4, GUARANTOR_UUID_1, 'User Interfaces', 4, 'User Interfaces Annotation');
-        INSERT INTO courses (abbr, guarantor_id, name, credits, annotation)
-        VALUES (COURSE_ABBR_5, GUARANTOR_UUID_2, 'Formal Languages and Grammars', 6,
+        INSERT INTO courses (id, abbr, guarantor_id, name, credits, annotation)
+        VALUES (COURSE_UUID_1, COURSE_ABBR_1, GUARANTOR_UUID_1, 'Database Systems', 5, 'Database Systems Annotation');
+        INSERT INTO courses (id, abbr, guarantor_id, name, credits, annotation)
+        VALUES (COURSE_UUID_2, COURSE_ABBR_2, GUARANTOR_UUID_2, 'Linear Algebra', 4, 'Linear Algebra Annotation');
+        INSERT INTO courses (id, abbr, guarantor_id, name, credits, annotation)
+        VALUES (COURSE_UUID_3, COURSE_ABBR_3, GUARANTOR_UUID_1, 'Information Systems', 10, 'Information Systems Annotation');
+        INSERT INTO courses (id, abbr, guarantor_id, name, credits, annotation)
+        VALUES (COURSE_UUID_4, COURSE_ABBR_4, GUARANTOR_UUID_1, 'User Interfaces', 4, 'User Interfaces Annotation');
+        INSERT INTO courses (id, abbr, guarantor_id, name, credits, annotation)
+        VALUES (COURSE_UUID_5, COURSE_ABBR_5, GUARANTOR_UUID_2, 'Formal Languages and Grammars', 6,
                 'Formal Languages and Grammars Annotation');
 
         -- Course Teachers
         -- IDS
-        INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_1, TEACHER_UUID_1);
-        INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_1, TEACHER_UUID_2);
+        INSERT INTO course_teachers (course_id, teacher_id)
+        VALUES (COURSE_UUID_1, TEACHER_UUID_1);
+        INSERT INTO course_teachers (course_id, teacher_id)
+        VALUES (COURSE_UUID_1, TEACHER_UUID_2);
         -- ILG
-        INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_2, TEACHER_UUID_3);
+        INSERT INTO course_teachers (course_id, teacher_id)
+        VALUES (COURSE_UUID_2, TEACHER_UUID_3);
         -- IIS
-        INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_3, TEACHER_UUID_1);
-        INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_3, TEACHER_UUID_2);
+        INSERT INTO course_teachers (course_id, teacher_id)
+        VALUES (COURSE_UUID_3, TEACHER_UUID_1);
+        INSERT INTO course_teachers (course_id, teacher_id)
+        VALUES (COURSE_UUID_3, TEACHER_UUID_2);
         -- ITU
-        INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_4, TEACHER_UUID_1);
-        INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_4, TEACHER_UUID_2);
+        INSERT INTO course_teachers (course_id, teacher_id)
+        VALUES (COURSE_UUID_4, TEACHER_UUID_1);
+        INSERT INTO course_teachers (course_id, teacher_id)
+        VALUES (COURSE_UUID_4, TEACHER_UUID_2);
         -- IFJ
-        INSERT INTO course_teachers (course_abbr, teacher_id)
-        VALUES (COURSE_ABBR_5, TEACHER_UUID_3);
+        INSERT INTO course_teachers (course_id, teacher_id)
+        VALUES (COURSE_UUID_5, TEACHER_UUID_3);
 
         -- Course Activities
         -- IDS
-        INSERT INTO course_activity (id, course_abbr, form)
-        VALUES (COURSE_ACTIVITY_1_1, COURSE_ABBR_1, 'LECTURE');
-        INSERT INTO course_activity (id, course_abbr, form)
-        VALUES (COURSE_ACTIVITY_1_2, COURSE_ABBR_1, 'SEMINAR');
+        INSERT INTO course_activity (id, course_id, form)
+        VALUES (COURSE_ACTIVITY_1_1, COURSE_UUID_1, 'LECTURE');
+        INSERT INTO course_activity (id, course_id, form)
+        VALUES (COURSE_ACTIVITY_1_2, COURSE_UUID_1, 'SEMINAR');
         -- ILG
-        INSERT INTO course_activity (id, course_abbr, form)
-        VALUES (COURSE_ACTIVITY_2_1, COURSE_ABBR_2, 'LECTURE');
-        INSERT INTO course_activity (id, course_abbr, form)
-        VALUES (COURSE_ACTIVITY_2_2, COURSE_ABBR_2, 'EXERCISE');
+        INSERT INTO course_activity (id, course_id, form)
+        VALUES (COURSE_ACTIVITY_2_1, COURSE_UUID_2, 'LECTURE');
+        INSERT INTO course_activity (id, course_id, form)
+        VALUES (COURSE_ACTIVITY_2_2, COURSE_UUID_2, 'EXERCISE');
         -- IIS
-        INSERT INTO course_activity (id, course_abbr, form)
-        VALUES (COURSE_ACTIVITY_3_1, COURSE_ABBR_3, 'LECTURE');
-        INSERT INTO course_activity (id, course_abbr, form)
-        VALUES (COURSE_ACTIVITY_3_2, COURSE_ABBR_3, 'EXERCISE');
-        INSERT INTO course_activity (id, course_abbr, form)
-        VALUES (COURSE_ACTIVITY_3_3, COURSE_ABBR_3, 'SEMINAR');
+        INSERT INTO course_activity (id, course_id, form)
+        VALUES (COURSE_ACTIVITY_3_1, COURSE_UUID_3, 'LECTURE');
+        INSERT INTO course_activity (id, course_id, form)
+        VALUES (COURSE_ACTIVITY_3_2, COURSE_UUID_3, 'EXERCISE');
+        INSERT INTO course_activity (id, course_id, form)
+        VALUES (COURSE_ACTIVITY_3_3, COURSE_UUID_3, 'SEMINAR');
         -- ITU
-        INSERT INTO course_activity (id, course_abbr, form)
-        VALUES (COURSE_ACTIVITY_4_1, COURSE_ABBR_4, 'LECTURE');
-        INSERT INTO course_activity (id, course_abbr, form)
-        VALUES (COURSE_ACTIVITY_4_2, COURSE_ABBR_4, 'SEMINAR');
+        INSERT INTO course_activity (id, course_id, form)
+        VALUES (COURSE_ACTIVITY_4_1, COURSE_UUID_4, 'LECTURE');
+        INSERT INTO course_activity (id, course_id, form)
+        VALUES (COURSE_ACTIVITY_4_2, COURSE_UUID_4, 'SEMINAR');
         -- IFJ
-        INSERT INTO course_activity (id, course_abbr, form)
-        VALUES (COURSE_ACTIVITY_5_1, COURSE_ABBR_5, 'LECTURE');
-        INSERT INTO course_activity (id, course_abbr, form)
-        VALUES (COURSE_ACTIVITY_5_2, COURSE_ABBR_5, 'EXERCISE');
+        INSERT INTO course_activity (id, course_id, form)
+        VALUES (COURSE_ACTIVITY_5_1, COURSE_UUID_5, 'LECTURE');
+        INSERT INTO course_activity (id, course_id, form)
+        VALUES (COURSE_ACTIVITY_5_2, COURSE_UUID_5, 'EXERCISE');
 
         -- Schedule Item
         -- IDS LECTURE

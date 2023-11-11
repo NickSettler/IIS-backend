@@ -9,8 +9,10 @@ import {
 } from 'typeorm';
 import { E_DB_TABLES } from '../constants';
 import { E_USER_ENTITY_KEYS, User } from './user.entity';
+import { IsUUID } from 'class-validator';
 
 export const enum E_COURSE_ENTITY_KEYS {
+  ID = 'id',
   ABBR = 'abbr',
   GUARANTOR_ID = 'guarantor_id',
   NAME = 'name',
@@ -25,6 +27,10 @@ export const enum E_COURSE_ENTITY_KEYS {
 })
 export class Course {
   @PrimaryColumn()
+  @IsUUID()
+  [E_COURSE_ENTITY_KEYS.ID]: string;
+
+  @Column({ unique: true })
   [E_COURSE_ENTITY_KEYS.ABBR]: string;
 
   @Column({ unique: true })
@@ -48,8 +54,8 @@ export class Course {
   @JoinTable({
     name: E_DB_TABLES.COURSE_TEACHERS,
     joinColumn: {
-      name: 'course_abbr',
-      referencedColumnName: E_COURSE_ENTITY_KEYS.ABBR,
+      name: 'course_id',
+      referencedColumnName: E_COURSE_ENTITY_KEYS.ID,
     },
     inverseJoinColumn: {
       name: 'teacher_id',

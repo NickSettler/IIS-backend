@@ -62,15 +62,12 @@ export class CoursesService {
 
   /**
    * Update a course
-   * @param abbr course abbreviation
+   * @param id course abbreviation
    * @param updateDto course data
    */
-  public async update(
-    abbr: string,
-    updateDto: UpdateCourseDto,
-  ): Promise<Course> {
+  public async update(id: string, updateDto: UpdateCourseDto): Promise<Course> {
     const course = await this.coursesRepository.findOne({
-      where: { [E_COURSE_ENTITY_KEYS.ABBR]: abbr },
+      where: { [E_COURSE_ENTITY_KEYS.ID]: id },
     });
 
     if (!course) throw new ConflictException('Course not found');
@@ -91,21 +88,21 @@ export class CoursesService {
     });
 
     return await this.coursesRepository.findOne({
-      where: { [E_COURSE_ENTITY_KEYS.ABBR]: abbr },
+      where: { [E_COURSE_ENTITY_KEYS.ID]: id },
     });
   }
 
   /**
    * Delete a course
-   * @param abbr course abbreviation
+   * @param id course abbreviation
    */
-  public async delete(abbr: string): Promise<void> {
+  public async delete(id: string): Promise<void> {
     const course = await this.coursesRepository.findOne({
-      where: { [E_COURSE_ENTITY_KEYS.ABBR]: abbr },
+      where: { [E_COURSE_ENTITY_KEYS.ID]: id },
     });
 
     if (!course) throw new NotFoundException('Course not found');
 
-    await this.coursesRepository.delete(abbr);
+    await this.coursesRepository.delete(id);
   }
 }
