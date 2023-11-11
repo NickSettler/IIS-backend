@@ -126,7 +126,17 @@ export class StudentScheduleController {
       [E_STUDENT_SCHEDULE_ENTITY_KEYS.SCHEDULE_ID]: scheduleId,
     });
 
-    return await this.studentScheduleService.findOne(studentId, scheduleId);
+    const createdSchedule = await this.studentScheduleService.findOne(
+      studentId,
+      scheduleId,
+    );
+
+    if (rules.cannot(E_ACTION.READ, createdSchedule))
+      throw new ForbiddenException(
+        "You don't have permission to read this student schedule",
+      );
+
+    return createdSchedule;
   }
 
   /**
