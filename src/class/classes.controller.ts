@@ -69,7 +69,7 @@ export class ClassesController {
     return foundClass;
   }
 
-  @Get(':abbr/abbr')
+  @Get('abbr/:abbr')
   @UseGuards(JwtAuthGuard)
   public async getByAbbr(@Req() request: Request, @Param('abbr') abbr: string) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
