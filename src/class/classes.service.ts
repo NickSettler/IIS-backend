@@ -38,12 +38,12 @@ export class ClassesService {
 
   /**
    * Update a class
-   * @param abbr
+   * @param id
    * @param updateDto
    */
-  public async update(abbr: string, updateDto: UpdateClassDto): Promise<Class> {
+  public async update(id: string, updateDto: UpdateClassDto): Promise<Class> {
     const classToUpdate = await this.classRepository.findOne({
-      where: { [E_CLASS_ENTITY_KEYS.ABBR]: abbr },
+      where: { [E_CLASS_ENTITY_KEYS.ID]: id },
     });
 
     if (!classToUpdate) throw new ConflictException('Class not found');
@@ -55,9 +55,9 @@ export class ClassesService {
 
   /**
    * Delete a class
-   * @param abbr
+   * @param id
    */
-  public async delete(abbr: string): Promise<void> {
-    await this.classRepository.delete(abbr);
+  public async delete(id: string): Promise<void> {
+    await this.classRepository.delete(id);
   }
 }

@@ -13,12 +13,12 @@ CREATE TABLE schedule
     id                 uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     course_activity_id uuid      NOT NULL,
     teacher_id         uuid      NOT NULL,
-    class_abbr         VARCHAR(10),
+    class_id           uuid,
     start_time         TIMESTAMP NOT NULL,
     end_time           TIMESTAMP NOT NULL CHECK (end_time > start_time),
     CONSTRAINT fk_teacher_id FOREIGN KEY (teacher_id) REFERENCES users (id) ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT fk_course_activity_id FOREIGN KEY (course_activity_id) REFERENCES course_activity (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT fk_class_abbr FOREIGN KEY (class_abbr) REFERENCES classes (abbr) ON UPDATE CASCADE ON DELETE SET NULL
+    CONSTRAINT fk_class_id FOREIGN KEY (class_id) REFERENCES classes (id) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 -- Check if schedule time is valid
@@ -97,7 +97,7 @@ $$
 BEGIN
     PERFORM *
     FROM schedule
-    WHERE class_abbr = NEW.class_abbr
+    WHERE class_id = NEW.class_id
       AND (
             (NEW.start_time BETWEEN start_time AND end_time)
             OR (NEW.end_time BETWEEN start_time AND end_time)

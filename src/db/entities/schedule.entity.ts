@@ -11,13 +11,14 @@ import {
 import { CourseActivity } from './course_activity.entity';
 import { Class } from './class.entity';
 import { E_USER_ENTITY_KEYS, User } from './user.entity';
+import { IsUUID } from 'class-validator';
 
 export enum E_SCHEDULE_ENTITY_KEYS {
   ID = 'id',
   COURSE_ACTIVITY_ID = 'course_activity_id',
   COURSE_ACTIVITY = 'course_activity',
   TEACHER = 'teacher',
-  CLASS_ABBR = 'class_abbr',
+  CLASS_ID = 'class_id',
   CLASSES = 'classes',
   START_TIME = 'start_time',
   END_TIME = 'end_time',
@@ -49,10 +50,11 @@ export class Schedule {
   [E_SCHEDULE_ENTITY_KEYS.TEACHER]: User;
 
   @Column()
-  [E_SCHEDULE_ENTITY_KEYS.CLASS_ABBR]: string;
+  @IsUUID()
+  [E_SCHEDULE_ENTITY_KEYS.CLASS_ID]: string;
 
   @ManyToOne(() => Class)
-  @JoinColumn({ name: E_SCHEDULE_ENTITY_KEYS.CLASS_ABBR })
+  @JoinColumn({ name: E_SCHEDULE_ENTITY_KEYS.CLASS_ID })
   [E_SCHEDULE_ENTITY_KEYS.CLASSES]: Class;
 
   @ManyToMany(() => User)

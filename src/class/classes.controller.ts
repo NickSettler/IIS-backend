@@ -47,9 +47,31 @@ export class ClassesController {
     );
   }
 
-  @Get('/:abbr')
+  @Get('/:id')
   @UseGuards(JwtAuthGuard)
-  public async getOne(@Req() request: Request, @Param('abbr') abbr: string) {
+  public async getOne(@Req() request: Request, @Param('id') id: string) {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    if (rules.cannot(E_ACTION.READ, Class))
+      throw new ForbiddenException("You don't have permission to read classes");
+
+    const foundClass = await this.classService.findOne({
+      where: { [E_CLASS_ENTITY_KEYS.ID]: id },
+    });
+
+    if (!foundClass) throw new NotFoundException('Class not found');
+
+    if (!rules.can(E_ACTION.READ, foundClass))
+      throw new ForbiddenException(
+        "You don't have permission to read this class",
+      );
+
+    return foundClass;
+  }
+
+  @Get('abbr/:abbr')
+  @UseGuards(JwtAuthGuard)
+  public async getByAbbr(@Req() request: Request, @Param('abbr') abbr: string) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
     if (rules.cannot(E_ACTION.READ, Class))
@@ -106,11 +128,11 @@ export class ClassesController {
     return foundClass;
   }
 
-  @Put('/:abbr')
+  @Put('/:id')
   @UseGuards(JwtAuthGuard)
   public async update(
     @Req() request: Request,
-    @Param('abbr') abbr: string,
+    @Param('id') id: string,
     @Body() updateDto: UpdateClassDto,
   ) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
@@ -119,7 +141,7 @@ export class ClassesController {
       throw new ForbiddenException("You don't have permission to update class");
 
     const foundClass = await this.classService.findOne({
-      where: { [E_CLASS_ENTITY_KEYS.ABBR]: abbr },
+      where: { [E_CLASS_ENTITY_KEYS.ID]: id },
     });
 
     if (!foundClass) throw new NotFoundException('Class not found');
@@ -130,7 +152,7 @@ export class ClassesController {
       );
 
     const updatedClass = await this.classService
-      .update(abbr, updateDto)
+      .update(id, updateDto)
       .catch((err: any) => {
         if (isError(err, 'UNIQUE_CONSTRAINT'))
           throw new ConflictException('Class already exists');
@@ -142,7 +164,7 @@ export class ClassesController {
 
     const foundUpdatedClass = await this.classService.findOne({
       where: {
-        [E_CLASS_ENTITY_KEYS.ABBR]: updatedClass[E_CLASS_ENTITY_KEYS.ABBR],
+        [E_CLASS_ENTITY_KEYS.ID]: updatedClass[E_CLASS_ENTITY_KEYS.ID],
       },
     });
 
@@ -154,16 +176,16 @@ export class ClassesController {
     return foundUpdatedClass;
   }
 
-  @Delete('/:abbr')
+  @Delete('/:id')
   @UseGuards(JwtAuthGuard)
-  public async delete(@Req() request: Request, @Param('abbr') abbr: string) {
+  public async delete(@Req() request: Request, @Param('id') id: string) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
     if (rules.cannot(E_ACTION.DELETE, Class))
       throw new ForbiddenException("You don't have permission to delete class");
 
     const foundClass = await this.classService.findOne({
-      where: { [E_CLASS_ENTITY_KEYS.ABBR]: abbr },
+      where: { [E_CLASS_ENTITY_KEYS.ID]: id },
     });
 
     if (!foundClass) throw new NotFoundException('Class not found');
@@ -173,6 +195,6 @@ export class ClassesController {
         "You don't have permission to delete this class",
       );
 
-    return this.classService.delete(abbr);
+    return this.classService.delete(id);
   }
 }
