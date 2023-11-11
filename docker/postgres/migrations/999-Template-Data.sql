@@ -13,6 +13,13 @@ $$
         DECLARE STUDENT_UUID_3      uuid    := '5c60d405-9343-47d6-bbb8-242702f9cb56';
         DECLARE STUDENT_UUID_4      uuid    := 'a6599e18-61d7-451e-a15e-70002b7c5a32';
         DECLARE STUDENT_UUID_5      uuid    := '7bc41479-0163-4430-a23d-df9f0fc9a2d8';
+        DECLARE CLASS_UUID_1        uuid    := '171c546f-cf84-4ccb-aee2-32ac6abc3051';
+        DECLARE CLASS_UUID_2        uuid    := '74ec21f2-7203-4adf-b982-79fc6f7691be';
+        DECLARE CLASS_UUID_3        uuid    := '4a248f66-39a8-4582-991d-a622357ed6bd';
+        DECLARE CLASS_UUID_4        uuid    := '41e21ae3-2fca-46ea-a729-ab371124c6d0';
+        DECLARE CLASS_UUID_5        uuid    := '0aeab050-2f37-48bb-a129-0b36ac9ca71a';
+        DECLARE CLASS_UUID_6        uuid    := '9f528627-5813-49db-8953-7763938ac347';
+        DECLARE CLASS_UUID_7        uuid    := '5ad436e2-cea2-4067-8310-32de6184e59b';
         DECLARE COURSE_ABBR_1       varchar := 'IDS';
         DECLARE COURSE_ABBR_2       varchar := 'ILG';
         DECLARE COURSE_ABBR_3       varchar := 'IIS';
@@ -95,20 +102,20 @@ $$
          */
 
         -- Classes
-        INSERT INTO classes (abbr, capacity)
-        VALUES ('A112', 64);
-        INSERT INTO classes (abbr, capacity)
-        VALUES ('A113', 64);
-        INSERT INTO classes (abbr, capacity)
-        VALUES ('A218', 20);
-        INSERT INTO classes (abbr, capacity)
-        VALUES ('D105', 299);
-        INSERT INTO classes (abbr, capacity)
-        VALUES ('E104', 72);
-        INSERT INTO classes (abbr, capacity)
-        VALUES ('E105', 72);
-        INSERT INTO classes (abbr, capacity)
-        VALUES ('E112', 156);
+        INSERT INTO classes (id, abbr, capacity)
+        VALUES (CLASS_UUID_1, 'A112', 64);
+        INSERT INTO classes (id, abbr, capacity)
+        VALUES (CLASS_UUID_2, 'A113', 64);
+        INSERT INTO classes (id, abbr, capacity)
+        VALUES (CLASS_UUID_3, 'A218', 20);
+        INSERT INTO classes (id, abbr, capacity)
+        VALUES (CLASS_UUID_4, 'D105', 299);
+        INSERT INTO classes (id, abbr, capacity)
+        VALUES (CLASS_UUID_5, 'E104', 72);
+        INSERT INTO classes (id, abbr, capacity)
+        VALUES (CLASS_UUID_6, 'E105', 72);
+        INSERT INTO classes (id, abbr, capacity)
+        VALUES (CLASS_UUID_7, 'E112', 156);
 
         -- Users
         INSERT INTO users (id, first_name, last_name, username, password)
@@ -281,81 +288,81 @@ $$
 
         -- Schedule Item
         -- IDS LECTURE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_1_1_1, COURSE_ACTIVITY_1_1, TEACHER_UUID_1, 'D105', '2024-02-05 09:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_1_1_1, COURSE_ACTIVITY_1_1, TEACHER_UUID_1, CLASS_UUID_4, '2024-02-05 09:00:00',
                 '2024-02-05 10:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_1_1_2, COURSE_ACTIVITY_1_1, TEACHER_UUID_1, 'D105', '2024-02-12 09:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_1_1_2, COURSE_ACTIVITY_1_1, TEACHER_UUID_1, CLASS_UUID_4, '2024-02-12 09:00:00',
                 '2024-02-12 10:50:00');
         -- IDS SEMINAR
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_1_2_1, COURSE_ACTIVITY_1_2, TEACHER_UUID_1, 'E104', '2024-02-05 11:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_1_2_1, COURSE_ACTIVITY_1_2, TEACHER_UUID_1, CLASS_UUID_5, '2024-02-05 11:00:00',
                 '2024-02-05 12:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_1_2_2, COURSE_ACTIVITY_1_2, TEACHER_UUID_1, 'E104', '2024-02-12 11:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_1_2_2, COURSE_ACTIVITY_1_2, TEACHER_UUID_1, CLASS_UUID_5, '2024-02-12 11:00:00',
                 '2024-02-12 12:50:00');
         -- ILG LECTURE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_2_1_1, COURSE_ACTIVITY_2_1, TEACHER_UUID_3, 'D105', '2024-02-05 16:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_2_1_1, COURSE_ACTIVITY_2_1, TEACHER_UUID_3, CLASS_UUID_4, '2024-02-05 16:00:00',
                 '2024-02-05 17:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_2_1_2, COURSE_ACTIVITY_2_1, TEACHER_UUID_3, 'D105', '2024-02-12 16:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_2_1_2, COURSE_ACTIVITY_2_1, TEACHER_UUID_3, CLASS_UUID_4, '2024-02-12 16:00:00',
                 '2024-02-12 17:50:00');
         -- ILG EXERCISE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_2_2_1, COURSE_ACTIVITY_2_2, TEACHER_UUID_3, 'A112', '2024-02-06 08:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_2_2_1, COURSE_ACTIVITY_2_2, TEACHER_UUID_3, CLASS_UUID_1, '2024-02-06 08:00:00',
                 '2024-02-06 09:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_2_2_2, COURSE_ACTIVITY_2_2, TEACHER_UUID_3, 'A112', '2024-02-13 08:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_2_2_2, COURSE_ACTIVITY_2_2, TEACHER_UUID_3, CLASS_UUID_1, '2024-02-13 08:00:00',
                 '2024-02-13 09:50:00');
         -- IIS LECTURE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_3_1_1, COURSE_ACTIVITY_3_1, TEACHER_UUID_2, 'D105', '2024-02-06 12:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_3_1_1, COURSE_ACTIVITY_3_1, TEACHER_UUID_2, CLASS_UUID_4, '2024-02-06 12:00:00',
                 '2024-02-06 13:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_3_1_2, COURSE_ACTIVITY_3_1, TEACHER_UUID_2, 'D105', '2024-02-13 12:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_3_1_2, COURSE_ACTIVITY_3_1, TEACHER_UUID_2, CLASS_UUID_4, '2024-02-13 12:00:00',
                 '2024-02-13 13:50:00');
         -- IIS EXERCISE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_3_2_1, COURSE_ACTIVITY_3_2, TEACHER_UUID_2, 'A112', '2024-02-08 14:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_3_2_1, COURSE_ACTIVITY_3_2, TEACHER_UUID_2, CLASS_UUID_1, '2024-02-08 14:00:00',
                 '2024-02-08 15:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_3_2_2, COURSE_ACTIVITY_3_2, TEACHER_UUID_2, 'A112', '2024-02-15 14:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_3_2_2, COURSE_ACTIVITY_3_2, TEACHER_UUID_2, CLASS_UUID_1, '2024-02-15 14:00:00',
                 '2024-02-15 15:50:00');
         -- IIS SEMINAR
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_3_3_1, COURSE_ACTIVITY_3_3, TEACHER_UUID_2, 'E105', '2024-02-07 08:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_3_3_1, COURSE_ACTIVITY_3_3, TEACHER_UUID_2, CLASS_UUID_6, '2024-02-07 08:00:00',
                 '2024-02-07 09:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_3_3_2, COURSE_ACTIVITY_3_3, TEACHER_UUID_2, 'E105', '2024-02-14 08:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_3_3_2, COURSE_ACTIVITY_3_3, TEACHER_UUID_2, CLASS_UUID_6, '2024-02-14 08:00:00',
                 '2024-02-14 09:50:00');
         -- ITU LECTURE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_4_1_1, COURSE_ACTIVITY_4_1, TEACHER_UUID_2, 'D105', '2024-02-06 16:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_4_1_1, COURSE_ACTIVITY_4_1, TEACHER_UUID_2, CLASS_UUID_4, '2024-02-06 16:00:00',
                 '2024-02-06 18:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_4_1_2, COURSE_ACTIVITY_4_1, TEACHER_UUID_2, 'D105', '2024-02-13 16:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_4_1_2, COURSE_ACTIVITY_4_1, TEACHER_UUID_2, CLASS_UUID_4, '2024-02-13 16:00:00',
                 '2024-02-13 18:50:00');
         -- ITU SEMINAR
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_4_2_1, COURSE_ACTIVITY_4_2, TEACHER_UUID_2, 'E105', '2024-02-08 08:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_4_2_1, COURSE_ACTIVITY_4_2, TEACHER_UUID_2, CLASS_UUID_6, '2024-02-08 08:00:00',
                 '2024-02-08 09:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_4_2_2, COURSE_ACTIVITY_4_2, TEACHER_UUID_2, 'E105', '2024-02-15 08:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_4_2_2, COURSE_ACTIVITY_4_2, TEACHER_UUID_2, CLASS_UUID_6, '2024-02-15 08:00:00',
                 '2024-02-15 09:50:00');
         -- IFJ LECTURE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_5_1_1, COURSE_ACTIVITY_5_1, TEACHER_UUID_3, 'D105', '2024-02-07 11:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_5_1_1, COURSE_ACTIVITY_5_1, TEACHER_UUID_3, CLASS_UUID_4, '2024-02-07 11:00:00',
                 '2024-02-07 12:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_5_1_2, COURSE_ACTIVITY_5_1, TEACHER_UUID_3, 'D105', '2024-02-14 11:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_5_1_2, COURSE_ACTIVITY_5_1, TEACHER_UUID_3, CLASS_UUID_4, '2024-02-14 11:00:00',
                 '2024-02-14 12:50:00');
         -- IFJ EXERCISE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_5_2_1, COURSE_ACTIVITY_5_2, TEACHER_UUID_3, 'E105', '2024-02-07 13:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_5_2_1, COURSE_ACTIVITY_5_2, TEACHER_UUID_3, CLASS_UUID_6, '2024-02-07 13:00:00',
                 '2024-02-07 14:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_abbr, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_5_2_2, COURSE_ACTIVITY_5_2, TEACHER_UUID_3, 'E105', '2024-02-14 13:00:00',
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
+        VALUES (SCHEDULE_ITEM_5_2_2, COURSE_ACTIVITY_5_2, TEACHER_UUID_3, CLASS_UUID_6, '2024-02-14 13:00:00',
                 '2024-02-14 14:50:00');
 
         -- Student Schedule

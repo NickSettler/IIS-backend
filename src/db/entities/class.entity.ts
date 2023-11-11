@@ -1,7 +1,9 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { E_DB_TABLES } from '../constants';
+import { IsUUID } from 'class-validator';
 
 export enum E_CLASS_ENTITY_KEYS {
+  ID = 'id',
   ABBR = 'abbr',
   CAPACITY = 'capacity',
 }
@@ -11,6 +13,10 @@ export enum E_CLASS_ENTITY_KEYS {
 })
 export class Class {
   @PrimaryColumn()
+  @IsUUID()
+  id: string;
+
+  @Column({ unique: true })
   [E_CLASS_ENTITY_KEYS.ABBR]: string;
 
   @Column({ default: 15 })
