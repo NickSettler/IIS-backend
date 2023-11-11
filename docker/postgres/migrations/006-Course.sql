@@ -6,11 +6,12 @@ DROP TABLE IF EXISTS courses;
 
 CREATE TABLE courses
 (
-    abbr         VARCHAR(10) PRIMARY KEY,
-    guarantor_id uuid         NOT NULL,
-    name         VARCHAR(255) NOT NULL UNIQUE,
-    credits      INT          NOT NULL CHECK (credits > 0 and credits < 20),
-    annotation   VARCHAR(512) NOT NULL DEFAULT '',
+    id           uuid                        DEFAULT gen_random_uuid() PRIMARY KEY,
+    abbr         VARCHAR(10) UNIQUE NOT NULL,
+    guarantor_id uuid               NOT NULL,
+    name         VARCHAR(255)       NOT NULL UNIQUE,
+    credits      INT                NOT NULL CHECK (credits > 0 and credits < 20),
+    annotation   VARCHAR(512)       NOT NULL DEFAULT '',
     CONSTRAINT fk_guarantor_id FOREIGN KEY (guarantor_id) REFERENCES users (id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
@@ -52,8 +53,8 @@ CREATE FUNCTION auto_insert_course_guarantor()
 AS
 $$
 BEGIN
-    INSERT INTO course_teachers (course_abbr, teacher_id)
-    VALUES (NEW.abbr, NEW.guarantor_id);
+    INSERT INTO course_teachers (course_id, teacher_id)
+    VALUES (NEW.id, NEW.guarantor_id);
 
     RETURN NEW;
 END

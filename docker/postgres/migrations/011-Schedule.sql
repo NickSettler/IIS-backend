@@ -61,16 +61,16 @@ CREATE FUNCTION check_schedule_teacher()
 AS
 $$
 DECLARE
-    selected_course_abbr VARCHAR(10);
+    selected_course_id uuid;
 BEGIN
-    SELECT course_activity.course_abbr
-    INTO selected_course_abbr
+    SELECT course_activity.course_id
+    INTO selected_course_id
     FROM course_activity
     WHERE id = NEW.course_activity_id;
 
     PERFORM *
     FROM course_teachers
-    WHERE course_abbr = selected_course_abbr
+    WHERE course_id = selected_course_id
       AND teacher_id = NEW.teacher_id;
 
     IF NOT FOUND THEN

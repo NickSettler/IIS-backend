@@ -60,7 +60,7 @@ export class CourseActivitiesService {
       ...createDto,
       ...(createDto[E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE] && {
         [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]: {
-          [E_COURSE_ENTITY_KEYS.ABBR]:
+          [E_COURSE_ENTITY_KEYS.ID]:
             createDto[E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE],
         },
       }),
@@ -90,7 +90,7 @@ export class CourseActivitiesService {
         ...updateDto,
         ...(updateDto[E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE] && {
           [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]: {
-            [E_COURSE_ENTITY_KEYS.ABBR]:
+            [E_COURSE_ENTITY_KEYS.ID]:
               updateDto[E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE],
           },
         }),

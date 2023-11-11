@@ -10,7 +10,7 @@ import { Course } from './course.entity';
 
 export enum E_COURSE_ACTIVITY_ENTITY_KEYS {
   ID = 'id',
-  COURSE_ABBR = 'course_abbr',
+  COURSE_ID = 'course_id',
   COURSE = 'course',
   FORM = 'form',
   REQUIREMENTS = 'requirements',
@@ -27,7 +27,7 @@ export class CourseActivity {
   [E_COURSE_ACTIVITY_ENTITY_KEYS.FORM]: string;
 
   @ManyToOne(() => Course)
-  @JoinColumn({ name: E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE_ABBR })
+  @JoinColumn({ name: E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE_ID })
   [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]: Course;
 
   @Column()

@@ -52,9 +52,36 @@ export class CoursesController {
     );
   }
 
-  @Get('/:abbr')
+  @Get('/:id')
   @UseGuards(JwtAuthGuard)
   public async getOne(
+    @Req() request: Request,
+    @Param('id') id: string,
+  ): Promise<Course> {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    if (rules.cannot(E_ACTION.READ, Course))
+      throw new ForbiddenException("You don't have permission to read courses");
+
+    const foundCourse = await this.coursesService.findOne({
+      where: {
+        [E_COURSE_ENTITY_KEYS.ID]: id,
+      },
+    });
+
+    if (!foundCourse) throw new NotFoundException('Course not found');
+
+    if (!rules.can(E_ACTION.READ, foundCourse))
+      throw new ForbiddenException(
+        "You don't have permission to read this class",
+      );
+
+    return foundCourse;
+  }
+
+  @Get('abbr/:abbr')
+  @UseGuards(JwtAuthGuard)
+  public async getOneByAbbr(
     @Req() request: Request,
     @Param('abbr') abbr: string,
   ): Promise<Course> {
@@ -124,12 +151,12 @@ export class CoursesController {
     return foundCourse;
   }
 
-  @Put('/:abbr')
+  @Put('/:id')
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   public async update(
     @Req() request: Request,
-    @Param('abbr') abbr: string,
+    @Param('id') id: string,
     @Body() updateDto: UpdateCourseDto,
   ): Promise<Course> {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
@@ -141,7 +168,7 @@ export class CoursesController {
 
     const foundCourse = await this.coursesService.findOne({
       where: {
-        [E_COURSE_ENTITY_KEYS.ABBR]: abbr,
+        [E_COURSE_ENTITY_KEYS.ID]: id,
       },
     });
 
@@ -153,7 +180,7 @@ export class CoursesController {
       );
 
     const updatedCourse = await this.coursesService
-      .update(abbr, updateDto)
+      .update(id, updateDto)
       .catch((err: any) => {
         if (isError(err, 'UNIQUE_CONSTRAINT')) {
           throw new ConflictException('Course already exists');
@@ -171,7 +198,7 @@ export class CoursesController {
 
     const foundUpdatedCourse = await this.coursesService.findOne({
       where: {
-        [E_COURSE_ENTITY_KEYS.ABBR]: updatedCourse[E_COURSE_ENTITY_KEYS.ABBR],
+        [E_COURSE_ENTITY_KEYS.ID]: updatedCourse[E_COURSE_ENTITY_KEYS.ID],
       },
     });
 
@@ -183,9 +210,9 @@ export class CoursesController {
     return foundUpdatedCourse;
   }
 
-  @Delete('/:abbr')
+  @Delete('/:id')
   @UseGuards(JwtAuthGuard)
-  public async delete(@Req() request: Request, @Param('abbr') abbr: string) {
+  public async delete(@Req() request: Request, @Param('id') id: string) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
     if (rules.cannot(E_ACTION.DELETE, Course))
@@ -195,7 +222,7 @@ export class CoursesController {
 
     const foundCourse = await this.coursesService.findOne({
       where: {
-        [E_COURSE_ENTITY_KEYS.ABBR]: abbr,
+        [E_COURSE_ENTITY_KEYS.ID]: id,
       },
     });
 
@@ -206,53 +233,53 @@ export class CoursesController {
         "You don't have permission to delete this course",
       );
 
-    return this.coursesService.delete(abbr);
+    return this.coursesService.delete(id);
   }
 
-  @Post('/:abbr/teachers')
+  @Post('/:id/teachers')
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   public async addTeachers(
     @Req() request: Request,
-    @Param('abbr') abbr: string,
+    @Param('id') id: string,
     @Body() manageCourseTeachersDto: ManageCourseTeachersDto,
   ) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
-    const foundTeachers = await this.getCourseTeachers(rules, abbr);
+    const foundTeachers = await this.getCourseTeachers(rules, id);
 
     const newTeachers = union(foundTeachers, manageCourseTeachersDto.teachers);
 
-    return this.update(request, abbr, {
+    return this.update(request, id, {
       [E_COURSE_ENTITY_KEYS.TEACHERS]: newTeachers,
     });
   }
 
-  @Delete('/:abbr/teachers')
+  @Delete('/:id/teachers')
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   public async deleteTeachers(
     @Req() request: Request,
-    @Param('abbr') abbr: string,
+    @Param('id') id: string,
     @Body() manageCourseTeachersDto: ManageCourseTeachersDto,
   ) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
 
-    const foundTeachers = await this.getCourseTeachers(rules, abbr);
+    const foundTeachers = await this.getCourseTeachers(rules, id);
 
     const newTeachers = filter(
       foundTeachers,
       (teacher) => !manageCourseTeachersDto.teachers.includes(teacher),
     );
 
-    return this.update(request, abbr, {
+    return this.update(request, id, {
       [E_COURSE_ENTITY_KEYS.TEACHERS]: newTeachers,
     });
   }
 
   private async getCourseTeachers(
     rules: TAbility,
-    abbr: string,
+    id: string,
   ): Promise<Array<string>> {
     if (rules.cannot(E_ACTION.UPDATE, Course, E_COURSE_ENTITY_KEYS.TEACHERS))
       throw new ForbiddenException(
@@ -261,7 +288,7 @@ export class CoursesController {
 
     const foundCourse = await this.coursesService.findOne({
       where: {
-        [E_COURSE_ENTITY_KEYS.ABBR]: abbr,
+        [E_COURSE_ENTITY_KEYS.ID]: id,
       },
     });
 

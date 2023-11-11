@@ -59,10 +59,10 @@ export class CourseActivitiesController {
   /**
    * Find all activities for a course
    */
-  @Get('/:abbr/activities')
+  @Get('/:id/activities')
   @UseGuards(JwtAuthGuard)
   public async getAllForCourse(
-    @Param('abbr') abbr: string,
+    @Param('id') id: string,
     @Req() request: Request,
   ) {
     const rules = this.caslAbilityFactory.createForUser(request.user as User);
@@ -74,7 +74,7 @@ export class CourseActivitiesController {
 
     return filter(
       await this.courseActivitiesService.findByOptions({
-        [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]: { abbr },
+        [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]: { id },
       }),
       (course_activity) => rules.can(E_ACTION.READ, course_activity),
     );
