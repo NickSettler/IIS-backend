@@ -24,6 +24,7 @@ export enum E_CUSTOM_ERROR_CODES {
   USER_NOT_A_STUDENT = 'C0063',
   TEACHER_REQS_UNSATISFIED = 'C0007',
   TEACHER_REQS_CONFLICT = 'C0008',
+  TEACHER_REQS_DATE_CONFLICT = 'C0009',
 }
 
 export const defaultCustomMessages: Record<E_CUSTOM_ERROR_CODES, string> = {
@@ -44,6 +45,8 @@ export const defaultCustomMessages: Record<E_CUSTOM_ERROR_CODES, string> = {
     'Teacher requirements are not satisfied',
   [E_CUSTOM_ERROR_CODES.TEACHER_REQS_CONFLICT]:
     'Teacher already has requirements for this time',
+  [E_CUSTOM_ERROR_CODES.TEACHER_REQS_DATE_CONFLICT]:
+    'Teacher requirements cant be in the past',
 };
 
 export enum E_POSTGRES_ERROR_CODES {
