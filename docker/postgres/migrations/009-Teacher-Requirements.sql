@@ -1,7 +1,9 @@
 DROP TRIGGER IF EXISTS check_user_is_teacher ON teacher_requirements;
 DROP TRIGGER IF EXISTS check_existing_teacher_requirements ON teacher_requirements;
+DROP TRIGGER IF EXISTS check_teacher_requirements_time ON teacher_requirements;
 DROP FUNCTION IF EXISTS check_user_is_teacher();
 DROP FUNCTION IF EXISTS check_existing_teacher_requirements();
+DROP FUNCTION IF EXISTS check_teacher_requirements_time();
 DROP TABLE IF EXISTS teacher_requirements;
 DROP TYPE IF EXISTS teacher_req_mode;
 
@@ -14,7 +16,7 @@ CREATE TABLE teacher_requirements
     teacher_id UUID             NOT NULL,
     mode       teacher_req_mode NOT NULL,
     start_time TIMESTAMP        NOT NULL,
-    end_time   TIMESTAMP        NOT NULL,
+    end_time   TIMESTAMP        NOT NULL CHECK (end_time > start_time),
     FOREIGN KEY (teacher_id) REFERENCES users (id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
@@ -72,3 +74,24 @@ CREATE TRIGGER check_existing_teacher_requirements
     ON teacher_requirements
     FOR EACH ROW
 EXECUTE PROCEDURE check_existing_teacher_requirements();
+
+CREATE FUNCTION check_teacher_requirements_time()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+
+    IF NEW.start_time < NOW() THEN
+        RAISE EXCEPTION 'Time must be in the future' USING ERRCODE = 'C0003';
+    END IF;
+
+    RETURN NEW;
+END
+$$;
+
+CREATE TRIGGER check_teacher_requirements_time
+    BEFORE INSERT OR UPDATE
+    ON teacher_requirements
+    FOR EACH ROW
+EXECUTE PROCEDURE check_teacher_requirements_time();
