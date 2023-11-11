@@ -83,7 +83,7 @@ $$
 BEGIN
 
     IF NEW.start_time < NOW() THEN
-        RAISE EXCEPTION 'Time must be in the future' USING ERRCODE = 'C0003';
+        RAISE EXCEPTION 'Time must be in the future' USING ERRCODE = 'C0009';
     END IF;
 
     RETURN NEW;
