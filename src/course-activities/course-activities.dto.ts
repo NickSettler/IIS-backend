@@ -10,6 +10,10 @@ export class CreateCourseActivitiesDto {
   @IsNotEmpty()
   @IsString()
   [E_COURSE_ACTIVITY_ENTITY_KEYS.FORM]: string;
+
+  @IsNotEmpty()
+  @IsString()
+  [E_COURSE_ACTIVITY_ENTITY_KEYS.REQUIREMENTS]: string;
 }
 
 export class UpdateCourseActivitiesDto extends PartialType(

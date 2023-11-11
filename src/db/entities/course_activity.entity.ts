@@ -13,6 +13,7 @@ export enum E_COURSE_ACTIVITY_ENTITY_KEYS {
   COURSE_ABBR = 'course_abbr',
   COURSE = 'course',
   FORM = 'form',
+  REQUIREMENTS = 'requirements',
 }
 
 @Entity({
@@ -28,4 +29,7 @@ export class CourseActivity {
   @ManyToOne(() => Course)
   @JoinColumn({ name: E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE_ABBR })
   [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]: Course;
+
+  @Column()
+  [E_COURSE_ACTIVITY_ENTITY_KEYS.REQUIREMENTS]: string;
 }
