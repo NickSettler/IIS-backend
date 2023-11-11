@@ -47,7 +47,7 @@ export class StudentScheduleController {
 
     if (rules.cannot(E_ACTION.READ, StudentSchedule))
       throw new ForbiddenException(
-        "You don't have permission to read student_schedule",
+        "You don't have permission to read student schedule",
       );
 
     return filter(
@@ -71,7 +71,7 @@ export class StudentScheduleController {
 
     if (rules.cannot(E_ACTION.READ, StudentSchedule))
       throw new ForbiddenException(
-        "You don't have permission to read student_schedule",
+        "You don't have permission to read student schedule",
       );
 
     return filter(
