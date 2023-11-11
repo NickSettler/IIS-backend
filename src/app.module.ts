@@ -9,6 +9,7 @@ import { CoursesModule } from './courses/courses.module';
 import { CaslModule } from './casl/casl.module';
 import { CourseActivitiesModule } from './course-activities/course-activities.module';
 import { TeacherRequirementsModule } from './teacher_requirements/teacher_requirements.module';
+import { StudentScheduleModule } from './student_schedule/student_schedule.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { TeacherRequirementsModule } from './teacher_requirements/teacher_requir
     CoursesModule,
     ClassesModule,
     TeacherRequirementsModule,
+    StudentScheduleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
