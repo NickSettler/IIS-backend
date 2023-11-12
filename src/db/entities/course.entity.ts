@@ -5,11 +5,10 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { E_DB_TABLES } from '../constants';
 import { E_USER_ENTITY_KEYS, User } from './user.entity';
-import { IsUUID } from 'class-validator';
 
 export const enum E_COURSE_ENTITY_KEYS {
   ID = 'id',
@@ -26,8 +25,7 @@ export const enum E_COURSE_ENTITY_KEYS {
   name: E_DB_TABLES.COURSES,
 })
 export class Course {
-  @PrimaryColumn()
-  @IsUUID()
+  @PrimaryGeneratedColumn('uuid')
   [E_COURSE_ENTITY_KEYS.ID]: string;
 
   @Column({ unique: true })
