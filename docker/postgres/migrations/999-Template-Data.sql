@@ -13,13 +13,13 @@ $$
         DECLARE STUDENT_UUID_3      uuid    := '5c60d405-9343-47d6-bbb8-242702f9cb56';
         DECLARE STUDENT_UUID_4      uuid    := 'a6599e18-61d7-451e-a15e-70002b7c5a32';
         DECLARE STUDENT_UUID_5      uuid    := '7bc41479-0163-4430-a23d-df9f0fc9a2d8';
-        DECLARE CLASS_UUID_1        uuid    := '171c546f-cf84-4ccb-aee2-32ac6abc3051';
-        DECLARE CLASS_UUID_2        uuid    := '74ec21f2-7203-4adf-b982-79fc6f7691be';
-        DECLARE CLASS_UUID_3        uuid    := '4a248f66-39a8-4582-991d-a622357ed6bd';
-        DECLARE CLASS_UUID_4        uuid    := '41e21ae3-2fca-46ea-a729-ab371124c6d0';
-        DECLARE CLASS_UUID_5        uuid    := '0aeab050-2f37-48bb-a129-0b36ac9ca71a';
-        DECLARE CLASS_UUID_6        uuid    := '9f528627-5813-49db-8953-7763938ac347';
-        DECLARE CLASS_UUID_7        uuid    := '5ad436e2-cea2-4067-8310-32de6184e59b';
+        DECLARE CLASS_UUID_A112     uuid    := '171c546f-cf84-4ccb-aee2-32ac6abc3051';
+        DECLARE CLASS_UUID_A113     uuid    := '74ec21f2-7203-4adf-b982-79fc6f7691be';
+        DECLARE CLASS_UUID_A218     uuid    := '4a248f66-39a8-4582-991d-a622357ed6bd';
+        DECLARE CLASS_UUID_D105     uuid    := '41e21ae3-2fca-46ea-a729-ab371124c6d0';
+        DECLARE CLASS_UUID_E104     uuid    := '0aeab050-2f37-48bb-a129-0b36ac9ca71a';
+        DECLARE CLASS_UUID_E105     uuid    := '9f528627-5813-49db-8953-7763938ac347';
+        DECLARE CLASS_UUID_E112     uuid    := '5ad436e2-cea2-4067-8310-32de6184e59b';
         DECLARE COURSE_UUID_1       uuid    := '9ae5a999-d8eb-470a-884f-003de7d75241';
         DECLARE COURSE_UUID_2       uuid    := '24bed943-a1dc-4572-aac8-e6e2c2add0d0';
         DECLARE COURSE_UUID_3       uuid    := '68eb8ec9-0b24-45ec-8bd9-0dceebf34ca0';
@@ -41,28 +41,17 @@ $$
         DECLARE COURSE_ACTIVITY_4_2 uuid    := '3bd70920-6526-49f4-afc9-139c6ebabb57';
         DECLARE COURSE_ACTIVITY_5_1 uuid    := '96d0a7b2-b83e-4812-9ba9-2a41570387a0';
         DECLARE COURSE_ACTIVITY_5_2 uuid    := '518fb24b-474c-4dfc-a599-e2033b53566c';
-        DECLARE SCHEDULE_ITEM_1_1_1 uuid    := '46e4e41a-a77a-4cc6-8c0a-ee393eb91e8f';
-        DECLARE SCHEDULE_ITEM_1_1_2 uuid    := '8e2226a8-a481-4fb3-abfd-95e91e390ac9';
-        DECLARE SCHEDULE_ITEM_1_2_1 uuid    := 'd8b1c264-ec5e-40d0-be32-961984ab47d2';
-        DECLARE SCHEDULE_ITEM_1_2_2 uuid    := 'ccd213e7-f8cc-4c24-8fad-3ddfec7aa38b';
-        DECLARE SCHEDULE_ITEM_2_1_1 uuid    := 'c01272aa-9ecd-4bbb-b916-d22de28b32fb';
-        DECLARE SCHEDULE_ITEM_2_1_2 uuid    := '1a888bda-219e-4d39-a9fd-943ce8c1b0ea';
-        DECLARE SCHEDULE_ITEM_2_2_1 uuid    := '09d81386-9b13-4bd4-a12e-c48bfab37892';
-        DECLARE SCHEDULE_ITEM_2_2_2 uuid    := '7ebccf63-380c-44b8-b20e-42e0a25c95a4';
-        DECLARE SCHEDULE_ITEM_3_1_1 uuid    := '8b845a6a-ded9-427d-bff1-04e8e485fd74';
-        DECLARE SCHEDULE_ITEM_3_1_2 uuid    := 'fc91df36-ff85-4394-8bf9-9981155cd2e8';
-        DECLARE SCHEDULE_ITEM_3_2_1 uuid    := 'e3abeb02-37db-440d-9288-d13aa04b9e98';
-        DECLARE SCHEDULE_ITEM_3_2_2 uuid    := '61fc3063-ef6e-4b42-a76c-a56d3285e4f5';
-        DECLARE SCHEDULE_ITEM_3_3_1 uuid    := 'b1e94222-7c89-46dd-97ad-749a58c95e7e';
-        DECLARE SCHEDULE_ITEM_3_3_2 uuid    := '12df785f-e468-4c9c-8db9-e685b2a53c26';
-        DECLARE SCHEDULE_ITEM_4_1_1 uuid    := '5482e998-fed1-4fc4-9995-ce043459c99b';
-        DECLARE SCHEDULE_ITEM_4_1_2 uuid    := '461c709a-5fe6-485d-82f7-5e082151f264';
-        DECLARE SCHEDULE_ITEM_4_2_1 uuid    := '418f98ea-db19-41e6-8d01-a6482ff79c8a';
-        DECLARE SCHEDULE_ITEM_4_2_2 uuid    := '71a2bbb6-d382-4a6d-bfe0-60a01a247e8c';
-        DECLARE SCHEDULE_ITEM_5_1_1 uuid    := 'bedbf815-8576-4b9e-92e3-b9ff5b0a4760';
-        DECLARE SCHEDULE_ITEM_5_1_2 uuid    := '68336941-a2bf-4574-9b17-748b2b3a83b9';
-        DECLARE SCHEDULE_ITEM_5_2_1 uuid    := '17c196fc-b80a-4476-b4c8-861e14423b2e';
-        DECLARE SCHEDULE_ITEM_5_2_2 uuid    := '09f0e89a-1ad6-43bf-8a7f-daab59467309';
+        DECLARE SCHEDULE_ITEM_1_1   uuid    := '46e4e41a-a77a-4cc6-8c0a-ee393eb91e8f';
+        DECLARE SCHEDULE_ITEM_1_2   uuid    := 'd8b1c264-ec5e-40d0-be32-961984ab47d2';
+        DECLARE SCHEDULE_ITEM_2_1   uuid    := 'c01272aa-9ecd-4bbb-b916-d22de28b32fb';
+        DECLARE SCHEDULE_ITEM_2_2   uuid    := '09d81386-9b13-4bd4-a12e-c48bfab37892';
+        DECLARE SCHEDULE_ITEM_3_1   uuid    := '8b845a6a-ded9-427d-bff1-04e8e485fd74';
+        DECLARE SCHEDULE_ITEM_3_2   uuid    := 'e3abeb02-37db-440d-9288-d13aa04b9e98';
+        DECLARE SCHEDULE_ITEM_3_3   uuid    := 'b1e94222-7c89-46dd-97ad-749a58c95e7e';
+        DECLARE SCHEDULE_ITEM_4_1   uuid    := '5482e998-fed1-4fc4-9995-ce043459c99b';
+        DECLARE SCHEDULE_ITEM_4_2   uuid    := '418f98ea-db19-41e6-8d01-a6482ff79c8a';
+        DECLARE SCHEDULE_ITEM_5_1   uuid    := 'bedbf815-8576-4b9e-92e3-b9ff5b0a4760';
+        DECLARE SCHEDULE_ITEM_5_2   uuid    := '17c196fc-b80a-4476-b4c8-861e14423b2e';
     BEGIN
         /* Script Info
             -- 2 Guarantors
@@ -77,6 +66,8 @@ $$
             Courses 2, 5:
                 Guarantor: 2
                 Teachers: 3
+
+            Courses repeat every week for 13 weeks
 
             Course 1:
                 Activities: 1_1 (LECTURE), 1_2 (SEMINAR)
@@ -108,19 +99,19 @@ $$
 
         -- Classes
         INSERT INTO classes (id, abbr, capacity)
-        VALUES (CLASS_UUID_1, 'A112', 64);
+        VALUES (CLASS_UUID_A112, 'A112', 64);
         INSERT INTO classes (id, abbr, capacity)
-        VALUES (CLASS_UUID_2, 'A113', 64);
+        VALUES (CLASS_UUID_A113, 'A113', 64);
         INSERT INTO classes (id, abbr, capacity)
-        VALUES (CLASS_UUID_3, 'A218', 20);
+        VALUES (CLASS_UUID_A218, 'A218', 20);
         INSERT INTO classes (id, abbr, capacity)
-        VALUES (CLASS_UUID_4, 'D105', 299);
+        VALUES (CLASS_UUID_D105, 'D105', 299);
         INSERT INTO classes (id, abbr, capacity)
-        VALUES (CLASS_UUID_5, 'E104', 72);
+        VALUES (CLASS_UUID_E104, 'E104', 72);
         INSERT INTO classes (id, abbr, capacity)
-        VALUES (CLASS_UUID_6, 'E105', 72);
+        VALUES (CLASS_UUID_E105, 'E105', 72);
         INSERT INTO classes (id, abbr, capacity)
-        VALUES (CLASS_UUID_7, 'E112', 156);
+        VALUES (CLASS_UUID_E112, 'E112', 156);
 
         -- Users
         INSERT INTO users (id, first_name, last_name, username, password)
@@ -232,7 +223,8 @@ $$
         INSERT INTO courses (id, abbr, guarantor_id, name, credits, annotation)
         VALUES (COURSE_UUID_2, COURSE_ABBR_2, GUARANTOR_UUID_2, 'Linear Algebra', 4, 'Linear Algebra Annotation');
         INSERT INTO courses (id, abbr, guarantor_id, name, credits, annotation)
-        VALUES (COURSE_UUID_3, COURSE_ABBR_3, GUARANTOR_UUID_1, 'Information Systems', 10, 'Information Systems Annotation');
+        VALUES (COURSE_UUID_3, COURSE_ABBR_3, GUARANTOR_UUID_1, 'Information Systems', 10,
+                'Information Systems Annotation');
         INSERT INTO courses (id, abbr, guarantor_id, name, credits, annotation)
         VALUES (COURSE_UUID_4, COURSE_ABBR_4, GUARANTOR_UUID_1, 'User Interfaces', 4, 'User Interfaces Annotation');
         INSERT INTO courses (id, abbr, guarantor_id, name, credits, annotation)
@@ -292,227 +284,80 @@ $$
         VALUES (COURSE_ACTIVITY_5_2, COURSE_UUID_5, 'EXERCISE');
 
         -- Schedule Item
-        -- IDS LECTURE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_1_1_1, COURSE_ACTIVITY_1_1, TEACHER_UUID_1, CLASS_UUID_4, '2024-02-05 09:00:00',
-                '2024-02-05 10:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_1_1_2, COURSE_ACTIVITY_1_1, TEACHER_UUID_1, CLASS_UUID_4, '2024-02-12 09:00:00',
-                '2024-02-12 10:50:00');
-        -- IDS SEMINAR
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_1_2_1, COURSE_ACTIVITY_1_2, TEACHER_UUID_1, CLASS_UUID_5, '2024-02-05 11:00:00',
-                '2024-02-05 12:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_1_2_2, COURSE_ACTIVITY_1_2, TEACHER_UUID_1, CLASS_UUID_5, '2024-02-12 11:00:00',
-                '2024-02-12 12:50:00');
-        -- ILG LECTURE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_2_1_1, COURSE_ACTIVITY_2_1, TEACHER_UUID_3, CLASS_UUID_4, '2024-02-05 16:00:00',
-                '2024-02-05 17:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_2_1_2, COURSE_ACTIVITY_2_1, TEACHER_UUID_3, CLASS_UUID_4, '2024-02-12 16:00:00',
-                '2024-02-12 17:50:00');
-        -- ILG EXERCISE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_2_2_1, COURSE_ACTIVITY_2_2, TEACHER_UUID_3, CLASS_UUID_1, '2024-02-06 08:00:00',
-                '2024-02-06 09:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_2_2_2, COURSE_ACTIVITY_2_2, TEACHER_UUID_3, CLASS_UUID_1, '2024-02-13 08:00:00',
-                '2024-02-13 09:50:00');
-        -- IIS LECTURE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_3_1_1, COURSE_ACTIVITY_3_1, TEACHER_UUID_2, CLASS_UUID_4, '2024-02-06 12:00:00',
-                '2024-02-06 13:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_3_1_2, COURSE_ACTIVITY_3_1, TEACHER_UUID_2, CLASS_UUID_4, '2024-02-13 12:00:00',
-                '2024-02-13 13:50:00');
-        -- IIS EXERCISE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_3_2_1, COURSE_ACTIVITY_3_2, TEACHER_UUID_2, CLASS_UUID_1, '2024-02-08 14:00:00',
-                '2024-02-08 15:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_3_2_2, COURSE_ACTIVITY_3_2, TEACHER_UUID_2, CLASS_UUID_1, '2024-02-15 14:00:00',
-                '2024-02-15 15:50:00');
-        -- IIS SEMINAR
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_3_3_1, COURSE_ACTIVITY_3_3, TEACHER_UUID_2, CLASS_UUID_6, '2024-02-07 08:00:00',
-                '2024-02-07 09:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_3_3_2, COURSE_ACTIVITY_3_3, TEACHER_UUID_2, CLASS_UUID_6, '2024-02-14 08:00:00',
-                '2024-02-14 09:50:00');
-        -- ITU LECTURE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_4_1_1, COURSE_ACTIVITY_4_1, TEACHER_UUID_2, CLASS_UUID_4, '2024-02-06 16:00:00',
-                '2024-02-06 18:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_4_1_2, COURSE_ACTIVITY_4_1, TEACHER_UUID_2, CLASS_UUID_4, '2024-02-13 16:00:00',
-                '2024-02-13 18:50:00');
-        -- ITU SEMINAR
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_4_2_1, COURSE_ACTIVITY_4_2, TEACHER_UUID_2, CLASS_UUID_6, '2024-02-08 08:00:00',
-                '2024-02-08 09:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_4_2_2, COURSE_ACTIVITY_4_2, TEACHER_UUID_2, CLASS_UUID_6, '2024-02-15 08:00:00',
-                '2024-02-15 09:50:00');
-        -- IFJ LECTURE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_5_1_1, COURSE_ACTIVITY_5_1, TEACHER_UUID_3, CLASS_UUID_4, '2024-02-07 11:00:00',
-                '2024-02-07 12:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_5_1_2, COURSE_ACTIVITY_5_1, TEACHER_UUID_3, CLASS_UUID_4, '2024-02-14 11:00:00',
-                '2024-02-14 12:50:00');
-        -- IFJ EXERCISE
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_5_2_1, COURSE_ACTIVITY_5_2, TEACHER_UUID_3, CLASS_UUID_6, '2024-02-07 13:00:00',
-                '2024-02-07 14:50:00');
-        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time)
-        VALUES (SCHEDULE_ITEM_5_2_2, COURSE_ACTIVITY_5_2, TEACHER_UUID_3, CLASS_UUID_6, '2024-02-14 13:00:00',
-                '2024-02-14 14:50:00');
+        -- IDS
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time, recurrence_rule)
+        VALUES (SCHEDULE_ITEM_1_1, COURSE_ACTIVITY_1_1, TEACHER_UUID_1, CLASS_UUID_D105, '2023-09-25 09:00:00',
+                '2023-09-25 10:50:00', 'FREQ=WEEKLY;UNTIL=20231217T130000Z;WKST=MO;BYDAY=MO');
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time, recurrence_rule)
+        VALUES (SCHEDULE_ITEM_1_2, COURSE_ACTIVITY_1_2, TEACHER_UUID_1, CLASS_UUID_E104, '2023-09-25 11:00:00',
+                '2023-09-25 12:50:00', 'FREQ=WEEKLY;UNTIL=20231217T130000Z;WKST=MO;BYDAY=MO');
+        -- ILG
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time, recurrence_rule)
+        VALUES (SCHEDULE_ITEM_2_1, COURSE_ACTIVITY_2_1, TEACHER_UUID_3, CLASS_UUID_D105, '2023-09-25 16:00:00',
+                '2023-09-25 17:50:00', 'FREQ=WEEKLY;UNTIL=20231217T130000Z;WKST=MO;BYDAY=MO');
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time, recurrence_rule)
+        VALUES (SCHEDULE_ITEM_2_2, COURSE_ACTIVITY_2_2, TEACHER_UUID_3, CLASS_UUID_A112, '2023-09-26 08:00:00',
+                '2023-09-26 09:50:00', 'FREQ=WEEKLY;UNTIL=20231217T130000Z;WKST=MO;BYDAY=TU');
+        -- IIS
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time, recurrence_rule)
+        VALUES (SCHEDULE_ITEM_3_1, COURSE_ACTIVITY_3_1, TEACHER_UUID_2, CLASS_UUID_D105, '2023-09-26 12:00:00',
+                '2023-09-26 13:50:00', 'FREQ=WEEKLY;UNTIL=20231217T130000Z;WKST=MO;BYDAY=TU');
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time, recurrence_rule)
+        VALUES (SCHEDULE_ITEM_3_2, COURSE_ACTIVITY_3_2, TEACHER_UUID_2, CLASS_UUID_A112, '2023-09-28 14:00:00',
+                '2023-09-28 15:50:00', 'FREQ=WEEKLY;UNTIL=20231217T130000Z;WKST=MO;BYDAY=TH');
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time, recurrence_rule)
+        VALUES (SCHEDULE_ITEM_3_3, COURSE_ACTIVITY_3_3, TEACHER_UUID_2, CLASS_UUID_E105, '2023-09-27 08:00:00',
+                '2023-09-27 09:50:00', 'FREQ=WEEKLY;UNTIL=20231217T130000Z;WKST=MO;BYDAY=WE');
+        -- ITU
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time, recurrence_rule)
+        VALUES (SCHEDULE_ITEM_4_1, COURSE_ACTIVITY_4_1, TEACHER_UUID_2, CLASS_UUID_D105, '2023-09-26 16:00:00',
+                '2023-09-26 18:50:00', 'FREQ=WEEKLY;UNTIL=20231217T130000Z;WKST=MO;BYDAY=TU');
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time, recurrence_rule)
+        VALUES (SCHEDULE_ITEM_4_2, COURSE_ACTIVITY_4_2, TEACHER_UUID_2, CLASS_UUID_E105, '2023-09-28 08:00:00',
+                '2023-09-28 09:50:00', 'FREQ=WEEKLY;UNTIL=20231217T130000Z;WKST=MO;BYDAY=TH');
+        -- IFJ
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time, recurrence_rule)
+        VALUES (SCHEDULE_ITEM_5_1, COURSE_ACTIVITY_5_1, TEACHER_UUID_3, CLASS_UUID_D105, '2023-09-27 11:00:00',
+                '2023-09-27 12:50:00', 'FREQ=WEEKLY;UNTIL=20231217T130000Z;WKST=MO;BYDAY=WE');
+        INSERT INTO schedule (id, course_activity_id, teacher_id, class_id, start_time, end_time, recurrence_rule)
+        VALUES (SCHEDULE_ITEM_5_2, COURSE_ACTIVITY_5_2, TEACHER_UUID_3, CLASS_UUID_E105, '2023-09-27 13:00:00',
+                '2023-09-27 14:50:00', 'FREQ=WEEKLY;UNTIL=20231217T130000Z;WKST=MO;BYDAY=WE');
 
-        -- Student Schedule
-        -- Student 1
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_1, SCHEDULE_ITEM_1_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_1, SCHEDULE_ITEM_1_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_1, SCHEDULE_ITEM_1_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_1, SCHEDULE_ITEM_1_2_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_1, SCHEDULE_ITEM_2_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_1, SCHEDULE_ITEM_2_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_1, SCHEDULE_ITEM_2_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_1, SCHEDULE_ITEM_2_2_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_1, SCHEDULE_ITEM_4_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_1, SCHEDULE_ITEM_4_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_1, SCHEDULE_ITEM_4_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_1, SCHEDULE_ITEM_4_2_2);
-        -- Student 2
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_1_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_1_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_1_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_1_2_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_3_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_3_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_3_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_3_2_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_3_3_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_3_3_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_4_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_4_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_4_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_2, SCHEDULE_ITEM_4_2_2);
-        -- Student 3
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_2_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_2_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_2_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_2_2_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_3_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_3_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_3_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_3_2_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_3_3_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_3_3_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_5_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_5_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_5_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_3, SCHEDULE_ITEM_5_2_2);
-        -- Student 4
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_2_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_2_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_2_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_2_2_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_3_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_3_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_3_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_3_2_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_3_3_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_3_3_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_5_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_5_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_5_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_4, SCHEDULE_ITEM_5_2_2);
-        -- Student 5
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_2_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_2_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_2_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_2_2_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_3_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_3_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_3_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_3_2_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_3_3_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_3_3_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_5_1_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_5_1_2);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_5_2_1);
-        INSERT INTO student_schedule (student_id, schedule_id)
-        VALUES (STUDENT_UUID_5, SCHEDULE_ITEM_5_2_2);
+        -- Course Students
+        -- Course 1
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_1, COURSE_UUID_1);
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_2, COURSE_UUID_1);
+        -- Course 2
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_1, COURSE_UUID_2);
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_3, COURSE_UUID_2);
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_4, COURSE_UUID_2);
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_5, COURSE_UUID_2);
+        -- Course 3
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_2, COURSE_UUID_3);
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_3, COURSE_UUID_3);
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_4, COURSE_UUID_3);
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_5, COURSE_UUID_3);
+        -- Course 4
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_1, COURSE_UUID_4);
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_2, COURSE_UUID_4);
+        -- Course 5
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_3, COURSE_UUID_5);
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_4, COURSE_UUID_5);
+        INSERT INTO course_students (student_id, course_id)
+        VALUES (STUDENT_UUID_5, COURSE_UUID_5);
     END
 $$;
-
--- Some comment
