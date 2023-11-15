@@ -13,6 +13,7 @@ import {
   Req,
   UnprocessableEntityException,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { CaslAbilityFactory } from '../casl/casl-ability.factory';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -30,6 +31,7 @@ import {
   UpdateTeacherRequirementsDto,
 } from './teacher_requirements.dto';
 import { handleCustomError, isCustomError, isError } from '../utils/errors';
+import { ValidationPipe } from '../common/pipes/validation.pipe';
 
 @Controller('teacher/requirements')
 export class TeacherRequirementsController {
@@ -124,6 +126,7 @@ export class TeacherRequirementsController {
    */
   @Post()
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
   public async create(
     @Req() request: Request,
     @Body() createDto: CreateTeacherRequirementsDto,
@@ -175,6 +178,7 @@ export class TeacherRequirementsController {
    */
   @Put('/:id')
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
   public async update(
     @Param('id') id: string,
     @Req() request: Request,

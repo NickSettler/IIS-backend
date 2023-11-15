@@ -130,6 +130,7 @@ export class ClassesController {
 
   @Put('/:id')
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
   public async update(
     @Req() request: Request,
     @Param('id') id: string,
