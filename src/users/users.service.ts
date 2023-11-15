@@ -14,6 +14,7 @@ import {
   omitBy,
   isArray,
 } from 'lodash';
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
 
 @Injectable()
 export class UsersService {
@@ -27,9 +28,10 @@ export class UsersService {
   /**
    * Find all users
    */
-  public async findAll(): Promise<Array<User>> {
+  public async findAll(options?: FindManyOptions<User>): Promise<Array<User>> {
     return this.usersRepository.find({
-      relations: [E_USER_ENTITY_KEYS.ROLES],
+      ...(options && { ...options }),
+      relations: options?.relations ?? [E_USER_ENTITY_KEYS.ROLES],
     });
   }
 

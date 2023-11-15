@@ -33,6 +33,9 @@ export class TeacherRequirement {
   @Column({ type: 'timestamp' })
   [E_TEACHER_REQUIREMENT_ENTITY_KEYS.END_TIME]: Date;
 
+  @Column()
+  [E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER_ID]: string;
+
   @ManyToOne(() => User, { eager: true })
   @JoinColumn({ name: E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER_ID })
   [E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER]: User;
