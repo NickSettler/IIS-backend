@@ -64,6 +64,30 @@ export class UsersController {
     });
   }
 
+  @Get('/teachers')
+  @UseGuards(JwtAuthGuard)
+  public async getTeachers(@Req() request: Request): Promise<Array<User>> {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    if (rules.cannot(E_ACTION.READ, User))
+      throw new ForbiddenException("You don't have permission to read users");
+
+    return filter(
+      await this.usersService.findAll({
+        where: {
+          [E_USER_ENTITY_KEYS.ROLES]: {
+            [E_ROLE_ENTITY_KEYS.NAME]: E_ROLE.TEACHER,
+          },
+        },
+        relations: [
+          E_USER_ENTITY_KEYS.ROLES,
+          E_USER_ENTITY_KEYS.TEACHER_REQUIREMENTS,
+        ],
+      }),
+      (user) => rules.can(E_ACTION.READ, user),
+    );
+  }
+
   @Get('/:id')
   @UseGuards(JwtAuthGuard)
   public async getOne(

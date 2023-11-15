@@ -4,14 +4,20 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { E_DB_TABLES } from '../constants';
 import { E_ROLE_ENTITY_KEYS, Role } from './role.entity';
 import { Exclude } from 'class-transformer';
 import { hashSync } from 'bcrypt';
+import {
+  E_TEACHER_REQUIREMENT_ENTITY_KEYS,
+  TeacherRequirement,
+} from './teacher_requirement.entity';
 
 export enum E_USER_ENTITY_KEYS {
   ID = 'id',
@@ -21,6 +27,7 @@ export enum E_USER_ENTITY_KEYS {
   LAST_NAME = 'last_name',
   REFRESH_TOKEN = 'refresh_token',
   ROLES = 'roles',
+  TEACHER_REQUIREMENTS = 'teacher_requirements',
 }
 
 @Entity({
@@ -64,6 +71,14 @@ export class User {
     },
   })
   [E_USER_ENTITY_KEYS.ROLES]: Array<Role>;
+
+  @OneToMany(
+    () => TeacherRequirement,
+    (teacherRequirement) =>
+      teacherRequirement[E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER],
+  )
+  @JoinColumn({ name: E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER_ID })
+  [E_USER_ENTITY_KEYS.TEACHER_REQUIREMENTS]: Array<TeacherRequirement>;
 
   @Exclude()
   private tempPassword: string;
