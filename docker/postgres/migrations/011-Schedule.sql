@@ -16,6 +16,9 @@ CREATE TABLE schedule
     class_id           uuid,
     start_time         TIMESTAMP NOT NULL,
     end_time           TIMESTAMP NOT NULL CHECK (end_time > start_time),
+    recurrence_rule    TEXT,
+    exclusion_dates    TEXT,
+    notes              TEXT,
     CONSTRAINT fk_teacher_id FOREIGN KEY (teacher_id) REFERENCES users (id) ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT fk_course_activity_id FOREIGN KEY (course_activity_id) REFERENCES course_activity (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fk_class_id FOREIGN KEY (class_id) REFERENCES classes (id) ON UPDATE CASCADE ON DELETE SET NULL
@@ -38,10 +41,6 @@ BEGIN
 
     IF NEW.end_time - NEW.start_time > INTERVAL '4 hours' THEN
         RAISE EXCEPTION 'Schedule time must be at most 4 hours' USING ERRCODE = 'C0002';
-    END IF;
-
-    IF NEW.start_time < NOW() THEN
-        RAISE EXCEPTION 'Schedule time must be in the future' USING ERRCODE = 'C0003';
     END IF;
 
     RETURN NEW;
