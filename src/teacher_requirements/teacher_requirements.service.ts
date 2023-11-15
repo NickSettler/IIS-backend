@@ -4,13 +4,14 @@ import {
   E_TEACHER_REQUIREMENT_ENTITY_KEYS,
   TeacherRequirement,
 } from '../db/entities/teacher_requirement.entity';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import {
   CreateTeacherRequirementsDto,
   UpdateTeacherRequirementsDto,
 } from './teacher_requirements.dto';
 import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
 import { assign, isArray, omitBy } from 'lodash';
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
 
 @Injectable()
 export class TeacherRequirementsService {
@@ -22,15 +23,17 @@ export class TeacherRequirementsService {
   /**
    * Find all teacherRequirements
    */
-  public async findAll(): Promise<Array<TeacherRequirement>> {
-    return this.teacherRequirementsRepository.find();
+  public async findAll(
+    options?: FindManyOptions<TeacherRequirement>,
+  ): Promise<Array<TeacherRequirement>> {
+    return this.teacherRequirementsRepository.find(options);
   }
 
   /**
    * Find one teacherRequirement using options
    * @param options
    */
-  public async findOne(options: any) {
+  public async findOne(options: FindOneOptions<TeacherRequirement>) {
     return this.teacherRequirementsRepository.findOne(options);
   }
 
