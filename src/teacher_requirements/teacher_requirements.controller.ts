@@ -94,6 +94,28 @@ export class TeacherRequirementsController {
 
     return foundRequirement;
   }
+  @Get('/teacher/:id')
+  @UseGuards(JwtAuthGuard)
+  public async getForTeacher(
+    @Param('id') id: string,
+    @Req() request: Request,
+  ): Promise<Array<TeacherRequirement>> {
+    const rules = this.caslAbilityFactory.createForUser(request.user as User);
+
+    if (rules.cannot(E_ACTION.READ, TeacherRequirement))
+      throw new ForbiddenException(
+        "You don't have permission to read teacher requirements",
+      );
+
+    return filter(
+      await this.teacherRequirementsService.findAll({
+        where: {
+          [E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER_ID]: id,
+        },
+      }),
+      (requirement) => rules.can(E_ACTION.READ, requirement),
+    );
+  }
 
   /**
    * Create a teacher requirement
