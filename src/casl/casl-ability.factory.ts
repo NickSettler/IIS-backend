@@ -17,14 +17,23 @@ import {
 } from '../db/entities/schedule.entity';
 import { map } from 'lodash';
 import { E_ROLE, E_ROLE_ENTITY_KEYS } from '../db/entities/role.entity';
-import { TeacherRequirement } from '../db/entities/teacher_requirement.entity';
+import {
+  E_TEACHER_REQUIREMENT_ENTITY_KEYS,
+  TeacherRequirement,
+} from '../db/entities/teacher_requirement.entity';
+import { AddRule } from './types';
 import { StudentSchedule } from '../db/entities/student_schedule.entity';
+import {
+  CourseStudent,
+  E_COURSE_STUDENTS_ENTITY_KEYS,
+} from '../db/entities/course_students.entity';
 
 export type TSubjects =
   | InferSubjects<
       | typeof Class
       | typeof Course
       | typeof CourseActivity
+      | typeof CourseStudent
       | typeof Schedule
       | typeof StudentSchedule
       | typeof TeacherRequirement
@@ -45,6 +54,17 @@ export class CaslAbilityFactory {
     can(E_ACTION.READ, Class);
     can(E_ACTION.READ, CourseActivity, ['**']);
     can(E_ACTION.READ, Course, ['**']);
+
+    can(E_ACTION.READ, CourseStudent, {
+      [E_COURSE_STUDENTS_ENTITY_KEYS.STUDENT_ID]: user[E_USER_ENTITY_KEYS.ID],
+    });
+    can(E_ACTION.CREATE, CourseStudent, {
+      [E_COURSE_STUDENTS_ENTITY_KEYS.STUDENT_ID]: user[E_USER_ENTITY_KEYS.ID],
+    });
+    can(E_ACTION.DELETE, CourseStudent, {
+      [E_COURSE_STUDENTS_ENTITY_KEYS.STUDENT_ID]: user[E_USER_ENTITY_KEYS.ID],
+    });
+
     can(E_ACTION.READ, Schedule);
     can(E_ACTION.CREATE, Schedule, [`${E_SCHEDULE_ENTITY_KEYS.STUDENTS}.*`]);
     can(E_ACTION.DELETE, Schedule, [`${E_SCHEDULE_ENTITY_KEYS.STUDENTS}.*`], {
@@ -54,8 +74,31 @@ export class CaslAbilityFactory {
     });
   }
 
-  private static applySchedulerRules(can: (...params: any) => void): void {
+  private static applySchedulerRules(can: AddRule<TAbility>): void {
     can(E_MANAGE_ACTION, Schedule);
+    can(E_ACTION.READ, TeacherRequirement);
+    can(E_ACTION.READ, Course);
+    can(E_ACTION.READ, CourseActivity);
+    can(E_ACTION.READ, CourseStudent);
+    can(E_ACTION.READ, Class);
+    can(E_ACTION.READ, StudentSchedule);
+    can(E_ACTION.READ, User);
+  }
+
+  private static applyTeacherRules(user: User, can: AddRule<TAbility>): void {
+    can(E_ACTION.READ, TeacherRequirement, {
+      [E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER_ID]:
+        user[E_USER_ENTITY_KEYS.ID],
+    });
+    can(E_ACTION.CREATE, TeacherRequirement);
+    can(E_ACTION.UPDATE, TeacherRequirement, {
+      [E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER_ID]:
+        user[E_USER_ENTITY_KEYS.ID],
+    });
+    can(E_ACTION.DELETE, TeacherRequirement, {
+      [E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER_ID]:
+        user[E_USER_ENTITY_KEYS.ID],
+    });
   }
 
   public createForUser(user: User | undefined): TAbility {
@@ -82,6 +125,12 @@ export class CaslAbilityFactory {
     if (userRoles.includes(E_ROLE.SCHEDULER)) {
       CaslAbilityFactory.applyStudentRules(user, can);
       CaslAbilityFactory.applySchedulerRules(can);
+    }
+
+    if (userRoles.includes(E_ROLE.TEACHER)) {
+      CaslAbilityFactory.applyStudentRules(user, can);
+      CaslAbilityFactory.applySchedulerRules(can);
+      CaslAbilityFactory.applyTeacherRules(user, can);
     }
 
     if (userRoles.includes(E_ROLE.ADMIN)) {

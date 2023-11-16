@@ -13,6 +13,7 @@ import {
   Req,
   UnprocessableEntityException,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { CourseActivitiesService } from './course-activities.service';
 import {
@@ -30,6 +31,7 @@ import { Request } from 'express';
 import { User } from '../db/entities/user.entity';
 import { E_ACTION } from '../casl/actions';
 import { filter } from 'lodash';
+import { ValidationPipe } from '../common/pipes/validation.pipe';
 
 @Controller('courses')
 export class CourseActivitiesController {
@@ -119,6 +121,7 @@ export class CourseActivitiesController {
    */
   @Post('/activity')
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
   public async create(
     @Body() createDto: CreateCourseActivitiesDto,
     @Req() request: Request,
@@ -164,6 +167,7 @@ export class CourseActivitiesController {
    */
   @Put('/activity/:id')
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
   public async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateCourseActivitiesDto,
