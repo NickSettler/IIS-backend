@@ -1,16 +1,23 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   E_SCHEDULE_ENTITY_KEYS,
   Schedule,
 } from '../db/entities/schedule.entity';
-import { DeepPartial, FindOneOptions, Repository } from 'typeorm';
+import { DeepPartial, FindOneOptions, Not, Repository } from 'typeorm';
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
 import { CreateScheduleDto, UpdateScheduleDto } from './schedule.dto';
 import { E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 import { E_COURSE_ACTIVITY_ENTITY_KEYS } from '../db/entities/course_activity.entity';
 import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
-import { assign, isArray } from 'lodash';
+import { assign, isArray, isEmpty, map } from 'lodash';
+import * as dayjs from 'dayjs';
+import { rrulestr } from 'rrule';
+import { checkDatesOverlap } from '../utils/datetime/overlap';
 
 @Injectable()
 export class ScheduleService {
@@ -46,6 +53,8 @@ export class ScheduleService {
   public async create(createDto: CreateScheduleDto): Promise<Schedule> {
     const schedule = this.scheduleRepository.create(this.processDTO(createDto));
 
+    await this.checkConflicts(schedule);
+
     return await this.scheduleRepository.save(schedule);
   }
 
@@ -63,6 +72,8 @@ export class ScheduleService {
       throw new NotFoundException(`Schedule with id ${id} not found`);
 
     assign(foundSchedule, this.processDTO(updateDto));
+
+    await this.checkConflicts(foundSchedule);
 
     await this.scheduleRepository.save(foundSchedule);
 
@@ -108,5 +119,76 @@ export class ScheduleService {
         },
       }),
     };
+  }
+
+  private getScheduleDates(schedule: Schedule): Array<[Date, Date]> {
+    const startDate = dayjs(schedule[E_SCHEDULE_ENTITY_KEYS.START_TIME]);
+    const endDate = dayjs(schedule[E_SCHEDULE_ENTITY_KEYS.END_TIME]);
+
+    if (isEmpty(schedule[E_SCHEDULE_ENTITY_KEYS.RECURRENCE_RULE]))
+      return [[startDate.toDate(), endDate.toDate()]];
+
+    const diff = endDate.diff(startDate, 'ms');
+
+    const rule = rrulestr(schedule[E_SCHEDULE_ENTITY_KEYS.RECURRENCE_RULE], {
+      dtstart: startDate.toDate(),
+    });
+
+    return map(rule.all(), (date) => [
+      date,
+      dayjs(date).add(diff, 'ms').toDate(),
+    ]);
+  }
+
+  private async checkTeacherConflicts(schedule: Schedule) {
+    const teacherScheduleItems = await this.scheduleRepository.find({
+      where: {
+        [E_SCHEDULE_ENTITY_KEYS.TEACHER_ID]:
+          schedule[E_SCHEDULE_ENTITY_KEYS.TEACHER_ID],
+        ...(schedule[E_SCHEDULE_ENTITY_KEYS.ID] && {
+          [E_SCHEDULE_ENTITY_KEYS.ID]: Not(schedule[E_SCHEDULE_ENTITY_KEYS.ID]),
+        }),
+      },
+    });
+
+    const teacherScheduleDates = teacherScheduleItems.reduce<
+      Array<[Date, Date]>
+    >((acc, scheduleItem) => {
+      return [...acc, ...this.getScheduleDates(scheduleItem)];
+    }, []);
+
+    const scheduleDates = this.getScheduleDates(schedule);
+
+    if (checkDatesOverlap(teacherScheduleDates, scheduleDates))
+      throw new ConflictException('Teacher is busy at this time');
+  }
+
+  private async checkClassConflicts(schedule: Schedule) {
+    const classScheduleItems = await this.scheduleRepository.find({
+      where: {
+        [E_SCHEDULE_ENTITY_KEYS.CLASS_ID]:
+          schedule[E_SCHEDULE_ENTITY_KEYS.CLASS_ID],
+        ...(schedule[E_SCHEDULE_ENTITY_KEYS.ID] && {
+          [E_SCHEDULE_ENTITY_KEYS.ID]: Not(schedule[E_SCHEDULE_ENTITY_KEYS.ID]),
+        }),
+      },
+    });
+
+    const classScheduleDates = classScheduleItems.reduce<Array<[Date, Date]>>(
+      (acc, scheduleItem) => {
+        return [...acc, ...this.getScheduleDates(scheduleItem)];
+      },
+      [],
+    );
+
+    const scheduleDates = this.getScheduleDates(schedule);
+
+    if (checkDatesOverlap(classScheduleDates, scheduleDates))
+      throw new ConflictException('Class is busy at this time');
+  }
+
+  private async checkConflicts(schedule: Schedule) {
+    await this.checkTeacherConflicts(schedule);
+    await this.checkClassConflicts(schedule);
   }
 }

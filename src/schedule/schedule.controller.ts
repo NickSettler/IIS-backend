@@ -107,6 +107,10 @@ export class ScheduleController {
           throw new HttpException(...handleCustomError(err));
         }
 
+        if (err instanceof HttpException) {
+          throw err;
+        }
+
         throw new InternalServerErrorException("Can't create schedule");
       });
 
@@ -148,6 +152,10 @@ export class ScheduleController {
           );
         else if (isCustomError(err)) {
           throw new HttpException(...handleCustomError(err));
+        }
+
+        if (err instanceof HttpException) {
+          throw err;
         }
 
         throw new InternalServerErrorException("Can't update schedule");
