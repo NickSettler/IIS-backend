@@ -12,6 +12,7 @@ import { CourseActivity } from './course_activity.entity';
 import { Class } from './class.entity';
 import { E_USER_ENTITY_KEYS, User } from './user.entity';
 import { IsUUID } from 'class-validator';
+import { E_STUDENT_SCHEDULE_ENTITY_KEYS } from './student_schedule.entity';
 
 export enum E_SCHEDULE_ENTITY_KEYS {
   ID = 'id',
@@ -61,11 +62,11 @@ export class Schedule {
   @JoinTable({
     name: E_DB_TABLES.STUDENT_SCHEDULE,
     joinColumn: {
-      name: 'schedule_id',
+      name: E_STUDENT_SCHEDULE_ENTITY_KEYS.SCHEDULE_ID,
       referencedColumnName: E_SCHEDULE_ENTITY_KEYS.ID,
     },
     inverseJoinColumn: {
-      name: 'student_id',
+      name: E_STUDENT_SCHEDULE_ENTITY_KEYS.STUDENT_ID,
       referencedColumnName: E_USER_ENTITY_KEYS.ID,
     },
   })
