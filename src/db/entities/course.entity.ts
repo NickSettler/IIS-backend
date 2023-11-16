@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { E_DB_TABLES } from '../constants';
 import { E_USER_ENTITY_KEYS, User } from './user.entity';
+import { E_COURSE_STUDENTS_ENTITY_KEYS } from './course_students.entity';
 
 export const enum E_COURSE_ENTITY_KEYS {
   ID = 'id',
@@ -19,6 +20,7 @@ export const enum E_COURSE_ENTITY_KEYS {
   ANNOTATION = 'annotation',
   GUARANTOR = 'guarantor',
   TEACHERS = 'teachers',
+  STUDENTS = 'students',
 }
 
 @Entity({
@@ -61,4 +63,18 @@ export class Course {
     },
   })
   [E_COURSE_ENTITY_KEYS.TEACHERS]: Array<User>;
+
+  @ManyToMany(() => User)
+  @JoinTable({
+    name: E_DB_TABLES.COURSE_STUDENTS,
+    joinColumn: {
+      name: E_COURSE_STUDENTS_ENTITY_KEYS.COURSE_ID,
+      referencedColumnName: E_COURSE_ENTITY_KEYS.ID,
+    },
+    inverseJoinColumn: {
+      name: E_COURSE_STUDENTS_ENTITY_KEYS.STUDENT_ID,
+      referencedColumnName: E_USER_ENTITY_KEYS.ID,
+    },
+  })
+  [E_COURSE_ENTITY_KEYS.STUDENTS]: Array<User>;
 }

@@ -67,6 +67,7 @@ export class CoursesController {
       where: {
         [E_COURSE_ENTITY_KEYS.ID]: id,
       },
+      relations: [E_COURSE_ENTITY_KEYS.STUDENTS],
     });
 
     if (!foundCourse) throw new NotFoundException('Course not found');
