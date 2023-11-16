@@ -10,7 +10,7 @@ import { CreateScheduleDto, UpdateScheduleDto } from './schedule.dto';
 import { E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 import { E_COURSE_ACTIVITY_ENTITY_KEYS } from '../db/entities/course_activity.entity';
 import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
-import { assign } from 'lodash';
+import { assign, isArray } from 'lodash';
 
 @Injectable()
 export class ScheduleService {
@@ -22,11 +22,25 @@ export class ScheduleService {
   public async findAll(
     options?: FindManyOptions<Schedule>,
   ): Promise<Array<Schedule>> {
-    return await this.scheduleRepository.find(options);
+    return await this.scheduleRepository.find({
+      ...options,
+      relations: [
+        ...(isArray(options?.relations) ? options.relations : []),
+        E_SCHEDULE_ENTITY_KEYS.STUDENTS,
+        `${E_SCHEDULE_ENTITY_KEYS.COURSE_ACTIVITY}.${E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE}`,
+      ],
+    });
   }
 
   public async fineOne(options?: FindOneOptions<Schedule>): Promise<Schedule> {
-    return this.scheduleRepository.findOne(options);
+    return this.scheduleRepository.findOne({
+      ...options,
+      relations: [
+        ...(isArray(options?.relations) ? options.relations : []),
+        E_SCHEDULE_ENTITY_KEYS.STUDENTS,
+        `${E_SCHEDULE_ENTITY_KEYS.COURSE_ACTIVITY}.${E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE}`,
+      ],
+    });
   }
 
   public async create(createDto: CreateScheduleDto): Promise<Schedule> {

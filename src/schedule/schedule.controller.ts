@@ -47,12 +47,7 @@ export class ScheduleController {
         "You don't have permission to read schedule",
       );
 
-    return this.postProcessResult(
-      await this.scheduleService.findAll({
-        relations: [E_SCHEDULE_ENTITY_KEYS.STUDENTS],
-      }),
-      rules,
-    );
+    return this.postProcessResult(await this.scheduleService.findAll(), rules);
   }
 
   @Get('/:id')
@@ -72,7 +67,6 @@ export class ScheduleController {
       where: {
         [E_SCHEDULE_ENTITY_KEYS.ID]: id,
       },
-      relations: [E_SCHEDULE_ENTITY_KEYS.STUDENTS],
     });
 
     if (!rules.can(E_ACTION.READ, foundSchedule))
@@ -120,7 +114,6 @@ export class ScheduleController {
       where: {
         [E_SCHEDULE_ENTITY_KEYS.ID]: createdSchedule[E_SCHEDULE_ENTITY_KEYS.ID],
       },
-      relations: [E_SCHEDULE_ENTITY_KEYS.STUDENTS],
     });
 
     if (!rules.can(E_ACTION.READ, foundSchedule))
@@ -164,7 +157,6 @@ export class ScheduleController {
       where: {
         [E_SCHEDULE_ENTITY_KEYS.ID]: updatedSchedule[E_SCHEDULE_ENTITY_KEYS.ID],
       },
-      relations: [E_SCHEDULE_ENTITY_KEYS.STUDENTS],
     });
 
     if (!rules.can(E_ACTION.READ, foundSchedule))
