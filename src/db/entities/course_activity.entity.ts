@@ -26,6 +26,9 @@ export class CourseActivity {
   @Column()
   [E_COURSE_ACTIVITY_ENTITY_KEYS.FORM]: string;
 
+  @Column('uuid')
+  [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE_ID]: string;
+
   @ManyToOne(() => Course)
   @JoinColumn({ name: E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE_ID })
   [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]: Course;
