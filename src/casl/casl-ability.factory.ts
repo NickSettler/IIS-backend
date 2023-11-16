@@ -51,38 +51,32 @@ export class CaslAbilityFactory {
     user: User,
     can: (...params: any) => void,
   ): void {
-    can(E_ACTION.READ, Class);
-    can(E_ACTION.READ, CourseActivity, ['**']);
-    can(E_ACTION.READ, Course, ['**']);
+    can(E_ACTION.READ, [User, Class, CourseActivity, Course]);
 
-    can(E_ACTION.READ, CourseStudent, {
-      [E_COURSE_STUDENTS_ENTITY_KEYS.STUDENT_ID]: user[E_USER_ENTITY_KEYS.ID],
-    });
-    can(E_ACTION.CREATE, CourseStudent, {
-      [E_COURSE_STUDENTS_ENTITY_KEYS.STUDENT_ID]: user[E_USER_ENTITY_KEYS.ID],
-    });
-    can(E_ACTION.DELETE, CourseStudent, {
+    can([E_ACTION.READ, E_ACTION.CREATE, E_ACTION.DELETE], CourseStudent, {
       [E_COURSE_STUDENTS_ENTITY_KEYS.STUDENT_ID]: user[E_USER_ENTITY_KEYS.ID],
     });
 
-    can(E_ACTION.READ, Schedule);
-    can(E_ACTION.CREATE, Schedule, [`${E_SCHEDULE_ENTITY_KEYS.STUDENTS}.*`]);
-    can(E_ACTION.DELETE, Schedule, [`${E_SCHEDULE_ENTITY_KEYS.STUDENTS}.*`], {
+    can(E_ACTION.READ, Schedule, {
       [E_SCHEDULE_ENTITY_KEYS.STUDENTS]: {
-        [E_USER_ENTITY_KEYS.ID]: user[E_USER_ENTITY_KEYS.ID],
+        $elemMatch: {
+          [E_USER_ENTITY_KEYS.ID]: user[E_USER_ENTITY_KEYS.ID],
+        },
       },
     });
   }
 
   private static applySchedulerRules(can: AddRule<TAbility>): void {
     can(E_MANAGE_ACTION, Schedule);
-    can(E_ACTION.READ, TeacherRequirement);
-    can(E_ACTION.READ, Course);
-    can(E_ACTION.READ, CourseActivity);
-    can(E_ACTION.READ, CourseStudent);
-    can(E_ACTION.READ, Class);
-    can(E_ACTION.READ, StudentSchedule);
-    can(E_ACTION.READ, User);
+    can(E_ACTION.READ, [
+      TeacherRequirement,
+      Course,
+      CourseActivity,
+      CourseStudent,
+      Class,
+      StudentSchedule,
+      User,
+    ]);
   }
 
   private static applyTeacherRules(user: User, can: AddRule<TAbility>): void {
