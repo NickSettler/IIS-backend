@@ -55,6 +55,8 @@ export class ScheduleService {
 
     await this.checkConflicts(schedule);
 
+    this.autoCorrectScheduleDates(schedule);
+
     return await this.scheduleRepository.save(schedule);
   }
 
@@ -74,6 +76,8 @@ export class ScheduleService {
     assign(foundSchedule, this.processDTO(updateDto));
 
     await this.checkConflicts(foundSchedule);
+
+    this.autoCorrectScheduleDates(foundSchedule);
 
     await this.scheduleRepository.save(foundSchedule);
 
@@ -121,6 +125,25 @@ export class ScheduleService {
     };
   }
 
+  private getScheduleTimeDiff(schedule: Schedule): number {
+    const startDate = dayjs(schedule[E_SCHEDULE_ENTITY_KEYS.START_TIME]);
+    const endDate = dayjs(schedule[E_SCHEDULE_ENTITY_KEYS.END_TIME]);
+
+    return endDate.diff(startDate, 'ms') % (1000 * 60 * 60 * 24);
+  }
+
+  private autoCorrectScheduleDates(schedule: Schedule): void {
+    const diff = this.getScheduleTimeDiff(schedule);
+
+    const startDate = dayjs(schedule[E_SCHEDULE_ENTITY_KEYS.START_TIME]);
+    const endDate = startDate.add(diff, 'ms');
+
+    assign(schedule, {
+      [E_SCHEDULE_ENTITY_KEYS.START_TIME]: startDate.toDate(),
+      [E_SCHEDULE_ENTITY_KEYS.END_TIME]: endDate.toDate(),
+    });
+  }
+
   private getScheduleDates(schedule: Schedule): Array<[Date, Date]> {
     const startDate = dayjs(schedule[E_SCHEDULE_ENTITY_KEYS.START_TIME]);
     const endDate = dayjs(schedule[E_SCHEDULE_ENTITY_KEYS.END_TIME]);
@@ -128,7 +151,7 @@ export class ScheduleService {
     if (isEmpty(schedule[E_SCHEDULE_ENTITY_KEYS.RECURRENCE_RULE]))
       return [[startDate.toDate(), endDate.toDate()]];
 
-    const diff = endDate.diff(startDate, 'ms');
+    const diff = this.getScheduleTimeDiff(schedule);
 
     const rule = rrulestr(schedule[E_SCHEDULE_ENTITY_KEYS.RECURRENCE_RULE], {
       dtstart: startDate.toDate(),
