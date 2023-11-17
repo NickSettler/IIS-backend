@@ -10,7 +10,10 @@ import {
 import { E_ACTION, E_MANAGE_ACTION } from './actions';
 import { Course, E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
 import { Class } from '../db/entities/class.entity';
-import { CourseActivity } from '../db/entities/course_activity.entity';
+import {
+  CourseActivity,
+  E_COURSE_ACTIVITY_ENTITY_KEYS,
+} from '../db/entities/course_activity.entity';
 import {
   E_SCHEDULE_ENTITY_KEYS,
   Schedule,
@@ -22,7 +25,10 @@ import {
   TeacherRequirement,
 } from '../db/entities/teacher_requirement.entity';
 import { AddRule } from './types';
-import { StudentSchedule } from '../db/entities/student_schedule.entity';
+import {
+  E_STUDENT_SCHEDULE_ENTITY_KEYS,
+  StudentSchedule,
+} from '../db/entities/student_schedule.entity';
 import {
   CourseStudent,
   E_COURSE_STUDENTS_ENTITY_KEYS,
@@ -47,14 +53,29 @@ export type TAbility = MongoAbility<
 
 @Injectable()
 export class CaslAbilityFactory {
-  private static applyStudentRules(
-    user: User,
-    can: (...params: any) => void,
-  ): void {
-    can(E_ACTION.READ, [User, Class, CourseActivity, Course]);
+  private static applyStudentRules(user: User, can: AddRule<TAbility>): void {
+    can(E_ACTION.READ, [Class, CourseActivity, Course]);
+
+    can(E_ACTION.READ, User, {
+      [E_USER_ENTITY_KEYS.ROLES]: {
+        $elemMatch: {
+          [E_ROLE_ENTITY_KEYS.NAME]: {
+            $in: [E_ROLE.TEACHER, E_ROLE.GUARANTOR],
+          },
+        },
+      },
+    });
+
+    can(E_ACTION.READ, User, {
+      [E_USER_ENTITY_KEYS.ID]: user[E_USER_ENTITY_KEYS.ID],
+    });
 
     can([E_ACTION.READ, E_ACTION.CREATE, E_ACTION.DELETE], CourseStudent, {
       [E_COURSE_STUDENTS_ENTITY_KEYS.STUDENT_ID]: user[E_USER_ENTITY_KEYS.ID],
+    });
+
+    can([E_ACTION.READ, E_ACTION.CREATE, E_ACTION.DELETE], StudentSchedule, {
+      [E_STUDENT_SCHEDULE_ENTITY_KEYS.STUDENT_ID]: user[E_USER_ENTITY_KEYS.ID],
     });
 
     can(E_ACTION.READ, Schedule, {
@@ -68,18 +89,44 @@ export class CaslAbilityFactory {
 
   private static applySchedulerRules(can: AddRule<TAbility>): void {
     can(E_MANAGE_ACTION, Schedule);
-    can(E_ACTION.READ, [
-      TeacherRequirement,
-      Course,
-      CourseActivity,
-      CourseStudent,
-      Class,
-      StudentSchedule,
-      User,
-    ]);
+    can(E_ACTION.READ, 'all');
   }
 
   private static applyTeacherRules(user: User, can: AddRule<TAbility>): void {
+    can(E_ACTION.READ, [Class]);
+
+    can(E_ACTION.READ, User, {
+      [E_USER_ENTITY_KEYS.ROLES]: {
+        $elemMatch: {
+          [E_ROLE_ENTITY_KEYS.NAME]: {
+            $in: [E_ROLE.TEACHER, E_ROLE.STUDENT],
+          },
+        },
+      },
+    });
+
+    can(E_ACTION.READ, Course, {
+      [E_COURSE_ENTITY_KEYS.TEACHERS]: {
+        $elemMatch: {
+          [E_USER_ENTITY_KEYS.ID]: user[E_USER_ENTITY_KEYS.ID],
+        },
+      },
+    });
+
+    can(E_ACTION.READ, CourseActivity, {
+      [`${E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE}.${[
+        E_COURSE_ENTITY_KEYS.TEACHERS,
+      ]}`]: {
+        $elemMatch: {
+          [E_USER_ENTITY_KEYS.ID]: user[E_USER_ENTITY_KEYS.ID],
+        },
+      },
+    });
+
+    can(E_ACTION.READ, Schedule, {
+      [E_SCHEDULE_ENTITY_KEYS.TEACHER_ID]: user[E_USER_ENTITY_KEYS.ID],
+    });
+
     can(E_ACTION.READ, TeacherRequirement, {
       [E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER_ID]:
         user[E_USER_ENTITY_KEYS.ID],
@@ -92,6 +139,48 @@ export class CaslAbilityFactory {
     can(E_ACTION.DELETE, TeacherRequirement, {
       [E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER_ID]:
         user[E_USER_ENTITY_KEYS.ID],
+    });
+  }
+
+  private static applyGuarantorRules(user: User, can: AddRule<TAbility>): void {
+    can(E_ACTION.READ, [Class, TeacherRequirement]);
+
+    can(E_ACTION.READ, User, {
+      [E_USER_ENTITY_KEYS.ROLES]: {
+        $elemMatch: {
+          [E_ROLE_ENTITY_KEYS.NAME]: {
+            $in: [E_ROLE.TEACHER, E_ROLE.STUDENT],
+          },
+        },
+      },
+    });
+
+    can(E_ACTION.READ, Course, {
+      [E_COURSE_ENTITY_KEYS.GUARANTOR_ID]: {
+        $eq: user[E_USER_ENTITY_KEYS.ID],
+      },
+    });
+
+    can(E_MANAGE_ACTION, Course, {
+      [E_COURSE_ENTITY_KEYS.GUARANTOR_ID]: user[E_USER_ENTITY_KEYS.ID],
+    });
+
+    can(E_ACTION.READ, CourseActivity, {
+      [`${[E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]}.${
+        E_COURSE_ENTITY_KEYS.GUARANTOR_ID
+      }`]: user[E_USER_ENTITY_KEYS.ID],
+    });
+
+    can(E_ACTION.READ, Schedule, {
+      [`${[E_SCHEDULE_ENTITY_KEYS.COURSE_ACTIVITY]}.${
+        E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE
+      }.${E_COURSE_ENTITY_KEYS.GUARANTOR_ID}`]: user[E_USER_ENTITY_KEYS.ID],
+    });
+
+    can(E_ACTION.READ, CourseStudent, {
+      [E_COURSE_STUDENTS_ENTITY_KEYS.COURSE]: {
+        [E_COURSE_ENTITY_KEYS.GUARANTOR_ID]: user[E_USER_ENTITY_KEYS.ID],
+      },
     });
   }
 
@@ -117,14 +206,15 @@ export class CaslAbilityFactory {
     }
 
     if (userRoles.includes(E_ROLE.SCHEDULER)) {
-      CaslAbilityFactory.applyStudentRules(user, can);
       CaslAbilityFactory.applySchedulerRules(can);
     }
 
     if (userRoles.includes(E_ROLE.TEACHER)) {
-      CaslAbilityFactory.applyStudentRules(user, can);
-      CaslAbilityFactory.applySchedulerRules(can);
       CaslAbilityFactory.applyTeacherRules(user, can);
+    }
+
+    if (userRoles.includes(E_ROLE.GUARANTOR)) {
+      CaslAbilityFactory.applyGuarantorRules(user, can);
     }
 
     if (userRoles.includes(E_ROLE.ADMIN)) {
