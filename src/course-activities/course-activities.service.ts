@@ -8,12 +8,14 @@ import {
   E_COURSE_ACTIVITY_ENTITY_KEYS,
 } from '../db/entities/course_activity.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import {
   CreateCourseActivitiesDto,
   UpdateCourseActivitiesDto,
 } from './course-activities.dto';
 import { E_COURSE_ENTITY_KEYS } from '../db/entities/course.entity';
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
+import { isArray } from 'lodash';
 
 @Injectable()
 export class CourseActivitiesService {
@@ -25,20 +27,16 @@ export class CourseActivitiesService {
   /**
    * Find all course activities
    */
-  public async findAll(): Promise<Array<CourseActivity>> {
-    return this.courseActivitiesRepository.find({
-      relations: [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE],
-    });
-  }
-
-  /**
-   * Find all activities for a course
-   * @param options find options
-   */
-  public async findByOptions(
-    options: FindOptionsWhere<CourseActivity>,
+  public async findAll(
+    options?: FindManyOptions<CourseActivity>,
   ): Promise<Array<CourseActivity>> {
-    return this.courseActivitiesRepository.findBy(options);
+    return this.courseActivitiesRepository.find({
+      ...options,
+      relations: [
+        ...(isArray(options?.relations) ? options?.relations : []),
+        E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE,
+      ],
+    });
   }
 
   /**

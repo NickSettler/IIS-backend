@@ -126,10 +126,12 @@ describe('CaslAbilityFactory test', () => {
     });
 
     describe('Users', () => {
-      const expected = generateExpected(
-        values(E_ACTION),
-        times(4, constant(false)),
-      );
+      const expected = generateExpected(values(E_ACTION), [
+        false,
+        true,
+        false,
+        false,
+      ]);
 
       map(expected, (value, action: E_ACTION) => {
         it(`Can ${action} users`, () => {
@@ -185,10 +187,10 @@ describe('CaslAbilityFactory test', () => {
 
     describe('Schedule', () => {
       const expected = generateExpected(values(E_ACTION), [
-        true,
-        true,
         false,
         true,
+        false,
+        false,
       ]);
 
       map(expected, (value, action: E_ACTION) => {

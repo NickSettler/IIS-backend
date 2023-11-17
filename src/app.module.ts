@@ -11,6 +11,7 @@ import { CourseActivitiesModule } from './course-activities/course-activities.mo
 import { TeacherRequirementsModule } from './teacher_requirements/teacher_requirements.module';
 import { StudentScheduleModule } from './student_schedule/student_schedule.module';
 import { CourseStudentsModule } from './course-students/course-students.module';
+import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { CourseStudentsModule } from './course-students/course-students.module';
     TeacherRequirementsModule,
     StudentScheduleModule,
     CourseStudentsModule,
+    ScheduleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
