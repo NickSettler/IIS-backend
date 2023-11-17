@@ -42,6 +42,9 @@ export class Course {
   @Column()
   [E_COURSE_ENTITY_KEYS.ANNOTATION]: string;
 
+  @Column('uuid')
+  [E_COURSE_ENTITY_KEYS.GUARANTOR_ID]: string;
+
   @ManyToOne(() => User, {
     eager: true,
   })
