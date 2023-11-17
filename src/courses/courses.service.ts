@@ -77,6 +77,11 @@ export class CoursesService {
     // check if new guarantor_id exists in users table
     await this.coursesRepository.save({
       ...course,
+      ...(updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR] && {
+        [E_COURSE_ENTITY_KEYS.GUARANTOR]: {
+          [E_USER_ENTITY_KEYS.ID]: updateDto[E_COURSE_ENTITY_KEYS.GUARANTOR],
+        },
+      }),
       ...(updateDto[E_COURSE_ENTITY_KEYS.TEACHERS] && {
         [E_COURSE_ENTITY_KEYS.TEACHERS]: map(
           updateDto[E_COURSE_ENTITY_KEYS.TEACHERS],
