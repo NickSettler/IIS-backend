@@ -75,8 +75,10 @@ export class CourseActivitiesController {
       );
 
     return filter(
-      await this.courseActivitiesService.findByOptions({
-        [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]: { id },
+      await this.courseActivitiesService.findAll({
+        where: {
+          [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]: { id },
+        },
       }),
       (course_activity) => rules.can(E_ACTION.READ, course_activity),
     );
