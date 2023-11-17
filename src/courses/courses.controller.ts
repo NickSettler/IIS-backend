@@ -77,7 +77,15 @@ export class CoursesController {
         "You don't have permission to read this class",
       );
 
-    return foundCourse;
+    return {
+      ...foundCourse,
+      [E_COURSE_ENTITY_KEYS.STUDENTS]: filter(
+        foundCourse[E_COURSE_ENTITY_KEYS.STUDENTS],
+        (student) => {
+          return rules.can(E_ACTION.READ, student);
+        },
+      ),
+    };
   }
 
   @Get('abbr/:abbr')
