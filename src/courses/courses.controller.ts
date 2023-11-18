@@ -29,7 +29,7 @@ import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { E_ACTION } from '../casl/actions';
 import { Request } from 'express';
 import { CaslAbilityFactory, TAbility } from '../casl/casl-ability.factory';
-import { filter, map, union } from 'lodash';
+import { filter, map, union, pick } from 'lodash';
 import { handleCustomError, isCustomError, isError } from '../utils/errors';
 
 @Controller('courses')
@@ -50,6 +50,18 @@ export class CoursesController {
     return filter(await this.coursesService.findAll(), (course) =>
       rules.can(E_ACTION.READ, course),
     );
+  }
+
+  @Get('/public')
+  public async getAllPublic(): Promise<Array<Partial<Course>>> {
+    const foundCourses = await this.coursesService.findAll();
+
+    return pick(foundCourses, [
+      E_COURSE_ENTITY_KEYS.ABBR,
+      E_COURSE_ENTITY_KEYS.NAME,
+      E_COURSE_ENTITY_KEYS.CREDITS,
+      E_COURSE_ENTITY_KEYS.ANNOTATION,
+    ]);
   }
 
   @Get('/:id')
