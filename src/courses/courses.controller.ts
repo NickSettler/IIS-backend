@@ -52,6 +52,17 @@ export class CoursesController {
     );
   }
 
+  @Get('/public')
+  public async getAllPublic(): Promise<Array<Partial<Course>>> {
+    return map(await this.coursesService.findAll(), (course) => ({
+      [E_COURSE_ENTITY_KEYS.ABBR]: course[E_COURSE_ENTITY_KEYS.ABBR],
+      [E_COURSE_ENTITY_KEYS.NAME]: course[E_COURSE_ENTITY_KEYS.NAME],
+      [E_COURSE_ENTITY_KEYS.CREDITS]: course[E_COURSE_ENTITY_KEYS.CREDITS],
+      [E_COURSE_ENTITY_KEYS.ANNOTATION]:
+        course[E_COURSE_ENTITY_KEYS.ANNOTATION],
+    }));
+  }
+
   @Get('/:id')
   @UseGuards(JwtAuthGuard)
   public async getOne(
