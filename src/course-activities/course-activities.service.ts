@@ -44,7 +44,10 @@ export class CourseActivitiesService {
    * @param options
    */
   public async findOne(options: FindOneOptions<CourseActivity>) {
-    return this.courseActivitiesRepository.findOne(options);
+    return this.courseActivitiesRepository.findOne({
+      ...options,
+      relations: [E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE],
+    });
   }
 
   /**
