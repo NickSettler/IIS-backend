@@ -10,7 +10,7 @@ import {
   UpdateTeacherRequirementsDto,
 } from './teacher_requirements.dto';
 import { E_USER_ENTITY_KEYS } from '../db/entities/user.entity';
-import { assign, isArray, omitBy } from 'lodash';
+import { assign, isArray, omit, omitBy } from 'lodash';
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
 
 @Injectable()
@@ -45,13 +45,11 @@ export class TeacherRequirementsService {
     createDto: CreateTeacherRequirementsDto,
   ): Promise<TeacherRequirement> {
     const newTeacherRequirement = this.teacherRequirementsRepository.create({
-      ...createDto,
-      ...(createDto[E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER] && {
-        [E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER]: {
-          [E_USER_ENTITY_KEYS.ID]:
-            createDto[E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER],
-        },
-      }),
+      ...omit(createDto, E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER_ID),
+      [E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER]: {
+        [E_USER_ENTITY_KEYS.ID]:
+          createDto[E_TEACHER_REQUIREMENT_ENTITY_KEYS.TEACHER],
+      },
     });
 
     return await this.teacherRequirementsRepository.save(newTeacherRequirement);
