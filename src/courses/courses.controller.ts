@@ -29,8 +29,9 @@ import { E_USER_ENTITY_KEYS, User } from '../db/entities/user.entity';
 import { E_ACTION } from '../casl/actions';
 import { Request } from 'express';
 import { CaslAbilityFactory, TAbility } from '../casl/casl-ability.factory';
-import { filter, map, union } from 'lodash';
+import { filter, map, pick, union, values } from 'lodash';
 import { handleCustomError, isCustomError, isError } from '../utils/errors';
+import { permittedFieldsOf } from '@casl/ability/extra';
 
 @Controller('courses')
 export class CoursesController {
@@ -202,8 +203,12 @@ export class CoursesController {
         "You don't have permission to update this course",
       );
 
+    const updatableFields = permittedFieldsOf(rules, E_ACTION.UPDATE, Course, {
+      fieldsFrom: (rule) => rule.fields || values(E_COURSE_ENTITY_KEYS),
+    });
+
     const updatedCourse = await this.coursesService
-      .update(id, updateDto)
+      .update(id, pick(updateDto, updatableFields))
       .catch((err: any) => {
         if (isError(err, 'UNIQUE_CONSTRAINT')) {
           throw new ConflictException('Course already exists');

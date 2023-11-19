@@ -11,7 +11,7 @@ import { E_DB_TABLES } from '../constants';
 import { E_USER_ENTITY_KEYS, User } from './user.entity';
 import { E_COURSE_STUDENTS_ENTITY_KEYS } from './course_students.entity';
 
-export const enum E_COURSE_ENTITY_KEYS {
+export enum E_COURSE_ENTITY_KEYS {
   ID = 'id',
   ABBR = 'abbr',
   GUARANTOR_ID = 'guarantor_id',
