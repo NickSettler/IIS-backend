@@ -142,7 +142,11 @@ export class CaslAbilityFactory {
     });
   }
 
-  private static applyGuarantorRules(user: User, can: AddRule<TAbility>): void {
+  private static applyGuarantorRules(
+    user: User,
+    can: AddRule<TAbility>,
+    cannot: AddRule<TAbility>,
+  ): void {
     can(E_ACTION.READ, [Class, TeacherRequirement]);
 
     can(E_ACTION.READ, User, {
@@ -161,14 +165,23 @@ export class CaslAbilityFactory {
       },
     });
 
-    can(E_MANAGE_ACTION, Course, {
-      [E_COURSE_ENTITY_KEYS.GUARANTOR_ID]: user[E_USER_ENTITY_KEYS.ID],
-    });
+    can(E_ACTION.READ, Course);
 
-    can(E_ACTION.READ, CourseActivity, {
+    can(
+      E_ACTION.UPDATE,
+      Course,
+      [E_COURSE_ENTITY_KEYS.ANNOTATION, E_COURSE_ENTITY_KEYS.TEACHERS],
+      {
+        [E_COURSE_ENTITY_KEYS.GUARANTOR_ID]: user[E_USER_ENTITY_KEYS.ID],
+      },
+    );
+
+    cannot([E_ACTION.CREATE, E_ACTION.DELETE], Course);
+
+    can(E_MANAGE_ACTION, CourseActivity, {
       [`${[E_COURSE_ACTIVITY_ENTITY_KEYS.COURSE]}.${
-        E_COURSE_ENTITY_KEYS.GUARANTOR_ID
-      }`]: user[E_USER_ENTITY_KEYS.ID],
+        E_COURSE_ENTITY_KEYS.GUARANTOR
+      }.${E_USER_ENTITY_KEYS.ID}`]: user[E_USER_ENTITY_KEYS.ID],
     });
 
     can(E_ACTION.READ, Schedule, {
@@ -214,7 +227,7 @@ export class CaslAbilityFactory {
     }
 
     if (userRoles.includes(E_ROLE.GUARANTOR)) {
-      CaslAbilityFactory.applyGuarantorRules(user, can);
+      CaslAbilityFactory.applyGuarantorRules(user, can, cannot);
     }
 
     if (userRoles.includes(E_ROLE.ADMIN)) {
