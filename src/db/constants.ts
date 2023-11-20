@@ -32,7 +32,6 @@ export enum E_CUSTOM_ERROR_CODES {
   ROLES_STUDENT_HAS_SCHEDULE = 'C0104',
   ROLES_NO_ADMIN_DELETE = 'C0105',
   ROLES_NO_ADMIN_CREATE = 'C0106',
-  ROLES_LAST_ROLE = 'C0199',
 }
 
 export const defaultCustomMessages: Record<E_CUSTOM_ERROR_CODES, string> = {
@@ -65,8 +64,6 @@ export const defaultCustomMessages: Record<E_CUSTOM_ERROR_CODES, string> = {
     'Student cannot be deleted because they have schedule items',
   [E_CUSTOM_ERROR_CODES.ROLES_NO_ADMIN_DELETE]: 'Admin role cannot be deleted',
   [E_CUSTOM_ERROR_CODES.ROLES_NO_ADMIN_CREATE]: 'Admin role cannot be created',
-  [E_CUSTOM_ERROR_CODES.ROLES_LAST_ROLE]:
-    'Jsem chvějící se tvor, nebo mám práva? © Dostoevskij (It is a special IIS easter egg ☺)',
 };
 
 export enum E_POSTGRES_ERROR_CODES {

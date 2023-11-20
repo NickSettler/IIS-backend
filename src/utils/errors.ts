@@ -50,7 +50,6 @@ export const handleCustomError = (err: any): [string, number] => {
     case E_CUSTOM_ERROR_CODES.ROLES_STUDENT_HAS_SCHEDULE:
     case E_CUSTOM_ERROR_CODES.ROLES_NO_ADMIN_DELETE:
     case E_CUSTOM_ERROR_CODES.ROLES_NO_ADMIN_CREATE:
-    case E_CUSTOM_ERROR_CODES.ROLES_LAST_ROLE:
       return [message, HttpStatus.CONFLICT];
   }
 };
