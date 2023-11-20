@@ -26,6 +26,13 @@ export enum E_CUSTOM_ERROR_CODES {
   TEACHER_REQS_UNSATISFIED = 'C0007',
   TEACHER_REQS_CONFLICT = 'C0008',
   TEACHER_REQS_DATE_CONFLICT = 'C0009',
+  ROLES_TEACHER_HAS_SCHEDULE = 'C0101',
+  ROLES_GUARANTOR_HAS_COURSES = 'C0102',
+  ROLES_STUDENT_HAS_COURSES = 'C0103',
+  ROLES_STUDENT_HAS_SCHEDULE = 'C0104',
+  ROLES_NO_ADMIN_DELETE = 'C0105',
+  ROLES_NO_ADMIN_CREATE = 'C0106',
+  ROLES_LAST_ROLE = 'C0199',
 }
 
 export const defaultCustomMessages: Record<E_CUSTOM_ERROR_CODES, string> = {
@@ -48,6 +55,18 @@ export const defaultCustomMessages: Record<E_CUSTOM_ERROR_CODES, string> = {
     'Teacher already has requirements for this time',
   [E_CUSTOM_ERROR_CODES.TEACHER_REQS_DATE_CONFLICT]:
     'Teacher requirements cant be in the past',
+  [E_CUSTOM_ERROR_CODES.ROLES_TEACHER_HAS_SCHEDULE]:
+    'Teacher cannot be deleted because they have schedule items',
+  [E_CUSTOM_ERROR_CODES.ROLES_GUARANTOR_HAS_COURSES]:
+    'Guarantor cannot be deleted because they have courses',
+  [E_CUSTOM_ERROR_CODES.ROLES_STUDENT_HAS_COURSES]:
+    'Student cannot be deleted because they have courses',
+  [E_CUSTOM_ERROR_CODES.ROLES_STUDENT_HAS_SCHEDULE]:
+    'Student cannot be deleted because they have schedule items',
+  [E_CUSTOM_ERROR_CODES.ROLES_NO_ADMIN_DELETE]: 'Admin role cannot be deleted',
+  [E_CUSTOM_ERROR_CODES.ROLES_NO_ADMIN_CREATE]: 'Admin role cannot be created',
+  [E_CUSTOM_ERROR_CODES.ROLES_LAST_ROLE]:
+    'Jsem chvějící se tvor, nebo mám práva? © Dostoevskij (It is a special IIS easter egg ☺)',
 };
 
 export enum E_POSTGRES_ERROR_CODES {
