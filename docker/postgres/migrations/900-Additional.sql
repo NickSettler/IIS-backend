@@ -17,8 +17,8 @@ DECLARE
 BEGIN
     FOR course_student in SELECT *
                           FROM course_students cs
-                                   INNER JOIN public.courses c on c.id = cs.course_id
-                                   INNER JOIN public.course_activity ca on c.id = ca.course_id
+                                   INNER JOIN courses c on c.id = cs.course_id
+                                   INNER JOIN course_activity ca on c.id = ca.course_id
                           WHERE ca.id = NEW.course_activity_id
         LOOP
             INSERT INTO student_schedule (student_id, schedule_id)
