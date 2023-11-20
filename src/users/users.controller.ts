@@ -156,7 +156,14 @@ export class UsersController {
     if (rules.cannot(E_ACTION.UPDATE, user))
       throw new ForbiddenException("You don't have permission to update user");
 
-    const updatedUser = await this.usersService.update(id, updateDto);
+    const updatedUser = await this.usersService
+      .update(id, updateDto)
+      .catch((err: any) => {
+        if (isCustomError(err))
+          throw new HttpException(...handleCustomError(err));
+
+        throw new InternalServerErrorException("Can't update user");
+      });
 
     const foundUser = await this.usersService.findOne({
       where: {

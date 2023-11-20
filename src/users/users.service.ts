@@ -99,7 +99,7 @@ export class UsersService {
 
     await this.usersRepository.save({
       ...user,
-      ...(updateDto[E_USER_ENTITY_KEYS.ROLES]?.length && {
+      ...(updateDto[E_USER_ENTITY_KEYS.ROLES] && {
         [E_USER_ENTITY_KEYS.ROLES]: map(
           updateDto[E_USER_ENTITY_KEYS.ROLES],
           (r) => ({
