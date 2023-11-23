@@ -30,7 +30,6 @@ import { ValidationPipe } from '../common/pipes/validation.pipe';
 import { CreateScheduleDto, UpdateScheduleDto } from './schedule.dto';
 import { handleCustomError, isCustomError, isError } from '../utils/errors';
 import { permittedFieldsOf } from '@casl/ability/extra';
-import { Class, E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 
 @Controller('schedule')
 export class ScheduleController {

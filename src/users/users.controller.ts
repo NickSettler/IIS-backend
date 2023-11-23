@@ -28,7 +28,6 @@ import { E_ACTION } from '../casl/actions';
 import { handleCustomError, isCustomError, isError } from '../utils/errors';
 import { filter, pick, values } from 'lodash';
 import { permittedFieldsOf } from '@casl/ability/extra';
-import { Class, E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 
 @Controller('users')
 export class UsersController {

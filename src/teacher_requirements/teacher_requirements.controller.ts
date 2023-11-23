@@ -33,7 +33,6 @@ import {
 import { handleCustomError, isCustomError, isError } from '../utils/errors';
 import { ValidationPipe } from '../common/pipes/validation.pipe';
 import { permittedFieldsOf } from '@casl/ability/extra';
-import { Class, E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 
 @Controller('teacher/requirements')
 export class TeacherRequirementsController {
