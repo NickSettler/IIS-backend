@@ -26,7 +26,9 @@ import DeleteAdminGuard from '../common/guards/delete-admin.guard';
 import { CaslAbilityFactory } from '../casl/casl-ability.factory';
 import { E_ACTION } from '../casl/actions';
 import { handleCustomError, isCustomError, isError } from '../utils/errors';
-import { filter } from 'lodash';
+import { filter, pick, values } from 'lodash';
+import { permittedFieldsOf } from '@casl/ability/extra';
+import { Class, E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 
 @Controller('users')
 export class UsersController {
@@ -156,8 +158,12 @@ export class UsersController {
     if (rules.cannot(E_ACTION.UPDATE, user))
       throw new ForbiddenException("You don't have permission to update user");
 
+    const updatableFields = permittedFieldsOf(rules, E_ACTION.UPDATE, User, {
+      fieldsFrom: (rule) => rule.fields || values(E_USER_ENTITY_KEYS),
+    });
+
     const updatedUser = await this.usersService
-      .update(id, updateDto)
+      .update(id, pick(updateDto, updatableFields))
       .catch((err: any) => {
         if (isCustomError(err))
           throw new HttpException(...handleCustomError(err));

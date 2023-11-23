@@ -20,7 +20,7 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { Request } from 'express';
 import { User } from '../db/entities/user.entity';
 import { E_ACTION } from '../casl/actions';
-import { filter } from 'lodash';
+import { filter, pick, values } from 'lodash';
 import {
   E_TEACHER_REQUIREMENT_ENTITY_KEYS,
   TeacherRequirement,
@@ -32,6 +32,8 @@ import {
 } from './teacher_requirements.dto';
 import { handleCustomError, isCustomError, isError } from '../utils/errors';
 import { ValidationPipe } from '../common/pipes/validation.pipe';
+import { permittedFieldsOf } from '@casl/ability/extra';
+import { Class, E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 
 @Controller('teacher/requirements')
 export class TeacherRequirementsController {
@@ -205,8 +207,18 @@ export class TeacherRequirementsController {
         "You don't have permission to update this teacher requirement",
       );
 
+    const updatableFields = permittedFieldsOf(
+      rules,
+      E_ACTION.UPDATE,
+      TeacherRequirement,
+      {
+        fieldsFrom: (rule) =>
+          rule.fields || values(E_TEACHER_REQUIREMENT_ENTITY_KEYS),
+      },
+    );
+
     const updatedTeacherRequirement = await this.teacherRequirementsService
-      .update(id, updateDto)
+      .update(id, pick(updateDto, updatableFields))
       .catch((err) => {
         if (isError(err, 'UNIQUE_CONSTRAINT'))
           throw new NotFoundException('Teacher requirement already exists');

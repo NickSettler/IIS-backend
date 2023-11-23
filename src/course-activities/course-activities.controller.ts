@@ -30,8 +30,10 @@ import { CaslAbilityFactory } from '../casl/casl-ability.factory';
 import { Request } from 'express';
 import { User } from '../db/entities/user.entity';
 import { E_ACTION } from '../casl/actions';
-import { filter } from 'lodash';
+import { filter, pick, values } from 'lodash';
 import { ValidationPipe } from '../common/pipes/validation.pipe';
+import { permittedFieldsOf } from '@casl/ability/extra';
+import { Class, E_CLASS_ENTITY_KEYS } from '../db/entities/class.entity';
 
 @Controller('courses')
 export class CourseActivitiesController {
@@ -196,8 +198,18 @@ export class CourseActivitiesController {
         "You don't have permission to update this course activity",
       );
 
+    const updatableFields = permittedFieldsOf(
+      rules,
+      E_ACTION.UPDATE,
+      CourseActivity,
+      {
+        fieldsFrom: (rule) =>
+          rule.fields || values(E_COURSE_ACTIVITY_ENTITY_KEYS),
+      },
+    );
+
     const updatedCourseActivity = await this.courseActivitiesService
-      .update(id, updateDto)
+      .update(id, pick(updateDto, updatableFields))
       .catch((err) => {
         if (isError(err, 'UNIQUE_CONSTRAINT'))
           throw new NotFoundException('Course activity already exists');
