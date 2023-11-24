@@ -203,7 +203,12 @@ export class UsersController {
     if (rules.cannot(E_ACTION.DELETE, user))
       throw new ForbiddenException("You don't have permission to delete user");
 
-    return this.usersService.delete(id);
+    return this.usersService.delete(id).catch((err: any) => {
+      if (isCustomError(err))
+        throw new HttpException(...handleCustomError(err));
+
+      throw new InternalServerErrorException("Can't update user");
+    });
   }
 
   @Post('/:id/role/:roleName')
