@@ -1,0 +1,104 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-2"/>
+    <title>Projekt IIS</title>
+    <style type="text/css">
+        table { border-collapse: collapse; }
+        td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
+        dt { font-weight: bold; margin-top: 0.5em; }
+    </style>
+</head>
+<body>
+
+<!-- Zkontrolujte prosím nastavení kódování v hlavičce dokumentu
+     podle použitého editoru -->
+
+<h1>Plánování rozvrhů</h1>
+
+<dl>
+    <dt>Autoři</dt>
+    <dd> <b>Nikita Moiseev</b>
+        <a href="mailto:xmoise01@stud.fit.vutbr.cz">xmoise01@stud.fit.vutbr.cz</a>
+        <ul>
+            <li>Vytvoření efektivní koordinace týmu</li>
+            <li>Distribuce úkolů a implementace funkcí včetně YouTrack integrace</li>
+            <li>Vytvoření triggerů databáze, vytvoření backendu pro entity: Users, Schedule</li>
+            <li>Implementace stranek: Users, Schedule, vytvoření testů</li>
+        </ul>
+    </dd>
+    <dd><b>Elena Marochkina</b>
+        <a href="mailto:xmaroc00@stud.fit.vutbr.cz">xmaroc00@stud.fit.vutbr.cz</a>
+        <ul>
+            <li>Vytvoření zakladní databáze</li>
+            <li>Vytvoření backendu pro entity: Users, Class, Course-activities, Teacher-requirements</li>
+            <li>Implementace stranek: Courses, Course info, Schedule</li>
+        </ul>
+    </dd>
+    <dd><b>Nikita Pasynkov</b>
+        <a href="mailto:xpasyn00@stud.fit.vutbr.cz">xpasyn00@stud.fit.vutbr.cz</a>
+        <ul>
+            <li>Implemetace registrace a přihlašení</li>
+            <li>Vytvoření backendu pro entity: Courses, Course-students, Schedule</li>
+            <li>Implementace stranek: Přihlašení, Classes, Schedule</li>
+        </ul>
+    </dd>
+    <dt>URL aplikace</dt>
+
+    <dd> <b>Hlavní odkaz:</b> <a href="http://www.stud.fit.vutbr.cz/~xautor01/IIS">http://www.stud.fit.vutbr.cz/~xautor01/IIS</a></dd>
+    <dd> <b>Další odkaz:</b> <a href="http://www.stud.fit.vutbr.cz/~xautor01/IIS">http://www.stud.fit.vutbr.cz/~xautor01/IIS</a></dd>
+</dl>
+<h2>Uživatelé systému pro testování</h2>
+<table>
+    <tr><th>Login</th><th>Heslo</th><th>Role</th></tr>
+    <tr><td>admin</td><td>password</td><td>ADMIN</td></tr>
+    <tr><td>john.smith</td><td>password</td><td>GUARANTOR</td></tr>
+    <tr><td>jane.doe</td><td>password</td><td>GUARANTOR</td></tr>
+    <tr><td>teacher.one</td><td>password</td><td>TEACHER</td></tr>
+    <tr><td>teacher.two</td><td>password</td><td>TEACHER</td></tr>
+    <tr><td>teacher.three</td><td>password</td><td>TEACHER</td></tr>
+    <tr><td>teacher.four</td><td>password</td><td>TEACHER</td></tr>
+    <tr><td>scheduler.one</td><td>password</td><td>SCHEDULER</td></tr>
+    <tr><td>student.one</td><td>password</td><td>STUDENT</td></tr>
+    <tr><td>student.two</td><td>password</td><td>STUDENT</td></tr>
+    <tr><td>student.three</td><td>password</td><td>STUDENT</td></tr>
+    <tr><td>student.four</td><td>password</td><td>STUDENT</td></tr>
+    <tr><td>student.five</td><td>password</td><td>STUDENT</td></tr>
+</table>
+
+<h3>Video</h3>
+
+<p>Přiložte odkaz na komentované video demostrující použití informačního systému. Zaměřte se na případy užití definované zadáním (např. registrace uživatele, správa uživatelů a činnosti jednotlivých rolí). Video nahrajte například na VUT Google Drive, kde ho bude možné přímo spustit z odkazu.</p>
+
+<h2>Implementace</h2>
+<p>Pro implementaci backendu je používán framework napsaný v NodeJS s názvem NestJS a ORM knihovna TypeORM. Systémové entity jsou definovány pomocí tříd a dekorátorů, které specifikují konkrétní pole entit a jejich vlastnosti. Tyto entity jsou následně propojeny s databází pomocí TypeORM.</p>
+    <p>V rámci NestJS je možné vytvářet moduly pro každou entitu, což zlepšuje modularitu a přehlednost kódu. Každý modul se skládá ze dvou hlavních částí: servisu a kontroléru.</p>
+<ul>
+    <li>Servis: Servis je odpovědný za komunikaci s databází a obsluhuje veškerou logiku spojenou s danou entitou.</li>
+    <li>Kontrolér: Kontrolér zajišťuje komunikaci mezi frontendem a backendem. Poskytuje koncové body (endpoints) pro příjem požadavků a zpracování odpovědí. Kontroléry delegují logiku zpracování dat na příslušné služby.</li>
+</ul>
+<p>Tímto způsobem je dosaženo oddělení zodpovědností a strukturování kódu do modulů, což zvyšuje přehlednost, udržitelnost a efektivitu při vývoji.</p>
+
+<h3>Databáze</h3>
+    <p>Postgres byl vybrán jako databázový stroj, protože má všechny potřebné funkce pro realizaci projektu.</p>
+    <img src="ERD.png" width=100% height="600">
+    <p>Databáze obsahuje celkem 13 entit, z nichž 5 slouží k definici vztahů typu ManyToMany, zatímco zbylých 8 entit představuje sémantické komponenty aplikace, jako jsou kurzy, uživatelé, třídy atd.</p>
+        <p>Použití databázových triggerů je zdůvodněno snahou udržet konzistenci dat v databázi. V případě výskytu chyby při provádění triggerů nedojde k modifikaci dat, která vyvolala spuštění triggerů. Tímto způsobem je zajištěna bezpečnost a integrita dat v případě nečekaných událostí.</p>
+        <p>Databázové triggery jsou implementovány k tomu, aby se předešlo nekonzistencím a udržela integrita dat. Při chybě v provedení triggeru zůstanou data nedotčena, což zabraňuje nežádoucím následkům. Tato opatření jsou klíčová pro zajištění spolehlivosti a stability aplikace pracující s danou databází.</p>
+
+<h2>Instalace</h2>
+
+Stručně popište:
+<ul>
+    <li>postup instalace na server,</li>
+    <li>softwarové požadavky (verze PHP apod.),</li>
+    <li>jak rozbalit, konfigurovat, inicializovat databázi, ...</li>
+</ul>
+
+<h2>Známé problémy</h2>
+<p>Zde popište, které body zadání nejsou implementovány a z jakého důvodu. Např. &bdquo;Z časových důvodů nebyla implementována správa uživatelů.&rdquo; Pomůžete tím zrychlit hodnocení, když neimplementované funkce nebudeme muset dlouze hledat.</p>
+
+</body>
+</html>
