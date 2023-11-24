@@ -25,10 +25,11 @@ import { Request } from 'express';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { User } from '../db/entities/user.entity';
 import { E_ACTION } from '../casl/actions';
-import { isArray, omit, reduce } from 'lodash';
+import { isArray, omit, pick, reduce, values } from 'lodash';
 import { ValidationPipe } from '../common/pipes/validation.pipe';
 import { CreateScheduleDto, UpdateScheduleDto } from './schedule.dto';
 import { handleCustomError, isCustomError, isError } from '../utils/errors';
+import { permittedFieldsOf } from '@casl/ability/extra';
 
 @Controller('schedule')
 export class ScheduleController {
@@ -143,8 +144,17 @@ export class ScheduleController {
         "You don't have permission to update schedule",
       );
 
+    const updatableFields = permittedFieldsOf(
+      rules,
+      E_ACTION.UPDATE,
+      Schedule,
+      {
+        fieldsFrom: (rule) => rule.fields || values(E_SCHEDULE_ENTITY_KEYS),
+      },
+    );
+
     const updatedSchedule = await this.scheduleService
-      .update(id, updateDto)
+      .update(id, pick(updateDto, updatableFields))
       .catch((err) => {
         if (isError(err, 'FOREIGN_KEY_VIOLATION'))
           throw new UnprocessableEntityException(

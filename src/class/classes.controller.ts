@@ -24,8 +24,9 @@ import { CaslAbilityFactory } from '../casl/casl-ability.factory';
 import { Request } from 'express';
 import { User } from '../db/entities/user.entity';
 import { E_ACTION } from '../casl/actions';
-import { filter } from 'lodash';
+import { filter, pick, values } from 'lodash';
 import { handleCustomError, isCustomError, isError } from 'src/utils/errors';
+import { permittedFieldsOf } from '@casl/ability/extra';
 
 @Controller('classes')
 export class ClassesController {
@@ -152,8 +153,12 @@ export class ClassesController {
         "You don't have permission to update this class",
       );
 
+    const updatableFields = permittedFieldsOf(rules, E_ACTION.UPDATE, Class, {
+      fieldsFrom: (rule) => rule.fields || values(E_CLASS_ENTITY_KEYS),
+    });
+
     const updatedClass = await this.classService
-      .update(id, updateDto)
+      .update(id, pick(updateDto, updatableFields))
       .catch((err: any) => {
         if (isError(err, 'UNIQUE_CONSTRAINT'))
           throw new ConflictException('Class already exists');
