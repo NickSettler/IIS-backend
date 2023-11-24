@@ -3,7 +3,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=iso-8859-2"/>
+    <meta lang="cz" http-equiv="content-type" content="text/html; charset=iso-8859-2"/>
     <title>Projekt IIS</title>
     <style type="text/css">
         table { border-collapse: collapse; }
@@ -80,7 +80,7 @@
     <li>Kontrolér: Kontrolér zajišťuje komunikaci mezi frontendem a backendem. Poskytuje koncové body (endpoints) pro příjem požadavků a zpracování odpovědí. Kontroléry delegují logiku zpracování dat na příslušné služby.</li>
 </ul>
 <p>Tímto způsobem je dosaženo oddělení zodpovědností a strukturování kódu do modulů, což zvyšuje přehlednost, udržitelnost a efektivitu při vývoji.</p>
-
+<p>K určení úrovní přístupu uživatelů se používá systém ABAC (Attribute based access control). Tento vzor má výhody oproti systému RBAC (Role based access control) díky své flexibilitě. Tato výhoda například umožnila pohodlně implementovat přístup garantů k editaci kurzů pouze v případě, že se ID garanta shoduje s ID uživatele, který požaduje úpravu.</p>
 <h3>Databáze</h3>
     <p>Postgres byl vybrán jako databázový stroj, protože má všechny potřebné funkce pro realizaci projektu.</p>
     <img src="./ERD.png" width=100% height="600" alt="ERD">
@@ -98,7 +98,7 @@ Stručně popište:
 </ul>
 
 <h2>Známé problémy</h2>
-<p>Zde popište, které body zadání nejsou implementovány a z jakého důvodu. Např. &bdquo;Z časových důvodů nebyla implementována správa uživatelů.&rdquo; Pomůžete tím zrychlit hodnocení, když neimplementované funkce nebudeme muset dlouze hledat.</p>
+<p>Všechny úkoly byly splněny.</p>
 
 </body>
 </html>
