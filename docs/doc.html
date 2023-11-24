@@ -83,7 +83,7 @@
 
 <h3>Databáze</h3>
     <p>Postgres byl vybrán jako databázový stroj, proto¾e má v¹echny potøebné funkce pro realizaci projektu.</p>
-    <img src="ERD.png" width=100% height="600">
+    <img src="./ERD.png" width=100% height="600" alt="ERD">
     <p>Databáze obsahuje celkem 13 entit, z nich¾ 5 slou¾í k definici vztahù typu ManyToMany, zatímco zbylých 8 entit pøedstavuje sémantické komponenty aplikace, jako jsou kurzy, u¾ivatelé, tøídy atd.</p>
         <p>Pou¾ití databázových triggerù je zdùvodnìno snahou udr¾et konzistenci dat v databázi. V pøípadì výskytu chyby pøi provádìní triggerù nedojde k modifikaci dat, která vyvolala spu¹tìní triggerù. Tímto zpùsobem je zaji¹tìna bezpeènost a integrita dat v pøípadì neèekaných událostí.</p>
         <p>Databázové triggery jsou implementovány k tomu, aby se pøede¹lo nekonzistencím a udr¾ela integrita dat. Pøi chybì v provedení triggeru zùstanou data nedotèena, co¾ zabraòuje ne¾ádoucím následkùm. Tato opatøení jsou klíèová pro zaji¹tìní spolehlivosti a stability aplikace pracující s danou databází.</p>
