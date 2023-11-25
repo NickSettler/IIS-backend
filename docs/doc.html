@@ -1,9 +1,9 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html lang="cs">
 <head>
-    <meta lang="cz" http-equiv="content-type" content="text/html; charset=iso-8859-2"/>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-2"/>
     <title>Projekt IIS</title>
     <style type="text/css">
         table { border-collapse: collapse; }
@@ -25,24 +25,24 @@
         <ul>
             <li>Vytvoření efektivní koordinace týmu</li>
             <li>Distribuce úkolů a implementace funkcí včetně YouTrack integrace</li>
-            <li>Vytvoření triggerů databáze, vytvoření backendu pro entity: Users, Schedule</li>
-            <li>Implementace stranek: Users, Schedule, vytvoření testů</li>
+            <li>Vytvoření backendu pro entity: Users, Schedule, uživatelské role a přístupy</li>
+            <li>Implementace stranek: Users, Schedule, Student Schedule</li>
         </ul>
     </dd>
     <dd><b>Elena Marochkina</b>
         <a href="mailto:xmaroc00@stud.fit.vutbr.cz">xmaroc00@stud.fit.vutbr.cz</a>
         <ul>
             <li>Vytvoření zakladní databáze</li>
-            <li>Vytvoření backendu pro entity: Users, Class, Course-activities, Teacher-requirements</li>
-            <li>Implementace stranek: Courses, Course info, Schedule</li>
+            <li>Vytvoření backendu pro entity: Courses, Course-activities, Student-Course</li>
+            <li>Implementace stranek: Courses, Courses info</li>
         </ul>
     </dd>
     <dd><b>Nikita Pasynkov</b>
         <a href="mailto:xpasyn00@stud.fit.vutbr.cz">xpasyn00@stud.fit.vutbr.cz</a>
         <ul>
             <li>Implemetace registrace a přihlašení</li>
-            <li>Vytvoření backendu pro entity: Courses, Course-students, Schedule</li>
-            <li>Implementace stranek: Přihlašení, Classes, Schedule</li>
+            <li>Vytvoření backendu pro entity: Classes, Teacher requirments</li>
+            <li>Implementace stranek: Přihlašení, Classes, Teacher requirments</li>
         </ul>
     </dd>
     <dt>URL aplikace</dt>
@@ -79,8 +79,24 @@
     <li>Servis: Servis je odpovědný za komunikaci s databází a obsluhuje veškerou logiku spojenou s danou entitou.</li>
     <li>Kontrolér: Kontrolér zajišťuje komunikaci mezi frontendem a backendem. Poskytuje koncové body (endpoints) pro příjem požadavků a zpracování odpovědí. Kontroléry delegují logiku zpracování dat na příslušné služby.</li>
 </ul>
+<img src="./Service.png" alt="Service">
 <p>Tímto způsobem je dosaženo oddělení zodpovědností a strukturování kódu do modulů, což zvyšuje přehlednost, udržitelnost a efektivitu při vývoji.</p>
+
+<h3>Přístup</h3>
 <p>K určení úrovní přístupu uživatelů se používá systém ABAC (Attribute based access control). Tento vzor má výhody oproti systému RBAC (Role based access control) díky své flexibilitě. Tato výhoda například umožnila pohodlně implementovat přístup garantů k editaci kurzů pouze v případě, že se ID garanta shoduje s ID uživatele, který požaduje úpravu.</p>
+<p>Na základě role uživatele a jeho atributů je diferencován přístup k zdrojům a prováděno filtrování. Například, když student požaduje prvky rozvrhu, všechny prvky jsou filtrovány a vráceny jsou pouze ty, které jsou relevantní pro konkrétního studenta na základě jeho zápisu.</p>
+
+<h3>Rozvrh</h3>
+    <p>Rozvrh má od 0 do N záznamů pro každou aktivitu kurzu. Každou aktivitu kurzu musí být možné v rozvrhu opakovat. K implementaci této funkce se používá pravidlo opakování ze standardu RFC5545 (https://datatracker.ietf.org/doc/html/rfc5545). Tato funkce umožňuje nastavit flexibilní pravidla pro opakování určitého prvku rozvrhu.<p>
+<h3>Frontend</h3>
+<p>Frontend aplikace využívá framework React a knihovny Material UI, react-query, DevExpress a query search.</p>
+<ul>
+    <li>Material UI: Stylování komponent s využitím DataGrid pro zobrazení dat z backendu.</li>
+    <li>react-query: Komunikace s backendem, včetně správy autorizačního tokenu a ukládání dat do mezipaměti pro offline použití.</li>
+    <li>DevExpress: Zobrazení rozvrhu pomocí flexibilní komponenty Rozvrh.</li>
+    <li>query search: Ručně napsaná knihovna pro flexibilní filtrování dat v každé komponentě DataGrid podobná dotazovacímu jazyku MongoDB.</li>
+</ul>
+
 <h3>Databáze</h3>
     <p>Postgres byl vybrán jako databázový stroj, protože má všechny potřebné funkce pro realizaci projektu.</p>
     <img src="./ERD.png" width=100% height="600" alt="ERD">
@@ -89,16 +105,31 @@
         <p>Databázové triggery jsou implementovány k tomu, aby se předešlo nekonzistencím a udržela integrita dat. Při chybě v provedení triggeru zůstanou data nedotčena, což zabraňuje nežádoucím následkům. Tato opatření jsou klíčová pro zajištění spolehlivosti a stability aplikace pracující s danou databází.</p>
 
 <h2>Instalace</h2>
+<p>Projekt se skládá ze tří vrstev (tier). První vrstvou je databáze. Druhou vrstvou je serverová vrstva (aplikační backend). Třetí vrstva je vrstva klienta (frontend aplikace).</p>
+<p>Každá část (Tier) aplikace je připravena pro osobní použití pomocí docker kontejnerů.
+<p>Aplikace využívá tři kontejnery:</p>
 
-Stručně popište:
 <ul>
-    <li>postup instalace na server,</li>
-    <li>softwarové požadavky (verze PHP apod.),</li>
-    <li>jak rozbalit, konfigurovat, inicializovat databázi, ...</li>
+    <li>databáze</li>
+    <li>backend</li>
+    <li>frontend</li>
 </ul>
+    <p>Celou aplikaci lze spustit pomocí docker compose.<p>
+    <p>Ke spuštění databáze stačí zadat obraz aplikace. Když spustíte kontejner s databází, obsahuje již všechny potřebné migrace a také předdefinovaná data přidaná pro účely testování.
+        Ke spuštění je třeba zadat obraz aplikace a také proměnné prostředí s daty pro připojení k databázi a parametry serveru pro aplikaci (datum vypršení platnosti tokenu, klíč generování tokenu atd.).</p>
+        <p>Chcete-li spustit frontend, musíte zadat obráz frontendu a také pomocí proměnné prostředí určit hostitele, který se má připojit k backendu.
+        Při použití jednoho souboru docker compose pro všechny tři části stačí zadat název kontejneru s backendem.</p>
+    <p>Požadavky na software: docker >= 4.0.0</p>
 
 <h2>Známé problémy</h2>
 <p>Všechny úkoly byly splněny.</p>
+
+<h2>Dodatečné informace</h2>
+<p>Při vývoji aplikace jsme se snažili pokrýt všechny požadavky na backendu a případy použití na frontendu. Existuje však riziko neočekávaného chování.</p>
+
+<p>Chyba by mohla narušit testování, úplně vypnout backend. Aplikace běží v systému Kubernetes DevOPS s obrazy tří vrstev: databáze, frontendu a backendu. Restart kontejnerů umožňuje testování s dostupnými daty. </p>
+<p>Pro restart kontejnerů je v horním pravém rohu frontendu tlačítko nastavení, které umožňuje manipulovat s kontejnery bez oprávnění. Tato metoda by měla vyřešit problémy během testování. </p>
+<p>V případě neúspěchu je k dispozici kopie aplikace na jiném serveru na adrese <a href="backup.iis.settler.tech">backup.iis.settler.tech</a>, nezávislém na původním serveru pro testování.</p>
 
 </body>
 </html>
