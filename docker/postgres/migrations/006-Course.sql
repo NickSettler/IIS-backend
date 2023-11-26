@@ -65,7 +65,7 @@ END
 $$;
 
 CREATE TRIGGER auto_insert_course_guarantor
-    BEFORE INSERT OR UPDATE
+    AFTER INSERT OR UPDATE
     ON courses
     FOR EACH ROW
 EXECUTE PROCEDURE auto_insert_course_guarantor();
