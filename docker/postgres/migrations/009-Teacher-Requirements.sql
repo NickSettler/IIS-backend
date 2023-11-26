@@ -26,17 +26,12 @@ CREATE FUNCTION check_user_is_teacher()
 AS
 $$
 DECLARE
-    user_username VARCHAR;
+    user_role VARCHAR;
 BEGIN
-    PERFORM * FROM course_teachers WHERE teacher_id = NEW.teacher_id;
+    SELECT role_name INTO user_role FROM user_roles WHERE user_id = NEW.teacher_id;
 
-    IF NOT FOUND THEN
-        SELECT username
-        INTO user_username
-        FROM users
-        WHERE id = NEW.teacher_id;
-
-        RAISE EXCEPTION 'User % is not a teacher', user_username USING ERRCODE = 'C0061';
+    IF user_role != 'TEACHER' THEN
+        RAISE EXCEPTION 'User is not a teacher' USING ERRCODE = 'C0061';
     END IF;
 
     RETURN NEW;
