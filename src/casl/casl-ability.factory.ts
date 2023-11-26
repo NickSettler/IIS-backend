@@ -99,7 +99,7 @@ export class CaslAbilityFactory {
       [E_USER_ENTITY_KEYS.ROLES]: {
         $elemMatch: {
           [E_ROLE_ENTITY_KEYS.NAME]: {
-            $in: [E_ROLE.TEACHER, E_ROLE.STUDENT],
+            $in: [E_ROLE.GUARANTOR, E_ROLE.TEACHER, E_ROLE.STUDENT],
           },
         },
       },
@@ -147,21 +147,15 @@ export class CaslAbilityFactory {
     can: AddRule<TAbility>,
     cannot: AddRule<TAbility>,
   ): void {
-    can(E_ACTION.READ, [Class, TeacherRequirement]);
+    can(E_ACTION.READ, [Class]);
 
     can(E_ACTION.READ, User, {
       [E_USER_ENTITY_KEYS.ROLES]: {
         $elemMatch: {
           [E_ROLE_ENTITY_KEYS.NAME]: {
-            $in: [E_ROLE.TEACHER, E_ROLE.STUDENT],
+            $in: [E_ROLE.GUARANTOR, E_ROLE.TEACHER, E_ROLE.STUDENT],
           },
         },
-      },
-    });
-
-    can(E_ACTION.READ, Course, {
-      [E_COURSE_ENTITY_KEYS.GUARANTOR_ID]: {
-        $eq: user[E_USER_ENTITY_KEYS.ID],
       },
     });
 

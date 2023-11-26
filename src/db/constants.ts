@@ -27,6 +27,7 @@ export enum E_CUSTOM_ERROR_CODES {
   TEACHER_REQS_CONFLICT = 'C0008',
   TEACHER_REQS_DATE_CONFLICT = 'C0009',
   TEACHER_HAS_SCHEDULE = 'C0010',
+  GUARANTOR_TEACHER_CHECK = 'C0011',
   ROLES_TEACHER_HAS_SCHEDULE = 'C0101',
   ROLES_GUARANTOR_HAS_COURSES = 'C0102',
   ROLES_STUDENT_HAS_COURSES = 'C0103',
@@ -57,6 +58,8 @@ export const defaultCustomMessages: Record<E_CUSTOM_ERROR_CODES, string> = {
     'Teacher requirements cant be in the past',
   [E_CUSTOM_ERROR_CODES.TEACHER_HAS_SCHEDULE]:
     'Teacher cannot be deleted because they have schedule items for the course',
+  [E_CUSTOM_ERROR_CODES.GUARANTOR_TEACHER_CHECK]:
+    'Guarantor must be a teacher of their course',
   [E_CUSTOM_ERROR_CODES.ROLES_TEACHER_HAS_SCHEDULE]:
     'Teacher cannot be deleted because they have schedule items',
   [E_CUSTOM_ERROR_CODES.ROLES_GUARANTOR_HAS_COURSES]:

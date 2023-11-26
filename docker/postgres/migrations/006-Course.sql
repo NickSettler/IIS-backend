@@ -53,15 +53,19 @@ CREATE FUNCTION auto_insert_course_guarantor()
 AS
 $$
 BEGIN
-    INSERT INTO course_teachers (course_id, teacher_id)
-    VALUES (NEW.id, NEW.guarantor_id);
+    PERFORM * FROM course_teachers WHERE course_id = NEW.id AND teacher_id = NEW.guarantor_id;
+
+    IF NOT FOUND THEN
+        INSERT INTO course_teachers (course_id, teacher_id)
+        VALUES (NEW.id, NEW.guarantor_id);
+    END IF;
 
     RETURN NEW;
 END
 $$;
 
 CREATE TRIGGER auto_insert_course_guarantor
-    AFTER INSERT
+    BEFORE INSERT OR UPDATE
     ON courses
     FOR EACH ROW
 EXECUTE PROCEDURE auto_insert_course_guarantor();
