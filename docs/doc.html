@@ -34,13 +34,13 @@
         <ul>
             <li>Vytvoření základní databáze</li>
             <li>Vytvoření backendu pro entity: Courses, Course-activities, Student-Course</li>
-            <li>Implementace stranek: Courses, Courses info</li>
+            <li>Implementace stránek: Courses, Courses info</li>
         </ul>
     </dd>
     <dd><b>Nikita Pasynkov</b>
         <a href="mailto:xpasyn00@stud.fit.vutbr.cz">xpasyn00@stud.fit.vutbr.cz</a>
         <ul>
-            <li>Implemetace registrace a přihlášení</li>
+            <li>Implementace registrace a přihlášení</li>
             <li>Vytvoření backendu pro entity: Classes, Teacher requirments</li>
             <li>Implementace stránek: Přihlášení, Classes, Teacher requirments</li>
         </ul>
@@ -75,7 +75,7 @@
 <a href="https://drive.google.com/file/d/1U_N5J5O4CpBV3lLbvKdpCb0fwa3ueSaJ/view?usp=sharing">Video na VUT Google Drive</a>
 
 <h2>Implementace</h2>
-<p>Pro implementaci backendu je používán framework napsaný v NodeJS s názvem NestJS a ORM knihovna TypeORM. Systémové entity jsou definovány pomocí tříd a dekorátorů, které specifikují konkrétní pole entit a jejich vlastnosti. Tyto entity jsou následně propojeny s databází pomocí TypeORM.</p>
+<p>Pro implementaci backendu je používán framework napsaný v NodeJS s názvem NestJS a ORM knihovna TypeORM. Systémové entity jsou definovány pomocí tříd a dekoratérů, které specifikují konkrétní pole entit a jejich vlastnosti. Tyto entity jsou následně propojeny s databází pomocí TypeORM.</p>
     <p>V rámci NestJS je možné vytvářet moduly pro každou entitu, což zlepšuje modularitu a přehlednost kódu. Každý modul se skládá ze dvou hlavních částí: servisu a kontroléru.</p>
 <ul>
     <li>Servis: Servis je odpovědný za komunikaci s databází a obsluhuje veškerou logiku spojenou s danou entitou.</li>
@@ -131,7 +131,6 @@
 
 <p>Chyba by mohla narušit testování, úplně vypnout backend. Aplikace běží v systému Kubernetes s obrazy tří vrstev: databáze, frontendu a backendu. Restart kontejnerů umožňuje testování s dostupnými daty. </p>
 <p>Pro restart kontejnerů je v horním pravém rohu frontendu tlačítko nastavení, které umožňuje resetovat s kontejnery i bez přihlášení. Tato metoda by měla vyřešit problémy během testování. </p>
-<p>V případě neúspěchu je k dispozici kopie aplikace na jiném serveru na adrese <a href="http://backup.iis.settler.tech">backup.iis.settler.tech</a>, nezávislém na původním serveru pro testování.</p>
 
 </body>
 </html>
