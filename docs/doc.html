@@ -238,6 +238,32 @@
     serveru pro aplikaci (datum vypršení platnosti tokenu, klíč generování tokenu atd.).</p>
 <p>Chcete-li spustit frontend, musíte zadat obraz frontendu a také pomocí proměnné prostředí určit server backendu.
     Při použití jednoho souboru docker compose pro všechny tři části stačí zadat název kontejneru s backendem.</p>
+
+<h3>Proměnné prostředí</h3>
+
+<h4>Frontend</h4>
+<ul>
+    <li><code>REACT_APP_API_URL</code> - adresa backendu</li>
+</ul>
+
+<h4>Backend</h4>
+
+<ul>
+    <li><code>JWT_ACCESS_SECRET_KEY</code> - klíč pro generování přístupových tokenů</li>
+    <li><code>JWT_ACCESS_EXPIRES_IN</code> - doba platnosti přístupového tokenu</li>
+    <li><code>JWT_REFRESH_SECRET_KEY</code> - klíč pro generování obnovovacích tokenů</li>
+    <li><code>JWT_REFRESH_EXPIRES_IN</code> - doba platnosti obnovovacího tokenu</li>
+    <li><code>POSTGRES_HOST</code> - host databáze</li>
+    <li><code>POSTGRES_USER</code> - uživatel databáze</li>
+    <li><code>POSTGRES_PASSWORD</code> - heslo databáze</li>
+    <li><code>POSTGRES_DB</code> - jméno databáze</li>
+    <li><code>ADMIN_USERNAME</code> - uživatelské jméno administrátora</li>
+    <li><code>ADMIN_PASSWORD</code> - heslo administrátora</li>
+    <li><code>ADMIN_FIRST_NAME</code> - jméno administrátora</li>
+    <li><code>ADMIN_LAST_NAME</code> - příjmení administrátora</li>
+    <li>Ostatní proměnné prostředí mohou být použity pro nastavení dalších vlastností aplikace.</li>
+</ul>
+
 <h3>Požadavky na software:</h3>
 <ul>
     <li><code>NodeJS >= v19.0.0</code></li>
