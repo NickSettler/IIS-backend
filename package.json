@@ -59,7 +59,7 @@
     "reflect-metadata": "^0.1.14",
     "rrule": "^2.8.1",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.18"
+    "typeorm": "^0.3.19"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.2.1",
